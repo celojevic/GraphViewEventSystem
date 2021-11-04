@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -18,6 +19,7 @@ public class EventGraphElementSaveData
 [System.Serializable]
 public class NodeSaveDataBase : EventGraphElementSaveData
 {
+    public string nodeType;
     public string groupGuid;
     public bool isEntryNode;
 
@@ -25,6 +27,7 @@ public class NodeSaveDataBase : EventGraphElementSaveData
     {
         groupGuid = node.groupGuid;
         isEntryNode = false;
+        nodeType = node.GetType().ToString();
     }
 }
 

@@ -45,7 +45,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
         Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
         {
-            EventGraphSaver.Load(_graphView);
+            EventGraphSaver.Load(_graphView, _fileName);
         });
         toolbar.Add(loadButton);
 

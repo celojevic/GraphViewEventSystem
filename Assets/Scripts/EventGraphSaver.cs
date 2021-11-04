@@ -47,9 +47,36 @@ public static class EventGraphSaver
         Debug.Log("Save successful! Path: " + path);
     }
 
-    public static void Load(EventGraphView graphView)
+    public static void Load(EventGraphView graphView, string fileName)
     {
-        throw new System.NotImplementedException();
+        if (!Directory.Exists($"{Application.persistentDataPath}/EventGraphs"))
+        {
+            Debug.LogError("Load directory doesn't exist. Try saving something first");
+            return;
+        }
+
+        string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
+        string json = File.ReadAllText(path);
+        Debug.Log(json);
+
+        EventGraphSaveData saveData = (EventGraphSaveData)JsonUtility.FromJson(json, typeof(EventGraphSaveData));
+        Debug.Log(saveData.nodeJsons[0]);
+
+        if (saveData.nodeJsons[0].Contains("nodeType"))
+        {
+            NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
+                saveData.nodeJsons[0], typeof(NodeSaveDataBase));
+            Debug.Log(nodeData.nodeType);
+
+            if (nodeData.nodeType == nameof(ChoiceNode))
+            {
+                ChoiceNodeSaveData cnData = (ChoiceNodeSaveData)JsonUtility.FromJson(
+                    saveData.nodeJsons[0], typeof(ChoiceNodeSaveData));
+
+                Debug.Log(cnData.message);
+            }
+        }
+
     }
 
     static void CreateFolders()
