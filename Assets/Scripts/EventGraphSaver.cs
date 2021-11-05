@@ -15,6 +15,17 @@ public static class EventGraphSaver
 
         CreateFolders();
 
+        string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
+        if (File.Exists(path))
+        {
+            if (!EditorUtility.DisplayDialog("File Already Exists",
+                "File already exists with name. OVerwrite?",
+                "Yes", "No"))
+            {
+                return;
+            }
+        }
+
         EventGraphSaveData graphData = new EventGraphSaveData();
 
         graphView.graphElements.ForEach(graphElement =>
@@ -30,21 +41,9 @@ public static class EventGraphSaver
             }
         });
 
-        //string json = JsonConvert.SerializeObject(graphData);
         string json = JsonUtility.ToJson(graphData, true);
-
-        string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
-        if (File.Exists(path))
-        {
-            if (!EditorUtility.DisplayDialog("File Already Exists",
-                "File already exists with name. OVerwrite?",
-                "Yes", "No"))
-            {
-                return;
-            }
-        }
-
         File.WriteAllText(path, json);
+
         Debug.Log("Save successful! Path: " + path);
     }
 
@@ -77,23 +76,21 @@ public static class EventGraphSaver
 
         for (int i = 0; i < saveData.nodeJsons.Count; i++)
         {
-            if (saveData.nodeJsons[i].Contains("nodeType"))
+            // unnecessary?
+            //if (!saveData.nodeJsons[i].Contains("nodeType")) continue;
+
+            NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
+                saveData.nodeJsons[i], typeof(NodeSaveDataBase));
+
+            if (nodeData.nodeType == nameof(ChoiceNode))
             {
-                NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
-                    saveData.nodeJsons[i], typeof(NodeSaveDataBase));
+                ChoiceNodeSaveData cnData = (ChoiceNodeSaveData)JsonUtility.FromJson(
+                    saveData.nodeJsons[i], typeof(ChoiceNodeSaveData));
+                graphView.CreateNode(cnData);
 
-                if (nodeData.nodeType == nameof(ChoiceNode))
-                {
-                    ChoiceNodeSaveData cnData = (ChoiceNodeSaveData)JsonUtility.FromJson(
-                        saveData.nodeJsons[i], typeof(ChoiceNodeSaveData));
-                    graphView.CreateNode(cnData);
-
-                    // cache the conns to set edges after all nodes are created
-                    if (cnData.connections.HasElements())
-                    {
-                        savedConnections.AddRange(cnData.connections);
-                    }
-                }
+                // cache the conns to set edges after all nodes are created
+                if (cnData.connections.HasElements())
+                    savedConnections.AddRange(cnData.connections);
             }
         }
 
