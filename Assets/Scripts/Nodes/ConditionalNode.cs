@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -54,6 +53,10 @@ public class LevelCompareNode : ConditionalNode
         return true;
     }
 
+    public override void ConnectEdge(ConnectionSaveData conn)
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 public enum ComparisonOperator

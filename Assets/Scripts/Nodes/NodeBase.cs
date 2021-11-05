@@ -31,4 +31,6 @@ public abstract class NodeBase : Node
 
     public abstract string Serialize();
 
+    public abstract void ConnectEdge(ConnectionSaveData conn);
+
 }

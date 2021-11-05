@@ -101,17 +101,10 @@ public static class EventGraphSaver
         foreach (ConnectionSaveData conn in savedConnections)
         {
             NodeBase node = graphView.GetElementByGuid(conn.parentNodeGuid) as NodeBase;
-
-            List<VisualElement> elements = new List<VisualElement>(node.outputContainer.Children());
-            if (elements[conn.choiceIndex] is Port port)
-            {
-                NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
-                Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
-                Edge edge = port.ConnectTo(nextNodeInputPort);
-                graphView.AddElement(edge);
-            }
-
-            node.RefreshExpandedState();
+            if (node != null)
+                node.ConnectEdge(conn);
+            else
+                Debug.LogError("Couldn't get node from guid: " + conn.parentNodeGuid);
         }
 
     }

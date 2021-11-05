@@ -116,6 +116,25 @@ public class ChoiceNode : NodeBase
         return JsonUtility.ToJson(new ChoiceNodeSaveData(this));
     }
 
+    // can move this to base class without abstract?
+    public override void ConnectEdge(ConnectionSaveData conn)
+    {
+        List<VisualElement> elements = new List<VisualElement>(this.outputContainer.Children());
+        if (elements[conn.choiceIndex] is Port port)
+        {
+            NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
+            Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
+            Edge edge = port.ConnectTo(nextNodeInputPort);
+            graphView.AddElement(edge);
+        }
+        else
+        {
+            Debug.LogError("Invalid port index");
+            return;
+        }
+
+        this.RefreshExpandedState();
+    }
 }
 
 [System.Serializable]
