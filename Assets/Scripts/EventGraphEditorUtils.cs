@@ -48,5 +48,15 @@ public static class EventGraphEditorUtils
         return element;
     }
 
+    public static bool HasElements<T>(this List<T> list)
+    {
+        return list != null && list.Count > 0;
+    }
+
+    public static T FirstElement<T>(this IEnumerable<T> list)
+    {
+        return new List<T>(list)[0];
+    }
+
 
 }

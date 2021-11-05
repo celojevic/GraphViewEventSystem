@@ -18,6 +18,21 @@ public class ChoiceNode : NodeBase
 
         DrawNode();
     }
+    public ChoiceNode(EventGraphView graphView, NodeSaveDataBase saveData) 
+        : base(graphView, saveData)
+    {
+        if (!(saveData is ChoiceNodeSaveData))
+        {
+            Debug.LogError("Save data was not the same type but tried to load it as such.");
+            return;
+        }
+
+        ChoiceNodeSaveData cnData = saveData as ChoiceNodeSaveData;
+        this.message = cnData.message;
+        this.choices = cnData.choices;
+
+        DrawNode();
+    }
 
     protected override void DrawNode()
     {
@@ -30,7 +45,12 @@ public class ChoiceNode : NodeBase
 
     void DrawTitleContainer()
     {
-        TextField messageTextField = EventGraphEditorUtils.CreateTextField(message);
+        TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
+            (evt) => 
+            { 
+                message = evt.newValue; 
+            }
+        );
         titleContainer.Insert(0, messageTextField);
     }
 
@@ -46,9 +66,7 @@ public class ChoiceNode : NodeBase
         // add choice button
         Button addChoiceButton = EventGraphEditorUtils.CreateButton("Add Choice", () =>
         {
-            //Port choicePort = EventGraphEditorUtils.CreatePort(this, "New Choice");
             choices.Add("New Choice");
-            //outputContainer.Add(choicePort);
             CreateChoicePort("New Choice");
         });
         outputContainer.Add(addChoiceButton);
@@ -71,13 +89,13 @@ public class ChoiceNode : NodeBase
             if (outputPort.connected)
                 graphView.DeleteElements(outputPort.connections);
 
-            var list = new List<VisualElement>(outputContainer.Children());
+            List<VisualElement> list = new List<VisualElement>(outputContainer.Children());
             for (int i = 0; i < list.Count; i++)
             {
                 if (list[i] == outputPort)
                 {
                     // offset the index for non-choice elements in the outputContainer
-                    choices.RemoveAt(i-(list.Count - choices.Count));
+                    choices.RemoveAt(i - (list.Count - choices.Count));
                     break;
                 }
             }
@@ -85,10 +103,11 @@ public class ChoiceNode : NodeBase
             graphView.RemoveElement(outputPort);
 
         });
-        TextField choiceTextField = new TextField() { value = choiceText };
-
-        outputPort.Add(choiceTextField);
         outputPort.Add(deleteChoiceButton);
+
+        TextField choiceTextField = EventGraphEditorUtils.CreateTextField(choiceText);
+        outputPort.Add(choiceTextField);
+
         outputContainer.Add(outputPort);        
     }
 
@@ -105,44 +124,88 @@ public class ChoiceNodeSaveData : NodeSaveDataBase
 
     public string message;
     public List<string> choices = new List<string>();
-    public List<PortSaveData> ports = new List<PortSaveData>();
+    public List<ConnectionSaveData> connections = new List<ConnectionSaveData>();
 
     public ChoiceNodeSaveData(NodeBase node) : base(node)
     {
         ChoiceNode cn = node as ChoiceNode;
         message = cn.message;
-        choices = cn.choices;
 
-        foreach (var item in node.outputContainer.Children())
+        var list = new List<VisualElement>(node.outputContainer.Children());
+        for (int i = 0; i < list.Count; i++)
         {
+            var item = list[i];
+
             if (item is Port port)
             {
-                if (!port.connected) continue;
-
-                string toNodeGuid = "";
-                foreach (Edge edge in port.connections)
-                    toNodeGuid = edge.input.node.viewDataKey;
-                if (string.IsNullOrEmpty(toNodeGuid))
+                // save the ports connection
+                if (port.connected)
                 {
-                    Debug.LogError("ToNodeGuid was null");
-                    return;
+                    string toNodeGuid = "";
+                    foreach (Edge edge in port.connections)
+                        toNodeGuid = edge.input.node.viewDataKey;
+                    if (string.IsNullOrEmpty(toNodeGuid))
+                    {
+                        Debug.LogError("ToNodeGuid was null");
+                        return;
+                    }
+
+                    connections.Add(new ConnectionSaveData()
+                    {
+                        choiceIndex = i,
+                        parentNodeGuid = this.guid,
+                        toNodeGuid = toNodeGuid,
+                    });
                 }
 
-                ports.Add(new PortSaveData()
-                {
-                    parentNodeGuid = this.guid,
-                    toNodeGuid = toNodeGuid,
-                });
+                // save ports textField text
+                foreach (var thing in port.Children())
+                    if (thing is TextField tf)
+                        choices.Add(tf.text);
+
             }
         }
+
+        //foreach (var item in node.outputContainer.Children())
+        //{
+        //    if (item is Port port)
+        //    {
+        //        // save the ports connection
+        //        if (port.connected)
+        //        {
+        //            string toNodeGuid = "";
+        //            foreach (Edge edge in port.connections)
+        //                toNodeGuid = edge.input.node.viewDataKey;
+        //            if (string.IsNullOrEmpty(toNodeGuid))
+        //            {
+        //                Debug.LogError("ToNodeGuid was null");
+        //                return;
+        //            }
+
+        //            connections.Add(new ConnectionSaveData()
+        //            {
+
+        //                parentNodeGuid = this.guid,
+        //                toNodeGuid = toNodeGuid,
+        //            });
+        //        }
+
+        //        // save ports textField text
+        //        foreach (var thing in port.Children())
+        //            if (thing is TextField tf)
+        //                choices.Add(tf.text);
+
+        //    }
+        //}
 
     }
 
 }
 
 [System.Serializable]
-public class PortSaveData
+public struct ConnectionSaveData
 {
+    public int choiceIndex;
     public string parentNodeGuid;
     public string toNodeGuid;
 }

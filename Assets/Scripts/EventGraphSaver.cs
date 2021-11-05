@@ -2,7 +2,8 @@ using UnityEngine;
 using System.IO;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor;
-using Newtonsoft.Json;
+using System.Collections.Generic;
+using UnityEngine.UIElements;
 
 public static class EventGraphSaver 
 {
@@ -16,14 +17,14 @@ public static class EventGraphSaver
 
         EventGraphSaveData graphData = new EventGraphSaveData();
 
-        graphView.graphElements.ForEach(ge =>
+        graphView.graphElements.ForEach(graphElement =>
         {
-            if (ge is NodeBase node)
+            if (graphElement is NodeBase node)
             {
                 // TODO how to find type of node from string when loading?
                 graphData.nodeJsons.Add(node.Serialize());
             }
-            else if (ge is Group group)
+            else if (graphElement is Group group)
             {
                 graphData.groups.Add(new GroupSaveData(group));
             }
@@ -54,27 +55,63 @@ public static class EventGraphSaver
             Debug.LogError("Load directory doesn't exist. Try saving something first");
             return;
         }
+        if (graphView.graphElements.ToList().Count > 0)
+        {
+            if (!EditorUtility.DisplayDialog("Graph Has Elements",
+                "Are you sure you want to load? You will lose all unsaved progress.",
+                "Yes", "No"))
+            {
+                return;
+            }
+        }
+
+        graphView.ClearGraph();
 
         string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
         string json = File.ReadAllText(path);
-        Debug.Log(json);
+
+        // TODO load groups first
 
         EventGraphSaveData saveData = (EventGraphSaveData)JsonUtility.FromJson(json, typeof(EventGraphSaveData));
-        Debug.Log(saveData.nodeJsons[0]);
+        List<ConnectionSaveData> savedConnections = new List<ConnectionSaveData>();
 
-        if (saveData.nodeJsons[0].Contains("nodeType"))
+        for (int i = 0; i < saveData.nodeJsons.Count; i++)
         {
-            NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
-                saveData.nodeJsons[0], typeof(NodeSaveDataBase));
-            Debug.Log(nodeData.nodeType);
-
-            if (nodeData.nodeType == nameof(ChoiceNode))
+            if (saveData.nodeJsons[i].Contains("nodeType"))
             {
-                ChoiceNodeSaveData cnData = (ChoiceNodeSaveData)JsonUtility.FromJson(
-                    saveData.nodeJsons[0], typeof(ChoiceNodeSaveData));
+                NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
+                    saveData.nodeJsons[i], typeof(NodeSaveDataBase));
 
-                Debug.Log(cnData.message);
+                if (nodeData.nodeType == nameof(ChoiceNode))
+                {
+                    ChoiceNodeSaveData cnData = (ChoiceNodeSaveData)JsonUtility.FromJson(
+                        saveData.nodeJsons[i], typeof(ChoiceNodeSaveData));
+                    graphView.CreateNode(cnData);
+
+                    // cache the conns to set edges after all nodes are created
+                    if (cnData.connections.HasElements())
+                    {
+                        savedConnections.AddRange(cnData.connections);
+                    }
+                }
             }
+        }
+
+        // reconnect nodes
+        foreach (ConnectionSaveData conn in savedConnections)
+        {
+            NodeBase node = graphView.GetElementByGuid(conn.parentNodeGuid) as NodeBase;
+
+            List<VisualElement> elements = new List<VisualElement>(node.outputContainer.Children());
+            if (elements[conn.choiceIndex] is Port port)
+            {
+                NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
+                Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
+                Edge edge = port.ConnectTo(nextNodeInputPort);
+                graphView.AddElement(edge);
+            }
+
+            node.RefreshExpandedState();
         }
 
     }

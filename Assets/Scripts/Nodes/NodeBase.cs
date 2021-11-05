@@ -17,6 +17,16 @@ public abstract class NodeBase : Node
         SetPosition(new Rect(pos, Vector2.zero));
     }
 
+    public NodeBase(EventGraphView graphView, NodeSaveDataBase saveData)
+    {
+        this.position = saveData.position;
+        this.graphView = graphView;
+        this.viewDataKey = saveData.guid;
+        this.groupGuid = saveData.groupGuid;
+
+        SetPosition(new Rect(saveData.position, Vector2.zero));
+    }
+
     protected abstract void DrawNode();
 
     public abstract string Serialize();

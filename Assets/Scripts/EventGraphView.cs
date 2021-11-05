@@ -96,6 +96,14 @@ public class EventGraphView : GraphView
             )));
     }
 
+    public void CreateNode(NodeSaveDataBase nodeSaveData)
+    {
+        if (nodeSaveData is ChoiceNodeSaveData cnData)
+        {
+            AddElement(new ChoiceNode(this, cnData));
+        }
+    }
+
     public void CreateGroup(Vector2 pos, string title = "Event Group")
     {
         Group group = new Group() { title = title };
@@ -139,4 +147,10 @@ public class EventGraphView : GraphView
             mousePos -= _editorWindow.position.position;
         return contentViewContainer.WorldToLocal(mousePos);
     }
+
+    internal void ClearGraph()
+    {
+        DeleteElements(graphElements.ToList());
+    }
+
 }
