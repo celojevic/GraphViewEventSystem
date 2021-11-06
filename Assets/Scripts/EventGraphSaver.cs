@@ -71,35 +71,23 @@ public static class EventGraphSaver
 
         // TODO load groups first
 
-        EventGraphSaveData saveData = (EventGraphSaveData)JsonUtility.FromJson(json, typeof(EventGraphSaveData));
+        EventGraphSaveData graphData = (EventGraphSaveData)JsonUtility.FromJson(json, typeof(EventGraphSaveData));
         List<ConnectionSaveData> savedConnections = new List<ConnectionSaveData>();
 
-        for (int i = 0; i < saveData.nodeJsons.Count; i++)
+        for (int i = 0; i < graphData.nodeJsons.Count; i++)
         {
-            if (!saveData.nodeJsons[i].Contains("nodeType")) continue;
+            if (!graphData.nodeJsons[i].Contains("nodeType")) continue;
 
             NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
-                saveData.nodeJsons[i], typeof(NodeSaveDataBase));
+                graphData.nodeJsons[i], typeof(NodeSaveDataBase));
 
             if (nodeData.nodeType == nameof(ChoiceNode))
             {
-                ChoiceNodeSaveData cnData = (ChoiceNodeSaveData)JsonUtility.FromJson(
-                    saveData.nodeJsons[i], typeof(ChoiceNodeSaveData));
-                graphView.CreateNode(cnData);
-
-                // cache the conns to set edges after all nodes are created
-                if (cnData.connections.HasElements())
-                    savedConnections.AddRange(cnData.connections);
+                LoadNode<ChoiceNodeSaveData>(graphData.nodeJsons[i], graphView, savedConnections);
             }
             else if (nodeData.nodeType == nameof(LevelCompareNode))
             {
-                LevelCompareNodeSaveData lcn = (LevelCompareNodeSaveData)JsonUtility.FromJson(
-                    saveData.nodeJsons[i], typeof(LevelCompareNodeSaveData));
-                graphView.CreateNode(lcn);
-
-                // cache the conns to set edges after all nodes are created
-                if (lcn.connections.HasElements())
-                    savedConnections.AddRange(lcn.connections);
+                LoadNode<LevelCompareNodeSaveData>(graphData.nodeJsons[i], graphView, savedConnections);
             }
 
         }
@@ -113,7 +101,19 @@ public static class EventGraphSaver
             else
                 Debug.LogError("Couldn't get node from guid: " + conn.parentNodeGuid);
         }
+    }
 
+    static void LoadNode<T>(
+        string json, EventGraphView graphView, 
+        List<ConnectionSaveData> savedConnections
+    ) where T : NodeSaveDataBase
+    {
+        T nodeSaveData = (T)JsonUtility.FromJson(json, typeof(T));
+        graphView.CreateNode(nodeSaveData);
+
+        // cache the conns to set edges after all nodes are created
+        if (nodeSaveData.connections.HasElements())
+            savedConnections.AddRange(nodeSaveData.connections);
     }
 
     static void CreateFolders()
