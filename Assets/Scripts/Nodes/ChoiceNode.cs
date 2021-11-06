@@ -116,25 +116,6 @@ public class ChoiceNode : NodeBase
         return JsonUtility.ToJson(new ChoiceNodeSaveData(this));
     }
 
-    // can move this to base class without abstract?
-    public override void ConnectEdge(ConnectionSaveData conn)
-    {
-        List<VisualElement> elements = new List<VisualElement>(this.outputContainer.Children());
-        if (elements[conn.choiceIndex] is Port port)
-        {
-            NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
-            Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
-            Edge edge = port.ConnectTo(nextNodeInputPort);
-            graphView.AddElement(edge);
-        }
-        else
-        {
-            Debug.LogError("Invalid port index");
-            return;
-        }
-
-        this.RefreshExpandedState();
-    }
 }
 
 [System.Serializable]
@@ -143,80 +124,25 @@ public class ChoiceNodeSaveData : NodeSaveDataBase
 
     public string message;
     public List<string> choices = new List<string>();
-    public List<ConnectionSaveData> connections = new List<ConnectionSaveData>();
 
     public ChoiceNodeSaveData(NodeBase node) : base(node)
     {
         ChoiceNode cn = node as ChoiceNode;
         message = cn.message;
 
-        var list = new List<VisualElement>(node.outputContainer.Children());
-        for (int i = 0; i < list.Count; i++)
+        List<VisualElement> nodeOutputElements = new List<VisualElement>(node.outputContainer.Children());
+        for (int i = 0; i < nodeOutputElements.Count; i++)
         {
-            var item = list[i];
+            var item = nodeOutputElements[i];
 
             if (item is Port port)
             {
-                // save the ports connection
-                if (port.connected)
-                {
-                    string toNodeGuid = "";
-                    foreach (Edge edge in port.connections)
-                        toNodeGuid = edge.input.node.viewDataKey;
-                    if (string.IsNullOrEmpty(toNodeGuid))
-                    {
-                        Debug.LogError("ToNodeGuid was null");
-                        return;
-                    }
-
-                    connections.Add(new ConnectionSaveData()
-                    {
-                        choiceIndex = i,
-                        parentNodeGuid = this.guid,
-                        toNodeGuid = toNodeGuid,
-                    });
-                }
-
                 // save ports textField text
-                foreach (var thing in port.Children())
-                    if (thing is TextField tf)
+                foreach (VisualElement portElement in port.Children())
+                    if (portElement is TextField tf)
                         choices.Add(tf.text);
-
             }
         }
-
-        //foreach (var item in node.outputContainer.Children())
-        //{
-        //    if (item is Port port)
-        //    {
-        //        // save the ports connection
-        //        if (port.connected)
-        //        {
-        //            string toNodeGuid = "";
-        //            foreach (Edge edge in port.connections)
-        //                toNodeGuid = edge.input.node.viewDataKey;
-        //            if (string.IsNullOrEmpty(toNodeGuid))
-        //            {
-        //                Debug.LogError("ToNodeGuid was null");
-        //                return;
-        //            }
-
-        //            connections.Add(new ConnectionSaveData()
-        //            {
-
-        //                parentNodeGuid = this.guid,
-        //                toNodeGuid = toNodeGuid,
-        //            });
-        //        }
-
-        //        // save ports textField text
-        //        foreach (var thing in port.Children())
-        //            if (thing is TextField tf)
-        //                choices.Add(tf.text);
-
-        //    }
-        //}
-
     }
 
 }

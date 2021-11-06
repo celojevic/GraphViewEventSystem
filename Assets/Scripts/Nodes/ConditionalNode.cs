@@ -3,6 +3,7 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+[System.Serializable]
 public abstract class ConditionalNode : NodeBase
 {
 
@@ -10,8 +11,11 @@ public abstract class ConditionalNode : NodeBase
     {
         DrawNode();
     }
+    public ConditionalNode(EventGraphView graphView, NodeSaveDataBase saveData) : base(graphView, saveData)
+    { 
+    }
 
-    public abstract bool Compare();
+    public abstract bool EvaluateConditions();
 
     protected override void DrawNode()
     {
@@ -26,15 +30,39 @@ public abstract class ConditionalNode : NodeBase
 
 }
 
+[System.Serializable]
+public class LevelCompareNodeSaveData : NodeSaveDataBase
+{
+
+
+
+    public LevelCompareNodeSaveData(NodeBase node) : base(node)
+    {
+
+    }
+
+}
+
+[System.Serializable]
 public class LevelCompareNode : ConditionalNode
 {
 
-    public override string Serialize()
-    {
-        return "";
-    }
 
     public LevelCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
+    public LevelCompareNode(EventGraphView graphView, NodeSaveDataBase saveData)
+        : base(graphView, saveData)
+    {
+        if (!(saveData is LevelCompareNodeSaveData))
+        {
+            Debug.LogError("Save data was not the same type but tried to load it as such.");
+            return;
+        }
+
+        LevelCompareNodeSaveData cnData = saveData as LevelCompareNodeSaveData;
+
+
+        DrawNode();
+    }
 
     protected override void DrawNode()
     {
@@ -48,15 +76,16 @@ public class LevelCompareNode : ConditionalNode
         mainContainer.Add(new EnumField(ComparisonOperator.EqualTo));
     }
 
-    public override bool Compare()
+    public override bool EvaluateConditions()
     {
         return true;
     }
 
-    public override void ConnectEdge(ConnectionSaveData conn)
+    public override string Serialize()
     {
-        throw new System.NotImplementedException();
+        return JsonUtility.ToJson(new LevelCompareNodeSaveData(this));
     }
+
 }
 
 public enum ComparisonOperator

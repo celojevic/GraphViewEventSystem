@@ -3,6 +3,8 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
+using System.IO;
+using System.Collections.Generic;
 
 public class EventGraphEditorWindow : GraphViewEditorWindow
 {
@@ -29,12 +31,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
     {
         Toolbar toolbar = new Toolbar();
 
-        TextField fileName = EventGraphEditorUtils.CreateTextField(DEFAULT_FILE_NAME, "Filename:",
-            (evt) => 
-            {
-                _fileName = evt.newValue;
-            }
-        );
+        TextField fileName = EventGraphEditorUtils.CreateTextField(DEFAULT_FILE_NAME, "Filename:", (evt) => { _fileName = evt.newValue; });
         toolbar.Add(fileName);
 
         Button saveButton = EventGraphEditorUtils.CreateButton("Save", ()=> 
@@ -43,11 +40,36 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         });
         toolbar.Add(saveButton);
 
+        EnumField saveTypePopup = new EnumField(SaveType.PersistentDataPath);
+        // TODO callback for type and save as selected type when implemented
+        toolbar.Add(saveTypePopup);
+
         Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
         {
             EventGraphSaver.Load(_graphView, _fileName);
         });
         toolbar.Add(loadButton);
+
+        string savePath = $"{Application.persistentDataPath}/EventGraphs";
+        string[] files = Directory.GetFiles(savePath);
+        List<string> concatFiles = new List<string>();
+        foreach (var item in files)
+        {
+            // +1 to remove last '/'
+            concatFiles.Add(item.Remove(0, savePath.Length + 1));
+        }
+        if (files.Length == 0)
+        {
+            Label label = new Label("No files found.");
+            toolbar.Add(label);
+        }
+        else
+        {
+            PopupField<string> filesPopup = new PopupField<string>(concatFiles, 0);
+            // TODO callback for index and load that file
+            // TODO change fileName to be selected file
+            toolbar.Add(filesPopup);
+        }
 
         rootVisualElement.Add(toolbar);
     }
@@ -59,6 +81,10 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         rootVisualElement.Add(_graphView);
     }
 
-
+    public enum SaveType
+    {
+        PersistentDataPath,
+        ScriptableObject
+    }
 
 }

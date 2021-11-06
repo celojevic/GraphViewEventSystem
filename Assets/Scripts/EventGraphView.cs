@@ -102,6 +102,10 @@ public class EventGraphView : GraphView
         {
             AddElement(new ChoiceNode(this, cnData));
         }
+        else if (nodeSaveData is LevelCompareNodeSaveData lcn)
+        {
+            AddElement(new LevelCompareNode(this, lcn));
+        }
     }
 
     public void CreateGroup(Vector2 pos, string title = "Event Group")

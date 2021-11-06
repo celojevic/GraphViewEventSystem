@@ -76,8 +76,7 @@ public static class EventGraphSaver
 
         for (int i = 0; i < saveData.nodeJsons.Count; i++)
         {
-            // unnecessary?
-            //if (!saveData.nodeJsons[i].Contains("nodeType")) continue;
+            if (!saveData.nodeJsons[i].Contains("nodeType")) continue;
 
             NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
                 saveData.nodeJsons[i], typeof(NodeSaveDataBase));
@@ -92,6 +91,17 @@ public static class EventGraphSaver
                 if (cnData.connections.HasElements())
                     savedConnections.AddRange(cnData.connections);
             }
+            else if (nodeData.nodeType == nameof(LevelCompareNode))
+            {
+                LevelCompareNodeSaveData lcn = (LevelCompareNodeSaveData)JsonUtility.FromJson(
+                    saveData.nodeJsons[i], typeof(LevelCompareNodeSaveData));
+                graphView.CreateNode(lcn);
+
+                // cache the conns to set edges after all nodes are created
+                if (lcn.connections.HasElements())
+                    savedConnections.AddRange(lcn.connections);
+            }
+
         }
 
         // reconnect nodes

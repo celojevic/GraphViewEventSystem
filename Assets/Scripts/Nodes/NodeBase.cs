@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public abstract class NodeBase : Node
 {
@@ -31,6 +33,36 @@ public abstract class NodeBase : Node
 
     public abstract string Serialize();
 
-    public abstract void ConnectEdge(ConnectionSaveData conn);
+    // can move this to base class without abstract?
+    public void ConnectEdge(ConnectionSaveData conn)
+    {
+        List<VisualElement> elements = new List<VisualElement>(this.outputContainer.Children());
+        if (elements[conn.choiceIndex] is Port port)
+        {
+            NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
+            if (nextNode == null)
+            {
+                Debug.Log("NextNode was null");
+                return;
+            }
+
+            Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
+            if (nextNodeInputPort == null)
+            {
+                Debug.Log("NextNodeInputPort was null");
+                return;
+            }
+
+            Edge edge = port.ConnectTo(nextNodeInputPort);
+            graphView.AddElement(edge);
+        }
+        else
+        {
+            Debug.LogError("Invalid port index");
+            return;
+        }
+
+        this.RefreshExpandedState();
+    }
 
 }
