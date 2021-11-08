@@ -90,7 +90,7 @@ public class EventGraphView : GraphView
 
         this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
                 "Add Level Compare Node",
-                actionEvent => AddElement(new LevelCompareNode(
+                actionEvent => AddElement(new IntCompareNode(
                     GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
                 )
             )));
@@ -104,7 +104,7 @@ public class EventGraphView : GraphView
         }
         else if (nodeSaveData is LevelCompareNodeSaveData lcn)
         {
-            AddElement(new LevelCompareNode(this, lcn));
+            AddElement(new IntCompareNode(this, lcn));
         }
     }
 

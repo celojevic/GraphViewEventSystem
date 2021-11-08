@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.IO;
 using System.Collections.Generic;
+using System;
 
 public class EventGraphEditorWindow : GraphViewEditorWindow
 {
@@ -40,7 +41,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         });
         toolbar.Add(saveButton);
 
-        EnumField saveTypePopup = new EnumField(SaveType.PersistentDataPath);
+        EnumFlagsField saveTypePopup = new EnumFlagsField(SaveType.JSON);
         // TODO callback for type and save as selected type when implemented
         toolbar.Add(saveTypePopup);
 
@@ -81,10 +82,12 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         rootVisualElement.Add(_graphView);
     }
 
+    [Flags]
     public enum SaveType
     {
-        PersistentDataPath,
-        ScriptableObject
+        JSON=1,
+        ScriptableObject=2,
+        SQLite=4,
     }
 
 }

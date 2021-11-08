@@ -42,14 +42,14 @@ public abstract class NodeBase : Node
             NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
             if (nextNode == null)
             {
-                Debug.Log("NextNode was null");
+                Debug.LogError("NextNode was null");
                 return;
             }
 
             Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
             if (nextNodeInputPort == null)
             {
-                Debug.Log("NextNodeInputPort was null");
+                Debug.LogError("NextNodeInputPort was null");
                 return;
             }
 

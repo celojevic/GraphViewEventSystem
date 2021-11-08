@@ -85,7 +85,7 @@ public static class EventGraphSaver
             {
                 LoadNode<ChoiceNodeSaveData>(graphData.nodeJsons[i], graphView, savedConnections);
             }
-            else if (nodeData.nodeType == nameof(LevelCompareNode))
+            else if (nodeData.nodeType == nameof(IntCompareNode))
             {
                 LoadNode<LevelCompareNodeSaveData>(graphData.nodeJsons[i], graphView, savedConnections);
             }

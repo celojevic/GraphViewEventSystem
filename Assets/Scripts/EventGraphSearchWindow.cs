@@ -57,7 +57,7 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
                 return true;
 
             case "LevelCompareNode":
-                _graphView.AddElement(new LevelCompareNode(localMousePos, _graphView));
+                _graphView.AddElement(new IntCompareNode(localMousePos, _graphView));
                 return true;
 
             case Group _:
