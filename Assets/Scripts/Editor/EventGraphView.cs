@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -91,7 +93,7 @@ public class EventGraphView : GraphView
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
 
-        CreateRightClickMenu();
+        //CreateRightClickMenu();
     }
 
     void CreateRightClickMenu()
@@ -115,18 +117,6 @@ public class EventGraphView : GraphView
                     GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
                 )
             )));
-    }
-
-    public void CreateNode(NodeSaveDataBase nodeSaveData)
-    {
-        if (nodeSaveData is ChoiceNodeSaveData cnData)
-        {
-            AddElement(new ChoiceNode(this, cnData));
-        }
-        else if (nodeSaveData is LevelCompareNodeSaveData lcn)
-        {
-            AddElement(new IntCompareNode(this, lcn));
-        }
     }
 
     public void CreateGroup(Vector2 pos, string title = "Event Group")
@@ -175,7 +165,19 @@ public class EventGraphView : GraphView
 
     internal void ClearGraph()
     {
-        DeleteElements(graphElements.ToList());
+        List<GraphElement> graphElements = base.graphElements.ToList();
+
+        if (graphElements.Count > 0)
+        {
+            if (!EditorUtility.DisplayDialog("Graph Has Elements",
+                "Are you sure you want to load? You will lose all unsaved progress.",
+                "Yes", "No"))
+            {
+                return;
+            }
+        }
+
+        DeleteElements(graphElements);
     }
 
 }

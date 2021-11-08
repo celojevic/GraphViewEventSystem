@@ -136,7 +136,7 @@ public class ChoiceNodeSaveData : NodeSaveDataBase
         List<VisualElement> nodeOutputElements = new List<VisualElement>(node.outputContainer.Children());
         for (int i = 0; i < nodeOutputElements.Count; i++)
         {
-            var item = nodeOutputElements[i];
+            VisualElement item = nodeOutputElements[i];
 
             if (item is Port port)
             {

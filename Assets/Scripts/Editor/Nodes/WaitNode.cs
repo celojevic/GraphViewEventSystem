@@ -12,6 +12,16 @@ public class WaitNode : NodeBase
         DrawNode();
     }
 
+    public WaitNode(EventGraphView graphView, NodeSaveDataBase saveData) : base(graphView, saveData)
+    {
+        if (saveData is WaitNodeSaveData wnData)
+        {
+            this.timeToWait = wnData.timeToWait;
+        }
+
+        DrawNode();
+    }
+
     public override string Serialize()
     {
         return JsonUtility.ToJson(new WaitNodeSaveData(this));
@@ -25,6 +35,11 @@ public class WaitNode : NodeBase
         outputContainer.Add(this.CreatePort("Output"));
 
         FloatField timeField = new FloatField();
+        timeField.value = this.timeToWait;
+        timeField.RegisterValueChangedCallback(evt =>
+        {
+            this.timeToWait = evt.newValue;
+        });
         mainContainer.Add(timeField);
     }
 
@@ -33,10 +48,12 @@ public class WaitNode : NodeBase
 public class WaitNodeSaveData : NodeSaveDataBase
 {
 
+    public float timeToWait;
+
     public WaitNodeSaveData(NodeBase node) : base(node)
     {
-
+        WaitNode waitNode = node as WaitNode;
+        this.timeToWait = waitNode.timeToWait;
     }
-
 
 }

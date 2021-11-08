@@ -1,5 +1,6 @@
 ﻿using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
+
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,22 +10,27 @@ public class IntCompareNode : ConditionalNode<int>
     public int intToCompare;
     public ComparisonOperator comparisonOperator;
 
+    #region Constructors
+
     public IntCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
+    
     public IntCompareNode(EventGraphView graphView, NodeSaveDataBase saveData)
         : base(graphView, saveData)
     {
-        if (!(saveData is LevelCompareNodeSaveData))
+        if (!(saveData is IntCompareNodeSaveData))
         {
             Debug.LogError("Save data was not the same type but tried to load it as such.");
             return;
         }
 
-        LevelCompareNodeSaveData lcn = saveData as LevelCompareNodeSaveData;
+        IntCompareNodeSaveData lcn = saveData as IntCompareNodeSaveData;
         this.intToCompare = lcn.intToCompare;
         this.comparisonOperator = lcn.comparisonOperator;
 
         DrawNode();
     }
+
+    #endregion
 
     protected override void DrawNode()
     {
@@ -78,19 +84,20 @@ public class IntCompareNode : ConditionalNode<int>
 
     public override string Serialize()
     {
-        return JsonUtility.ToJson(new LevelCompareNodeSaveData(this));
+        return JsonUtility.ToJson(new IntCompareNodeSaveData(this));
     }
 
 }
 
 // TODO also make this generic and have base class like conditionalNode
 [System.Serializable]
-public class LevelCompareNodeSaveData : NodeSaveDataBase
+public class IntCompareNodeSaveData : NodeSaveDataBase
 {
+
     public int intToCompare;
     public ComparisonOperator comparisonOperator;
 
-    public LevelCompareNodeSaveData(NodeBase node) : base(node)
+    public IntCompareNodeSaveData(NodeBase node) : base(node)
     {
         if (!(node is IntCompareNode icNode))
         {
@@ -101,6 +108,7 @@ public class LevelCompareNodeSaveData : NodeSaveDataBase
         this.intToCompare = icNode.intToCompare;
         this.comparisonOperator = icNode.comparisonOperator;
     }
+
 }
 
 public enum ComparisonOperator

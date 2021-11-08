@@ -28,17 +28,20 @@ public class EventGraphElementSaveData
 public class NodeSaveDataBase : EventGraphElementSaveData
 {
     public string nodeType;
+    public string nodeSaveDataType;
+
     public string groupGuid;
     public bool isEntryNode;
     public List<ConnectionSaveData> connections = new List<ConnectionSaveData>();
 
-    public NodeSaveDataBase() { }
-
     public NodeSaveDataBase(NodeBase node) : base(node)
     {
-        groupGuid = node.groupGuid;
-        isEntryNode = false;
-        nodeType = node.GetType().ToString();
+        this.groupGuid = node.groupGuid;
+        this.isEntryNode = false;
+
+        // save the types so we can easily and generically cast them when loading
+        this.nodeType = node.GetType().ToString();
+        this.nodeSaveDataType = this.GetType().ToString();
 
         var list = new List<VisualElement>(node.outputContainer.Children());
         for (int i = 0; i < list.Count; i++)
