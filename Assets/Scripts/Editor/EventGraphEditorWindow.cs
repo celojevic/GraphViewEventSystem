@@ -32,25 +32,31 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
     {
         Toolbar toolbar = new Toolbar();
 
-        TextField fileName = EventGraphEditorUtils.CreateTextField(DEFAULT_FILE_NAME, "Filename:", (evt) => { _fileName = evt.newValue; });
-        toolbar.Add(fileName);
+        // file name text field
+        TextField fileNameField = EventGraphEditorUtils.CreateTextField(
+            DEFAULT_FILE_NAME, "Filename:", (evt) => { _fileName = evt.newValue; });
+        toolbar.Add(fileNameField);
 
+        // save button
         Button saveButton = EventGraphEditorUtils.CreateButton("Save", ()=> 
         {
             EventGraphSaver.Save(_graphView, _fileName);
         });
         toolbar.Add(saveButton);
 
+        // save type flags dropdown
         EnumFlagsField saveTypePopup = new EnumFlagsField(SaveType.JSON);
         // TODO callback for type and save as selected type when implemented
         toolbar.Add(saveTypePopup);
 
+        // load button
         Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
         {
             EventGraphSaver.Load(_graphView, _fileName);
         });
         toolbar.Add(loadButton);
 
+        // load files dropdown list
         string savePath = $"{Application.persistentDataPath}/EventGraphs";
         string[] files = Directory.GetFiles(savePath);
         List<string> concatFiles = new List<string>();
@@ -72,6 +78,17 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
             toolbar.Add(filesPopup);
         }
 
+        // minimap toggle
+        ToolbarToggle minimapToggle = new ToolbarToggle();
+        minimapToggle.label = "Minimap";
+        minimapToggle.RegisterValueChangedCallback(evt =>
+        {
+            _graphView.ToggleMinimap(evt.newValue);
+        });
+        minimapToggle.value = false;
+        toolbar.Add(minimapToggle);
+
+        // add the toolbar to editor window
         rootVisualElement.Add(toolbar);
     }
 

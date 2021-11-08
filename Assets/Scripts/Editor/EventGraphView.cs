@@ -13,6 +13,8 @@ public class EventGraphView : GraphView
     private EventGraphSearchWindow _searchWindow;
     private EventGraphEditorWindow _editorWindow;
 
+    private MiniMap _minimap;
+
     public EventGraphView(EventGraphEditorWindow editorWindow)
     {
         _editorWindow = editorWindow;
@@ -20,10 +22,29 @@ public class EventGraphView : GraphView
         CreateStartNode();
         CreateSearchWindow();
         CreateGridBg();
+        CreateMinimap();
         this.AddStyleSheets("GridBackground.uss");
         AddManips();
         SetupCallbacks();
     }
+
+    #region Minimap
+
+    void CreateMinimap()
+    {
+        _minimap = new MiniMap();
+        _minimap.anchored = true;
+        _minimap.SetPosition(new Rect(15, 50, 192, 108));
+        Add(_minimap);
+        _minimap.visible = false;
+    }
+
+    public void ToggleMinimap(bool visible)
+    {
+        _minimap.visible = visible;
+    }
+
+    #endregion
 
     void CreateStartNode()
     {
