@@ -11,6 +11,8 @@ public abstract class NodeBase : Node
     protected EventGraphView graphView;
     protected Vector2 position;
 
+    #region Constructors
+
     public NodeBase(Vector2 pos, EventGraphView graphView)
     {
         this.position = pos;
@@ -29,11 +31,16 @@ public abstract class NodeBase : Node
         SetPosition(new Rect(saveData.position, Vector2.zero));
     }
 
+    #endregion
+
+    #region Abstract
+
     protected abstract void DrawNode();
 
     public abstract string Serialize();
 
-    // can move this to base class without abstract?
+    #endregion
+
     public void ConnectEdge(ConnectionSaveData conn)
     {
         List<VisualElement> elements = new List<VisualElement>(this.outputContainer.Children());
