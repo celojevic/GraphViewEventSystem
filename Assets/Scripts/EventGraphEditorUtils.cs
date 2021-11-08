@@ -31,7 +31,7 @@ public static class EventGraphEditorUtils
         return new Button(onClick) { text = text };
     }
 
-    public static Port CreatePort(NodeBase node, string portName = "", 
+    public static Port CreatePort(this NodeBase node, string portName = "", 
         Direction direction = Direction.Output,
         Port.Capacity capacity = Port.Capacity.Single,
         Orientation orientation = Orientation.Horizontal)
@@ -39,6 +39,10 @@ public static class EventGraphEditorUtils
         Port port = node.InstantiatePort(orientation, direction, capacity, default);
         port.portName = portName;
         return port;
+    }
+    public static Port CreateInputPort(this NodeBase node)
+    {
+        return node.CreatePort("Input", Direction.Input, Port.Capacity.Multi, Orientation.Horizontal);
     }
 
     public static VisualElement AddStyleSheets(this VisualElement element, params string[] styleSheets)

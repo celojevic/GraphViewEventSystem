@@ -21,8 +21,8 @@ public abstract class ConditionalNode<T> : NodeBase
 
     void DrawOutputContainer()
     {
-        outputContainer.Add(EventGraphEditorUtils.CreatePort(this, "True"));
-        outputContainer.Add(EventGraphEditorUtils.CreatePort(this, "False"));
+        outputContainer.Add(this.CreatePort("True"));
+        outputContainer.Add(this.CreatePort("False"));
     }
 
 }

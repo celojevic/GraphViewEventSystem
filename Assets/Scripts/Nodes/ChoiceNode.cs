@@ -56,9 +56,7 @@ public class ChoiceNode : NodeBase
 
     void DrawInputContainer()
     {
-        inputContainer.Add(EventGraphEditorUtils.CreatePort(this, "Input",
-            Direction.Input, Port.Capacity.Multi)
-        );
+        inputContainer.Add(this.CreateInputPort());
     }
 
     void DrawOutputContainer()
@@ -80,7 +78,7 @@ public class ChoiceNode : NodeBase
 
     void CreateChoicePort(string choiceText)
     {
-        Port outputPort = EventGraphEditorUtils.CreatePort(this);
+        Port outputPort = this.CreatePort();
 
         Button deleteChoiceButton = EventGraphEditorUtils.CreateButton("X", () =>
         {

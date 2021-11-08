@@ -30,10 +30,9 @@ public class IntCompareNode : ConditionalNode<int>
     {
         base.DrawNode();
 
-        titleContainer.Add(new Label("Level Comparison"));
+        titleContainer.Add(new Label("Int Comparison"));
 
-        inputContainer.Add(
-            EventGraphEditorUtils.CreatePort(this, "Input", Direction.Input, Port.Capacity.Multi));
+        inputContainer.Add(this.CreateInputPort());
 
         DrawMainContainer();
     }
