@@ -6,14 +6,22 @@ using UnityEngine.UIElements;
 [System.Serializable]
 public class EventGraphElementSaveData
 {
+
     public string guid;
     public Vector2 position;
+
+    #region Constructors
+
+    public EventGraphElementSaveData() { }
 
     public EventGraphElementSaveData(GraphElement ge)
     {
         this.guid = ge.viewDataKey;
         this.position = ge.GetPosition().position;
     }
+
+    #endregion
+
 }
 
 [System.Serializable]
@@ -23,6 +31,8 @@ public class NodeSaveDataBase : EventGraphElementSaveData
     public string groupGuid;
     public bool isEntryNode;
     public List<ConnectionSaveData> connections = new List<ConnectionSaveData>();
+
+    public NodeSaveDataBase() { }
 
     public NodeSaveDataBase(NodeBase node) : base(node)
     {

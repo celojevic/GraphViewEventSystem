@@ -29,12 +29,13 @@ public class IntCompareNode : ConditionalNode<int>
     protected override void DrawNode()
     {
         base.DrawNode();
-
-        titleContainer.Add(new Label("Int Comparison"));
-
-        inputContainer.Add(this.CreateInputPort());
-
+        DrawTitleContainer();
         DrawMainContainer();
+    }
+
+    void DrawTitleContainer()
+    {
+        titleContainer.Add(new Label("Int Comparison"));
     }
 
     void DrawMainContainer()

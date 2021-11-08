@@ -9,6 +9,8 @@ public class ChoiceNode : NodeBase
     public string message;
     public List<string> choices;
 
+    #region Constructors
+
     public ChoiceNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
         this.message = "Choice Node";
@@ -18,6 +20,7 @@ public class ChoiceNode : NodeBase
 
         DrawNode();
     }
+
     public ChoiceNode(EventGraphView graphView, NodeSaveDataBase saveData) 
         : base(graphView, saveData)
     {
@@ -33,6 +36,8 @@ public class ChoiceNode : NodeBase
 
         DrawNode();
     }
+
+    #endregion
 
     protected override void DrawNode()
     {

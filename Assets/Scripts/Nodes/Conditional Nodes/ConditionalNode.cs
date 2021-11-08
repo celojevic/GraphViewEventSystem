@@ -4,19 +4,30 @@ using UnityEngine;
 public abstract class ConditionalNode<T> : NodeBase
 {
 
+    #region Constructors
+
     public ConditionalNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
         DrawNode();
     }
+
     public ConditionalNode(EventGraphView graphView, NodeSaveDataBase saveData) : base(graphView, saveData)
     { 
     }
+
+    #endregion
 
     public abstract bool EvaluateConditions(T value);
 
     protected override void DrawNode()
     {
+        DrawInputContainer();
         DrawOutputContainer();
+    }
+
+    void DrawInputContainer()
+    {
+        inputContainer.Add(this.CreateInputPort());
     }
 
     void DrawOutputContainer()

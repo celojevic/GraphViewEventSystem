@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Reflection;
+using System;
 
 public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
 {
@@ -19,29 +21,35 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
 
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
     {
-        List<SearchTreeEntry> searchTreeEntries = new List<SearchTreeEntry>()
+        List<SearchTreeEntry> nodeEntries = new List<SearchTreeEntry>();
+        var types = Assembly.GetExecutingAssembly().GetTypes();
+        for (int i = 0; i < types.Length; i++)
         {
-            new SearchTreeGroupEntry(new GUIContent("Open Search Window")),
-
-            new SearchTreeGroupEntry(new GUIContent("Nodes"), 1),
-            new SearchTreeEntry(new GUIContent("Choice Node", _indentIcon))
+            if ((types[i].BaseType == typeof(NodeBase) || types[i].BaseType == typeof(ConditionalNode<>))
+                && !types[i].IsAbstract)
             {
-                level = 2,
-                userData = "ChoiceNode"
-            },
-            new SearchTreeEntry(new GUIContent("Level Compare Node", _indentIcon))
-            {
-                level = 2,
-                userData = "LevelCompareNode"
-            },
-
-            new SearchTreeGroupEntry(new GUIContent("Groups"), 1),
-            new SearchTreeEntry(new GUIContent("Group", _indentIcon))
-            {
-                level = 2,
-                userData = new Group()
+                nodeEntries.Add(new SearchTreeEntry(new GUIContent(types[i].ToString(), _indentIcon))
+                {
+                    level = 2,
+                    userData = types[i]
+                });
             }
-        };
+        }
+
+        List<SearchTreeEntry> searchTreeEntries = new List<SearchTreeEntry>();
+        searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent("Open Search Window")));
+
+        // add nodes
+        searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent("Nodes"), 1));
+        searchTreeEntries.AddRange(nodeEntries);
+
+        // add groups
+        searchTreeEntries.Add(new SearchTreeGroupEntry(new GUIContent("Groups"), 1));
+        searchTreeEntries.Add(new SearchTreeEntry(new GUIContent("Group", _indentIcon))
+        {
+            level = 2,
+            userData = typeof(Group)
+        });
 
         return searchTreeEntries;
     }
@@ -50,23 +58,30 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
     {
         Vector2 localMousePos = _graphView.GetLocalMousePos(context.screenMousePosition, true);
 
-        switch (SearchTreeEntry.userData)
-        {
-            case "ChoiceNode":
-                _graphView.AddElement(new ChoiceNode(localMousePos, _graphView));
-                return true;
+        // TODO doesnt work for groups, either make a type check here or make 
+        //      a custome group class EventGraphGroup with proper constructor
+        _graphView.AddElement((GraphElement)Activator.CreateInstance(
+            (Type)SearchTreeEntry.userData, localMousePos, _graphView));
 
-            case "LevelCompareNode":
-                _graphView.AddElement(new IntCompareNode(localMousePos, _graphView));
-                return true;
+        return true;
 
-            case Group _:
-                _graphView.CreateGroup(localMousePos);
-                return true;
+        //switch (SearchTreeEntry.userData)
+        //{
+        //    case nameof(ChoiceNode):
+        //        _graphView.AddElement(new ChoiceNode(localMousePos, _graphView));
+        //        return true;
 
-            default:
-                return false;
-        }
+        //    case nameof(IntCompareNode):
+        //        _graphView.AddElement(new IntCompareNode(localMousePos, _graphView));
+        //        return true;
+
+        //    case Group _:
+        //        _graphView.CreateGroup(localMousePos);
+        //        return true;
+
+        //    default:
+        //        return false;
+        //}
     }
 
 }
