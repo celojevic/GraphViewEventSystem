@@ -22,11 +22,12 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
     public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
     {
         List<SearchTreeEntry> nodeEntries = new List<SearchTreeEntry>();
+        // TODO make custom asmdef and use that
         var types = Assembly.GetExecutingAssembly().GetTypes();
         for (int i = 0; i < types.Length; i++)
         {
-            if ((types[i].BaseType == typeof(NodeBase) || types[i].BaseType == typeof(ConditionalNode<>))
-                && !types[i].IsAbstract)
+            if ((types[i].BaseType == typeof(NodeBase) || types[i].BaseType.BaseType == typeof(NodeBase))
+                && !types[i].IsAbstract && !types[i].IsGenericType)
             {
                 nodeEntries.Add(new SearchTreeEntry(new GUIContent(types[i].ToString(), _indentIcon))
                 {
