@@ -12,7 +12,7 @@ public static class EventGraphSaver
     // TODO add option to open file location after save
     public static void Save(EventGraphView graphView, string fileName)
     {
-        if (graphView.graphElements.ToList().Count == 0) return;
+        if (graphView.graphElements.ToList().Count <= 1) return;
 
         CreateFolders();
 
@@ -20,7 +20,7 @@ public static class EventGraphSaver
         if (File.Exists(path))
         {
             if (!EditorUtility.DisplayDialog("File Already Exists",
-                "File already exists with name. OVerwrite?",
+                "File already exists with name. Overwrite?",
                 "Yes", "No"))
             {
                 return;
@@ -33,7 +33,14 @@ public static class EventGraphSaver
         {
             if (graphElement is NodeBase node)
             {
-                graphData.nodeJsons.Add(node.Serialize());
+                if (node is EntryNode)
+                {
+                    graphData.entryNode = node.Serialize();
+                }
+                else
+                {
+                    graphData.nodeJsons.Add(node.Serialize());
+                }
             }
             else if (graphElement is Group group)
             {
@@ -103,6 +110,14 @@ public static class EventGraphSaver
             else
                 Debug.LogError("Couldn't get node from guid: " + conn.parentNodeGuid);
         }
+
+        // connect entry node
+        EntryNodeSaveData entryData = (EntryNodeSaveData)JsonUtility.FromJson(graphData.entryNode, typeof(EntryNodeSaveData));
+        EntryNode entryNode = graphView.GetEntryNode();
+        NodeBase toNode = graphView.GetNodeByGuid(entryData.connections[0].toNodeGuid) as NodeBase;
+        Edge edge = entryNode.GetFirstOutputPort().ConnectTo(toNode.GetInputPort());
+        graphView.AddElement(edge);
+
     }
 
     static void CreateFolders()
@@ -117,6 +132,14 @@ public static class EventGraphSaver
         Directory.CreateDirectory(path);
     }
 
+
+    public static EventGraphSaveData LoadGraphDataJson(string fileName)
+    {
+        return (EventGraphSaveData)JsonUtility.FromJson(
+            File.ReadAllText($"{Application.persistentDataPath}/EventGraphs/{fileName}.json"), 
+            typeof(EventGraphSaveData)
+        );
+    }
 
 
 }

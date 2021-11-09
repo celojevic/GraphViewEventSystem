@@ -94,6 +94,7 @@ public class GroupSaveData : EventGraphElementSaveData
 [System.Serializable]
 public class EventGraphSaveData
 {
+    public string entryNode;
     public List<string> nodeJsons = new List<string>();
     public List<GroupSaveData> groups = new List<GroupSaveData>();
 }

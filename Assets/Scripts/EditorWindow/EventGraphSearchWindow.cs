@@ -27,7 +27,7 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
         for (int i = 0; i < types.Length; i++)
         {
             if ((types[i].BaseType == typeof(NodeBase) || types[i].BaseType.BaseType == typeof(NodeBase))
-                && !types[i].IsAbstract && !types[i].IsGenericType)
+                && !types[i].IsAbstract && !types[i].IsGenericType && types[i] != typeof(EntryNode))
             {
                 nodeEntries.Add(new SearchTreeEntry(new GUIContent(types[i].ToString(), _indentIcon))
                 {
@@ -61,27 +61,28 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
 
         // TODO doesnt work for groups, either make a type check here or make 
         //      a custome group class EventGraphGroup with proper constructor
-        _graphView.AddElement((GraphElement)Activator.CreateInstance(
-            (Type)SearchTreeEntry.userData, localMousePos, _graphView));
+        var node = (GraphElement)Activator.CreateInstance((Type)SearchTreeEntry.userData, localMousePos, _graphView);
+        _graphView.AddElement(node);
+
+        // if no other elements, automatically connect startNode to this new one
+        if (_graphView.graphElements.ToList().Count == 2)
+        {
+            EntryNode entryNode = (EntryNode)_graphView.graphElements.ToList()[0];
+            entryNode.ConnectEdge(new ConnectionSaveData
+            {
+                choiceIndex = 0,
+                parentNodeGuid = entryNode.guid,
+                toNodeGuid = node.viewDataKey
+            });
+        }
 
         return true;
 
         //switch (SearchTreeEntry.userData)
         //{
-        //    case nameof(ChoiceNode):
-        //        _graphView.AddElement(new ChoiceNode(localMousePos, _graphView));
-        //        return true;
-
-        //    case nameof(IntCompareNode):
-        //        _graphView.AddElement(new IntCompareNode(localMousePos, _graphView));
-        //        return true;
-
         //    case Group _:
         //        _graphView.CreateGroup(localMousePos);
         //        return true;
-
-        //    default:
-        //        return false;
         //}
     }
 

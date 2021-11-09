@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 public abstract class NodeBase : Node
 {
 
+    public string guid => viewDataKey;
+
     public string groupGuid;
 
     protected EventGraphView graphView;
@@ -19,6 +21,7 @@ public abstract class NodeBase : Node
         this.graphView = graphView;
 
         SetPosition(new Rect(pos, Vector2.zero));
+
     }
 
     public NodeBase(EventGraphView graphView, NodeSaveDataBase saveData)
@@ -53,7 +56,7 @@ public abstract class NodeBase : Node
                 return;
             }
 
-            Port nextNodeInputPort = nextNode.inputContainer.Children().FirstElement() as Port;
+            Port nextNodeInputPort = nextNode.GetInputPort();
             if (nextNodeInputPort == null)
             {
                 Debug.LogError("NextNodeInputPort was null");
@@ -70,6 +73,30 @@ public abstract class NodeBase : Node
         }
 
         this.RefreshExpandedState();
+    }
+
+    public Port GetFirstOutputPort()
+    {
+        foreach (var item in this.outputContainer.Children())
+            if (item is Port)
+                return item as Port;
+
+        // no ports
+        Debug.LogError("No output ports found for node.");
+        return null;
+    }
+
+    public Port GetInputPort()
+    {
+        if (inputContainer.Children().FirstElement() is Port port)
+        {
+            return port;
+        }
+        else
+        {
+            Debug.LogError("Couldn't find input port for node");
+            return null;
+        }
     }
 
 }

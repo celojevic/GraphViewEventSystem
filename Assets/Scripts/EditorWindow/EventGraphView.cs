@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
+
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+
 using UnityEngine;
 using UnityEngine.UIElements;
-
-public class StartNode : Pill
-{
-}
 
 public class EventGraphView : GraphView
 {
@@ -21,12 +19,12 @@ public class EventGraphView : GraphView
     {
         _editorWindow = editorWindow;
 
-        CreateStartNode();
         CreateSearchWindow();
         CreateGridBg();
         CreateMinimap();
         this.AddStyleSheets("GridBackground.uss");
         AddManips();
+        CreateEntryNode();
         SetupCallbacks();
     }
 
@@ -48,13 +46,9 @@ public class EventGraphView : GraphView
 
     #endregion
 
-    void CreateStartNode()
+    void CreateEntryNode()
     {
-        StartNode startNode = new StartNode();
-
-        startNode.text = "Start";
-
-        Add(startNode);
+        AddElement(new EntryNode(Vector2.zero, this));
     }
 
     void SetupCallbacks()
@@ -135,7 +129,7 @@ public class EventGraphView : GraphView
 
     void CreateGridBg()
     {
-        var bg = new GridBackground();
+        GridBackground bg = new GridBackground();
         bg.StretchToParentSize();
         Insert(0, bg);
     }
@@ -167,6 +161,9 @@ public class EventGraphView : GraphView
     {
         List<GraphElement> graphElements = base.graphElements.ToList();
 
+        // dont remove the entry node
+        graphElements.Remove(GetEntryNode());
+
         if (graphElements.Count > 0)
         {
             if (!EditorUtility.DisplayDialog("Graph Has Elements",
@@ -179,5 +176,7 @@ public class EventGraphView : GraphView
 
         DeleteElements(graphElements);
     }
+
+    public EntryNode GetEntryNode() => (EntryNode)base.graphElements.ToList().Find(x => x is EntryNode);
 
 }
