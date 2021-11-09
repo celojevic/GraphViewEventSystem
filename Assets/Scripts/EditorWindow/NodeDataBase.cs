@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [System.Serializable]
-public class EventGraphElementSaveData
+public class EventGraphElementData
 {
 
     public string guid;
@@ -12,9 +12,9 @@ public class EventGraphElementSaveData
 
     #region Constructors
 
-    public EventGraphElementSaveData() { }
+    public EventGraphElementData() { }
 
-    public EventGraphElementSaveData(GraphElement ge)
+    public EventGraphElementData(GraphElement ge)
     {
         this.guid = ge.viewDataKey;
         this.position = ge.GetPosition().position;
@@ -25,23 +25,23 @@ public class EventGraphElementSaveData
 }
 
 [System.Serializable]
-public class NodeSaveDataBase : EventGraphElementSaveData
+public class NodeDataBase : EventGraphElementData
 {
     public string nodeType;
-    public string nodeSaveDataType;
+    public string nodeDataType;
 
     public string groupGuid;
     public bool isEntryNode;
-    public List<ConnectionSaveData> connections = new List<ConnectionSaveData>();
+    public List<EdgeData> edges = new List<EdgeData>();
 
-    public NodeSaveDataBase(NodeBase node) : base(node)
+    public NodeDataBase(NodeBase node) : base(node)
     {
         this.groupGuid = node.groupGuid;
         this.isEntryNode = false;
 
         // save the types so we can easily and generically cast them when loading
         this.nodeType = node.GetType().ToString();
-        this.nodeSaveDataType = this.GetType().ToString();
+        this.nodeDataType = this.GetType().ToString();
 
         var list = new List<VisualElement>(node.outputContainer.Children());
         for (int i = 0; i < list.Count; i++)
@@ -60,7 +60,7 @@ public class NodeSaveDataBase : EventGraphElementSaveData
                         return;
                     }
 
-                    connections.Add(new ConnectionSaveData()
+                    edges.Add(new EdgeData()
                     {
                         choiceIndex = i,
                         parentNodeGuid = this.guid,
@@ -73,12 +73,12 @@ public class NodeSaveDataBase : EventGraphElementSaveData
 }
 
 [System.Serializable]
-public class GroupSaveData : EventGraphElementSaveData
+public class GroupData : EventGraphElementData
 {
 
     public List<string> nodeGuids;
 
-    public GroupSaveData(Group group) : base(group)
+    public GroupData(Group group) : base(group)
     {
         nodeGuids = new List<string>();
 
@@ -92,9 +92,9 @@ public class GroupSaveData : EventGraphElementSaveData
 }
 
 [System.Serializable]
-public class EventGraphSaveData
+public class EventGraphData
 {
     public string entryNode;
     public List<string> nodeJsons = new List<string>();
-    public List<GroupSaveData> groups = new List<GroupSaveData>();
+    public List<GroupData> groups = new List<GroupData>();
 }

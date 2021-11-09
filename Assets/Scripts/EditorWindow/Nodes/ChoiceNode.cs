@@ -21,16 +21,16 @@ public class ChoiceNode : NodeBase
         DrawNode();
     }
 
-    public ChoiceNode(EventGraphView graphView, NodeSaveDataBase saveData) 
-        : base(graphView, saveData)
+    public ChoiceNode(EventGraphView graphView, NodeDataBase nodeData) 
+        : base(graphView, nodeData)
     {
-        if (!(saveData is ChoiceNodeSaveData))
+        if (!(nodeData is ChoiceNodeData))
         {
             Debug.LogError("Save data was not the same type but tried to load it as such.");
             return;
         }
 
-        ChoiceNodeSaveData cnData = saveData as ChoiceNodeSaveData;
+        ChoiceNodeData cnData = nodeData as ChoiceNodeData;
         this.message = cnData.message;
         this.choices = cnData.choices;
 
@@ -116,19 +116,19 @@ public class ChoiceNode : NodeBase
 
     public override string Serialize()
     {
-        return JsonUtility.ToJson(new ChoiceNodeSaveData(this));
+        return JsonUtility.ToJson(new ChoiceNodeData(this));
     }
 
 }
 
 [System.Serializable]
-public class ChoiceNodeSaveData : NodeSaveDataBase
+public class ChoiceNodeData : NodeDataBase
 {
 
     public string message;
     public List<string> choices = new List<string>();
 
-    public ChoiceNodeSaveData(NodeBase node) : base(node)
+    public ChoiceNodeData(NodeBase node) : base(node)
     {
         ChoiceNode cn = node as ChoiceNode;
         message = cn.message;
@@ -151,7 +151,7 @@ public class ChoiceNodeSaveData : NodeSaveDataBase
 }
 
 [System.Serializable]
-public struct ConnectionSaveData
+public struct EdgeData
 {
     public int choiceIndex;
     public string parentNodeGuid;

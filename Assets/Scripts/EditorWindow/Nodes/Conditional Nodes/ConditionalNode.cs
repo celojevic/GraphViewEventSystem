@@ -11,7 +11,7 @@ public abstract class ConditionalNode<T> : NodeBase
         DrawNode();
     }
 
-    public ConditionalNode(EventGraphView graphView, NodeSaveDataBase saveData) : base(graphView, saveData)
+    public ConditionalNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)
     { 
     }
 

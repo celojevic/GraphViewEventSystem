@@ -68,7 +68,7 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
         if (_graphView.graphElements.ToList().Count == 2)
         {
             EntryNode entryNode = (EntryNode)_graphView.graphElements.ToList()[0];
-            entryNode.ConnectEdge(new ConnectionSaveData
+            entryNode.ConnectEdge(new EdgeData
             {
                 choiceIndex = 0,
                 parentNodeGuid = entryNode.guid,

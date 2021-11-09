@@ -14,16 +14,15 @@ public class IntCompareNode : ConditionalNode<int>
 
     public IntCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
     
-    public IntCompareNode(EventGraphView graphView, NodeSaveDataBase saveData)
-        : base(graphView, saveData)
+    public IntCompareNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)
     {
-        if (!(saveData is IntCompareNodeSaveData))
+        if (!(nodeData is IntCompareNodeData))
         {
             Debug.LogError("Save data was not the same type but tried to load it as such.");
             return;
         }
 
-        IntCompareNodeSaveData lcn = saveData as IntCompareNodeSaveData;
+        IntCompareNodeData lcn = nodeData as IntCompareNodeData;
         this.intToCompare = lcn.intToCompare;
         this.comparisonOperator = lcn.comparisonOperator;
 
@@ -84,20 +83,20 @@ public class IntCompareNode : ConditionalNode<int>
 
     public override string Serialize()
     {
-        return JsonUtility.ToJson(new IntCompareNodeSaveData(this));
+        return JsonUtility.ToJson(new IntCompareNodeData(this));
     }
 
 }
 
 // TODO also make this generic and have base class like conditionalNode
 [System.Serializable]
-public class IntCompareNodeSaveData : NodeSaveDataBase
+public class IntCompareNodeData : NodeDataBase
 {
 
     public int intToCompare;
     public ComparisonOperator comparisonOperator;
 
-    public IntCompareNodeSaveData(NodeBase node) : base(node)
+    public IntCompareNodeData(NodeBase node) : base(node)
     {
         if (!(node is IntCompareNode icNode))
         {

@@ -12,9 +12,9 @@ public class WaitNode : NodeBase
         DrawNode();
     }
 
-    public WaitNode(EventGraphView graphView, NodeSaveDataBase saveData) : base(graphView, saveData)
+    public WaitNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)
     {
-        if (saveData is WaitNodeSaveData wnData)
+        if (nodeData is WaitNodeData wnData)
         {
             this.timeToWait = wnData.timeToWait;
         }
@@ -24,7 +24,7 @@ public class WaitNode : NodeBase
 
     public override string Serialize()
     {
-        return JsonUtility.ToJson(new WaitNodeSaveData(this));
+        return JsonUtility.ToJson(new WaitNodeData(this));
     }
 
     protected override void DrawNode()
@@ -45,12 +45,12 @@ public class WaitNode : NodeBase
 
 }
 
-public class WaitNodeSaveData : NodeSaveDataBase
+public class WaitNodeData : NodeDataBase
 {
 
     public float timeToWait;
 
-    public WaitNodeSaveData(NodeBase node) : base(node)
+    public WaitNodeData(NodeBase node) : base(node)
     {
         WaitNode waitNode = node as WaitNode;
         this.timeToWait = waitNode.timeToWait;

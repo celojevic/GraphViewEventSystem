@@ -24,14 +24,14 @@ public abstract class NodeBase : Node
 
     }
 
-    public NodeBase(EventGraphView graphView, NodeSaveDataBase saveData)
+    public NodeBase(EventGraphView graphView, NodeDataBase nodeData)
     {
-        this.position = saveData.position;
+        this.position = nodeData.position;
         this.graphView = graphView;
-        this.viewDataKey = saveData.guid;
-        this.groupGuid = saveData.groupGuid;
+        this.viewDataKey = nodeData.guid;
+        this.groupGuid = nodeData.groupGuid;
 
-        SetPosition(new Rect(saveData.position, Vector2.zero));
+        SetPosition(new Rect(nodeData.position, Vector2.zero));
     }
 
     #endregion
@@ -44,7 +44,7 @@ public abstract class NodeBase : Node
 
     #endregion
 
-    public void ConnectEdge(ConnectionSaveData conn)
+    public void ConnectEdge(EdgeData conn)
     {
         List<VisualElement> elements = new List<VisualElement>(this.outputContainer.Children());
         if (elements[conn.choiceIndex] is Port port)

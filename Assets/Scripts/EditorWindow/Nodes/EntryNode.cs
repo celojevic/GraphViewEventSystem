@@ -13,7 +13,7 @@ public class EntryNode : NodeBase
 
     public override string Serialize()
     {
-        return JsonUtility.ToJson(new EntryNodeSaveData(this));
+        return JsonUtility.ToJson(new EntryNodeData(this));
     }
 
     protected override void DrawNode()
@@ -31,10 +31,10 @@ public class EntryNode : NodeBase
 }
 
 [System.Serializable]
-public class EntryNodeSaveData : NodeSaveDataBase
+public class EntryNodeData : NodeDataBase
 {
 
-    public EntryNodeSaveData(NodeBase node) : base(node)
+    public EntryNodeData(NodeBase node) : base(node)
     {
     }
 

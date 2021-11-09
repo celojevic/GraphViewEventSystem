@@ -27,7 +27,7 @@ public static class EventGraphSaver
             }
         }
 
-        EventGraphSaveData graphData = new EventGraphSaveData();
+        EventGraphData graphData = new EventGraphData();
 
         graphView.graphElements.ForEach(graphElement =>
         {
@@ -44,7 +44,7 @@ public static class EventGraphSaver
             }
             else if (graphElement is Group group)
             {
-                graphData.groups.Add(new GroupSaveData(group));
+                graphData.groups.Add(new GroupData(group));
             }
         });
 
@@ -73,8 +73,8 @@ public static class EventGraphSaver
 
 
 
-        EventGraphSaveData graphData = (EventGraphSaveData)JsonUtility.FromJson(json, typeof(EventGraphSaveData));
-        List<ConnectionSaveData> savedConnections = new List<ConnectionSaveData>();
+        EventGraphData graphData = (EventGraphData)JsonUtility.FromJson(json, typeof(EventGraphData));
+        List<EdgeData> savedConnections = new List<EdgeData>();
 
         for (int i = 0; i < graphData.nodeJsons.Count; i++)
         {
@@ -82,27 +82,27 @@ public static class EventGraphSaver
             if (!graphData.nodeJsons[i].Contains("nodeType")) continue;
 
             // load as base type to get nodeType info
-            NodeSaveDataBase nodeData = (NodeSaveDataBase)JsonUtility.FromJson(
-                graphData.nodeJsons[i], typeof(NodeSaveDataBase));
+            NodeDataBase nodeData = (NodeDataBase)JsonUtility.FromJson(
+                graphData.nodeJsons[i], typeof(NodeDataBase));
 
             // get save type and load data as parent
-            Type saveDataType = Type.GetType(nodeData.nodeSaveDataType);
-            var saveData = JsonUtility.FromJson(graphData.nodeJsons[i], saveDataType);
+            Type dataType = Type.GetType(nodeData.nodeDataType);
+            var data = JsonUtility.FromJson(graphData.nodeJsons[i], dataType);
 
             // create node from loaded save data
             Type nodeType = Type.GetType(nodeData.nodeType);
-            var node = Activator.CreateInstance(nodeType, graphView, saveData);
+            var node = Activator.CreateInstance(nodeType, graphView, data);
 
             // add node to graph
             graphView.AddElement((GraphElement)node);
 
             // cache edges to add
-            if ((saveData as NodeSaveDataBase).connections.HasElements())
-                savedConnections.AddRange((saveData as NodeSaveDataBase).connections);
+            if ((data as NodeDataBase).edges.HasElements())
+                savedConnections.AddRange((data as NodeDataBase).edges);
         }
 
         // reconnect nodes
-        foreach (ConnectionSaveData conn in savedConnections)
+        foreach (EdgeData conn in savedConnections)
         {
             NodeBase node = graphView.GetElementByGuid(conn.parentNodeGuid) as NodeBase;
             if (node != null)
@@ -111,13 +111,16 @@ public static class EventGraphSaver
                 Debug.LogError("Couldn't get node from guid: " + conn.parentNodeGuid);
         }
 
-        // connect entry node
-        EntryNodeSaveData entryData = (EntryNodeSaveData)JsonUtility.FromJson(graphData.entryNode, typeof(EntryNodeSaveData));
+        ConnectEntryNode(graphView, graphData);
+    }
+
+    static void ConnectEntryNode(EventGraphView graphView, EventGraphData graphData)
+    {
+        EntryNodeData entryData = (EntryNodeData)JsonUtility.FromJson(graphData.entryNode, typeof(EntryNodeData));
         EntryNode entryNode = graphView.GetEntryNode();
-        NodeBase toNode = graphView.GetNodeByGuid(entryData.connections[0].toNodeGuid) as NodeBase;
+        NodeBase toNode = graphView.GetNodeByGuid(entryData.edges[0].toNodeGuid) as NodeBase;
         Edge edge = entryNode.GetFirstOutputPort().ConnectTo(toNode.GetInputPort());
         graphView.AddElement(edge);
-
     }
 
     static void CreateFolders()
@@ -133,11 +136,11 @@ public static class EventGraphSaver
     }
 
 
-    public static EventGraphSaveData LoadGraphDataJson(string fileName)
+    public static EventGraphData LoadGraphDataJson(string fileName)
     {
-        return (EventGraphSaveData)JsonUtility.FromJson(
+        return (EventGraphData)JsonUtility.FromJson(
             File.ReadAllText($"{Application.persistentDataPath}/EventGraphs/{fileName}.json"), 
-            typeof(EventGraphSaveData)
+            typeof(EventGraphData)
         );
     }
 
