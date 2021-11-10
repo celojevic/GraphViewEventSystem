@@ -172,6 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd667871d1250d458f322fd4c35b184, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _panel: {fileID: 1700294610}
   _messageText: {fileID: 476315164}
   _choiceHolder: {fileID: 404361403}
   _choicePrefab: {fileID: 198185208475654754, guid: f7951086b6fe13a44849a524cf7b77c2, type: 3}

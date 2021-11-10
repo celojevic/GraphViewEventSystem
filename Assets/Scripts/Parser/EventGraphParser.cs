@@ -52,9 +52,23 @@ public class EventGraphParser : MonoBehaviour
         }
         else if (nodes[_curNodeGuid].nodeType == nameof(WaitNode))
         {
-            Debug.Log("Wait");
+            HandleWaitNode();
         }
 
+    }
+
+    void HandleWaitNode()
+    {
+        WaitNodeData data = nodes[_curNodeGuid] as WaitNodeData;
+        StartCoroutine(WaitNodeCo(data));
+    }
+
+    IEnumerator WaitNodeCo(WaitNodeData data)
+    {
+        yield return new WaitForSeconds(data.timeToWait);
+
+        _curNodeGuid = data.edges[0].toNodeGuid;
+        Next();
     }
 
     void HandleChoiceNode()

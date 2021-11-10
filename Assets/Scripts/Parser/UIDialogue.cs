@@ -8,6 +8,7 @@ public class UIDialogue : MonoBehaviour
 
     public static UIDialogue instance;
 
+    [SerializeField] private GameObject _panel = null;
     [SerializeField] private TMP_Text _messageText = null;
     [SerializeField] private Transform _choiceHolder = null;
 
@@ -17,10 +18,12 @@ public class UIDialogue : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        Hide();
     }
 
     public void ShowMessage(string message, List<ChoiceAction> choices)
     {
+        _panel.SetActive(true);
         _messageText.text = message;
 
         _choiceHolder.DestroyChildren();
@@ -31,6 +34,11 @@ public class UIDialogue : MonoBehaviour
             prefab.GetComponentInChildren<TMP_Text>().text = choices[i].choice;
             prefab.onClick.AddListener(() => choices[index].callback?.Invoke());
         }
+    }
+
+    public void Hide()
+    {
+        _panel.SetActive(false);
     }
 
 
