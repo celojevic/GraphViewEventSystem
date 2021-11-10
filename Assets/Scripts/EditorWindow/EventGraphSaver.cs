@@ -82,8 +82,8 @@ public static class EventGraphSaver
             if (!graphData.nodeJsons[i].Contains("nodeType")) continue;
 
             // load as base type to get nodeType info
-            NodeDataBase nodeData = (NodeDataBase)JsonUtility.FromJson(
-                graphData.nodeJsons[i], typeof(NodeDataBase));
+            NodeDataWrapper nodeData = (NodeDataWrapper)JsonUtility.FromJson(
+                graphData.nodeJsons[i], typeof(NodeDataWrapper));
 
             // get save type and load data as parent
             Type dataType = Type.GetType(nodeData.nodeDataType);

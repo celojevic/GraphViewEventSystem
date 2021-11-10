@@ -30,8 +30,8 @@ public class EventGraphParser : MonoBehaviour
             if (!json.Contains("nodeType")) continue;
 
             // load as base type to get nodeType info
-            NodeDataBase nodeData = (NodeDataBase)JsonUtility.FromJson(
-                json, typeof(NodeDataBase));
+            NodeDataWrapper nodeData = (NodeDataWrapper)JsonUtility.FromJson(
+                json, typeof(NodeDataWrapper));
 
             // get save type and load data as parent
             Type dataType = Type.GetType(nodeData.nodeDataType);

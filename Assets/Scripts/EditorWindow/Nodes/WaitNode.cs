@@ -56,4 +56,8 @@ public class WaitNodeData : NodeDataBase
         this.timeToWait = waitNode.timeToWait;
     }
 
+    public override void Parse()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -25,7 +25,7 @@ public class EventGraphElementData
 }
 
 [System.Serializable]
-public class NodeDataBase : EventGraphElementData
+public abstract class NodeDataBase : EventGraphElementData
 {
     public string nodeType;
     public string nodeDataType;
@@ -43,7 +43,7 @@ public class NodeDataBase : EventGraphElementData
         this.nodeType = node.GetType().ToString();
         this.nodeDataType = this.GetType().ToString();
 
-        var list = new List<VisualElement>(node.outputContainer.Children());
+        List<VisualElement> list = new List<VisualElement>(node.outputContainer.Children());
         for (int i = 0; i < list.Count; i++)
         {
             if (list[i] is Port port)
@@ -70,6 +70,15 @@ public class NodeDataBase : EventGraphElementData
             }
         }
     }
+
+    public abstract void Parse();
+}
+
+public class NodeDataWrapper : NodeDataBase
+{
+    public NodeDataWrapper(NodeBase node) : base(node) { }
+
+    public override void Parse() { }
 }
 
 [System.Serializable]
@@ -82,9 +91,9 @@ public class GroupData : EventGraphElementData
     {
         nodeGuids = new List<string>();
 
-        foreach (var item in group.containedElements)
+        foreach (GraphElement element in group.containedElements)
         {
-            if (item is NodeBase node)
+            if (element is NodeBase node)
                 nodeGuids.Add(node.viewDataKey);
         } 
     }

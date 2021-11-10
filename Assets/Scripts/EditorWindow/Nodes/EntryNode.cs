@@ -38,4 +38,8 @@ public class EntryNodeData : NodeDataBase
     {
     }
 
+    public override void Parse()
+    {
+        throw new System.NotImplementedException();
+    }
 }

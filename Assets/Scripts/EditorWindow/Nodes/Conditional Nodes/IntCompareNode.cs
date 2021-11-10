@@ -108,6 +108,10 @@ public class IntCompareNodeData : NodeDataBase
         this.comparisonOperator = icNode.comparisonOperator;
     }
 
+    public override void Parse()
+    {
+        throw new System.NotImplementedException();
+    }
 }
 
 public enum ComparisonOperator
