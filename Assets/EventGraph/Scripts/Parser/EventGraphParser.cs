@@ -1,8 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
-using System.IO;
-using System;
 
 public class EventGraphParser : MonoBehaviour
 {
@@ -10,7 +10,7 @@ public class EventGraphParser : MonoBehaviour
     public string fileName = "NewEventGraph";
 
     private Dictionary<string, NodeDataBase> nodes = new Dictionary<string, NodeDataBase>();
-    [SerializeField] private string _curNodeGuid = "";
+    private string _curNodeGuid;
 
     private void Start()
     {
@@ -54,6 +54,18 @@ public class EventGraphParser : MonoBehaviour
         {
             HandleWaitNode();
         }
+        else if (nodes[_curNodeGuid].nodeType == nameof(IntCompareNode))
+        {
+            HandleConditionalNode();
+        }
+
+    }
+
+    // TODO make generic
+    void HandleConditionalNode()
+    {
+
+        IntCompareNodeData data = nodes[_curNodeGuid] as IntCompareNodeData;
 
     }
 

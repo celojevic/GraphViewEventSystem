@@ -1,4 +1,5 @@
-using System;
+#if UNITY_EDITOR
+
 using System.Collections.Generic;
 
 using UnityEditor;
@@ -180,3 +181,5 @@ public class EventGraphView : GraphView
     public EntryNode GetEntryNode() => (EntryNode)base.graphElements.ToList().Find(x => x is EntryNode);
 
 }
+
+#endif

@@ -17,8 +17,6 @@ public abstract class ConditionalNode<T> : NodeBase
 
     #endregion
 
-    public abstract bool EvaluateConditions(T value);
-
     protected override void DrawNode()
     {
         DrawInputContainer();
@@ -36,4 +34,21 @@ public abstract class ConditionalNode<T> : NodeBase
         outputContainer.Add(this.CreatePort("False"));
     }
 
+}
+
+[System.Serializable]
+public abstract class ConditionalNodeData<T> : NodeDataBase
+{
+
+    public ConditionalNodeData(NodeBase node) : base(node) { }
+
+    public abstract bool EvaluateCondition(T value);
+
+}
+
+public enum ComparisonOperator
+{
+    EqualTo,
+    LessThan, GreaterThan,
+    LessThanOrEqualTo, GreaterThanOrEqualTo,
 }

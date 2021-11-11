@@ -4,27 +4,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [System.Serializable]
-public class EventGraphElementData
-{
-
-    public string guid;
-    public Vector2 position;
-
-    #region Constructors
-
-    public EventGraphElementData() { }
-
-    public EventGraphElementData(GraphElement ge)
-    {
-        this.guid = ge.viewDataKey;
-        this.position = ge.GetPosition().position;
-    }
-
-    #endregion
-
-}
-
-[System.Serializable]
 public abstract class NodeDataBase : EventGraphElementData
 {
     public string nodeType;
@@ -79,31 +58,4 @@ public class NodeDataWrapper : NodeDataBase
     public NodeDataWrapper(NodeBase node) : base(node) { }
 
     public override void Parse() { }
-}
-
-[System.Serializable]
-public class GroupData : EventGraphElementData
-{
-
-    public List<string> nodeGuids;
-
-    public GroupData(Group group) : base(group)
-    {
-        nodeGuids = new List<string>();
-
-        foreach (GraphElement element in group.containedElements)
-        {
-            if (element is NodeBase node)
-                nodeGuids.Add(node.viewDataKey);
-        } 
-    }
-
-}
-
-[System.Serializable]
-public class EventGraphData
-{
-    public string entryNode;
-    public List<string> nodeJsons = new List<string>();
-    public List<GroupData> groups = new List<GroupData>();
 }

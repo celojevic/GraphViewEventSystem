@@ -62,7 +62,34 @@ public class IntCompareNode : ConditionalNode<int>
         mainContainer.Add(intField);
     }
 
-    public override bool EvaluateConditions(int value)
+    public override string Serialize()
+    {
+        return JsonUtility.ToJson(new IntCompareNodeData(this));
+    }
+
+}
+
+// TODO also make this generic and have base class like conditionalNode
+[System.Serializable]
+public class IntCompareNodeData : ConditionalNodeData<int>
+{
+
+    public int intToCompare;
+    public ComparisonOperator comparisonOperator;
+
+    public IntCompareNodeData(NodeBase node) : base(node)
+    {
+        if (!(node is IntCompareNode icNode))
+        {
+            Debug.LogError("Node is not IntCompareNode but tried to load it as such.");
+            return;
+        }
+
+        this.intToCompare = icNode.intToCompare;
+        this.comparisonOperator = icNode.comparisonOperator;
+    }
+
+    public override bool EvaluateCondition(int value)
     {
         switch (comparisonOperator)
         {
@@ -81,42 +108,9 @@ public class IntCompareNode : ConditionalNode<int>
         }
     }
 
-    public override string Serialize()
-    {
-        return JsonUtility.ToJson(new IntCompareNodeData(this));
-    }
-
-}
-
-// TODO also make this generic and have base class like conditionalNode
-[System.Serializable]
-public class IntCompareNodeData : NodeDataBase
-{
-
-    public int intToCompare;
-    public ComparisonOperator comparisonOperator;
-
-    public IntCompareNodeData(NodeBase node) : base(node)
-    {
-        if (!(node is IntCompareNode icNode))
-        {
-            Debug.LogError("Node is not IntCompareNode but tried to load it as such.");
-            return;
-        }
-
-        this.intToCompare = icNode.intToCompare;
-        this.comparisonOperator = icNode.comparisonOperator;
-    }
-
     public override void Parse()
     {
         throw new System.NotImplementedException();
     }
-}
 
-public enum ComparisonOperator
-{
-    EqualTo,
-    LessThan, GreaterThan,
-    LessThanOrEqualTo, GreaterThanOrEqualTo,
 }

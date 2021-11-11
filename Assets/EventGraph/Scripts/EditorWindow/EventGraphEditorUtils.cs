@@ -1,9 +1,11 @@
+#if UNITY_EDITOR
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
+
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEngine;
+
 using UnityEngine.UIElements;
 
 public static class EventGraphEditorUtils
@@ -64,3 +66,5 @@ public static class EventGraphEditorUtils
 
 
 }
+
+#endif
