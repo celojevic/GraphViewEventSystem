@@ -12,6 +12,21 @@ public class IntCompareNode : ConditionalNode<int>
 
     #region Constructors
 
+    public IntCompareNode(NodeBase copy) : base(copy)
+    {
+        if (!(copy is IntCompareNode))
+        {
+            Debug.LogError("Tried to copy node that isn't an IntCompareNode.");
+            return;
+        }
+
+        IntCompareNode node = copy as IntCompareNode;
+        this.intToCompare = node.intToCompare;
+        this.comparisonOperator = node.comparisonOperator;
+
+        DrawNode();
+    }
+
     public IntCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
     
     public IntCompareNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)

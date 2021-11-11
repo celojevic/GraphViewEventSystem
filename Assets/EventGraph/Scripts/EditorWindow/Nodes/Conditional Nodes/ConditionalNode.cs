@@ -6,6 +6,10 @@ public abstract class ConditionalNode<T> : NodeBase
 
     #region Constructors
 
+    public ConditionalNode(NodeBase copy) : base(copy)
+    {
+    }
+
     public ConditionalNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
         DrawNode();

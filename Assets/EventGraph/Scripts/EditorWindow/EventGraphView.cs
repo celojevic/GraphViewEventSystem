@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 
+using System;
 using System.Collections.Generic;
 
 using UnityEditor;
@@ -8,12 +9,23 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
+// TODO duplicate nodes in graph
+// TODO drop edge on graph to open search window
+// TODO draw mouse coordinates on cursor
+// TODO look into Placemat and StickyNote classes
+
+public class EventGraphClipboard : ScriptableObject
+{
+    public IEnumerable<GraphElement> graphElements;
+}
+
 public class EventGraphView : GraphView
 {
 
     private EventGraphSearchWindow _searchWindow;
     private EventGraphEditorWindow _editorWindow;
-
+    private EventGraphClipboard _clipboard;
     private MiniMap _minimap;
 
     public EventGraphView(EventGraphEditorWindow editorWindow)
@@ -27,7 +39,88 @@ public class EventGraphView : GraphView
         AddManips();
         CreateEntryNode();
         SetupCallbacks();
+        SetupClipboard();
+
     }
+
+    #region Clipboard, Copy/Paste Functionality
+
+    private Vector2 _localMousePos;
+
+    void SetupClipboard()
+    {
+        serializeGraphElements += Copy;
+        unserializeAndPaste += Paste;
+        canPasteSerializedData += CanPaste;
+        deleteSelection += Delete;
+
+        RegisterCallback<MouseMoveEvent>(evt =>
+        {
+            _localMousePos = evt.localMousePosition;
+        });
+
+        _clipboard = ScriptableObject.CreateInstance<EventGraphClipboard>();
+    }
+
+    private void Delete(string operationName, AskUser askUser)
+    {
+        // TODO undo/redo functionality
+    }
+
+    /// <summary>
+    /// Simply allows paste functionality.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <returns></returns>
+    private bool CanPaste(string data)
+    {
+        return true;
+    }
+
+    private void Paste(string operationName, string data)
+    {
+        if (_clipboard.graphElements.HasElements())
+        {
+            // need an origin point to relatively place copied elements
+            Vector2 posOrigin = default;
+
+            foreach (GraphElement graphElement in _clipboard.graphElements)
+            {
+                Vector2 mousePos = GetLocalMousePos(_localMousePos);
+
+                if (graphElement is NodeBase node)
+                {
+                    // use first node that isn't the entry node as origin point
+                    if (posOrigin == default)
+                        posOrigin = node.GetPosition().position;
+
+                    Vector2 posOffset = node.GetPosition().position - posOrigin;
+                    NodeBase newNode = (NodeBase)Activator.CreateInstance(node.GetType(), node);
+                    newNode.SetPosition(new Rect(mousePos + posOffset, Vector2.zero));
+                    AddElement(newNode);
+                }
+                else if (graphElement is Edge edge)
+                {
+                    // connect existing edge?
+                }
+            }
+
+
+            // TODO automatically select the newly copied elements
+        }
+    }
+
+    private string Copy(IEnumerable<GraphElement> elements)
+    {
+        _clipboard.graphElements = null;
+        _clipboard.graphElements = elements;
+
+        // loop thru elements and create/cache new instances of them here instead of on paste
+
+        return null;
+    }
+
+    #endregion
 
     #region Minimap
 

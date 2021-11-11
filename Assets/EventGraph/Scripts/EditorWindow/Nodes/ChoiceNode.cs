@@ -11,12 +11,19 @@ public class ChoiceNode : NodeBase
 
     #region Constructors
 
+    public ChoiceNode(ChoiceNode copy) : base(copy)
+    {
+        this.message = copy.message;
+        this.choices = copy.choices;
+        DrawNode();
+    }
+
     public ChoiceNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
         this.message = "Choice Node";
 
-        choices = new List<string>();
-        choices.Add("Next Dialogue");
+        this.choices = new List<string>();
+        this.choices.Add("Next Dialogue");
 
         DrawNode();
     }

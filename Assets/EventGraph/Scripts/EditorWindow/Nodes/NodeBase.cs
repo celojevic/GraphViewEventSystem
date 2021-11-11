@@ -15,13 +15,20 @@ public abstract class NodeBase : Node
 
     #region Constructors
 
+    /// <summary>
+    /// Allows for derived classes to have their own constructors.
+    /// </summary>
+    public NodeBase(NodeBase copy)
+    {
+        this.position = copy.position;
+        this.graphView = copy.graphView;
+    }
+
     public NodeBase(Vector2 pos, EventGraphView graphView)
     {
         this.position = pos;
         this.graphView = graphView;
-
         SetPosition(new Rect(pos, Vector2.zero));
-
     }
 
     public NodeBase(EventGraphView graphView, NodeDataBase nodeData)
@@ -30,7 +37,6 @@ public abstract class NodeBase : Node
         this.graphView = graphView;
         this.viewDataKey = nodeData.guid;
         this.groupGuid = nodeData.groupGuid;
-
         SetPosition(new Rect(nodeData.position, Vector2.zero));
     }
 
@@ -38,6 +44,9 @@ public abstract class NodeBase : Node
 
     #region Abstract
 
+    /// <summary>
+    /// Must be called in constructors of derived classes after setting all the data.
+    /// </summary>
     protected abstract void DrawNode();
 
     public abstract string Serialize();
