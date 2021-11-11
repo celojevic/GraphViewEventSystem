@@ -74,15 +74,23 @@ public class EventGraphParser : MonoBehaviour
     {
         // create data class from type string
         Type dataType = Type.GetType(nodes[_curNodeGuid].nodeDataType);
-        var nodeData = Activator.CreateInstance(dataType, nodes[_curNodeGuid]);
+        NodeDataBase nodeData = (NodeDataBase)Activator.CreateInstance(dataType, nodes[_curNodeGuid]);
 
         // get the evaluation result by passing in the appropriate comparison value
         object[] parameters = new object[] { _testVal };
         bool result = (bool)nodeData.GetType().GetMethod("EvaluateCondition").Invoke(nodeData, parameters);
 
-
-        // move next based on result
-
+        if (result)
+        {
+            // 0 is always true port
+            _curNodeGuid = nodeData.edges[0].toNodeGuid;
+        }
+        else
+        {
+            // 1 is always false port
+            _curNodeGuid = nodeData.edges[1].toNodeGuid;
+        }
+        Next();
     }
 
     void HandleWaitNode()
