@@ -6,12 +6,21 @@ using UnityEngine.UIElements;
 [System.Serializable]
 public abstract class NodeDataBase : EventGraphElementData
 {
+
     public string nodeType;
     public string nodeDataType;
-
     public string groupGuid;
     public bool isEntryNode;
     public List<EdgeData> edges = new List<EdgeData>();
+
+    public NodeDataBase(NodeDataBase data) : base(data)
+    {
+        this.nodeType = data.nodeType;
+        this.nodeDataType = data.nodeDataType;
+        this.groupGuid = data.groupGuid;
+        this.isEntryNode = data.isEntryNode;
+        this.edges = data.edges;
+    }
 
     public NodeDataBase(NodeBase node) : base(node)
     {

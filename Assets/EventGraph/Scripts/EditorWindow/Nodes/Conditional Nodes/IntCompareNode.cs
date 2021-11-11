@@ -77,6 +77,13 @@ public class IntCompareNodeData : ConditionalNodeData<int>
     public int intToCompare;
     public ComparisonOperator comparisonOperator;
 
+    public IntCompareNodeData(NodeDataBase data):base(data)
+    {
+        IntCompareNodeData cndData = data as IntCompareNodeData;
+        this.intToCompare = cndData.intToCompare;
+        this.comparisonOperator = cndData.comparisonOperator;
+    }
+
     public IntCompareNodeData(NodeBase node) : base(node)
     {
         if (!(node is IntCompareNode icNode))
@@ -94,15 +101,15 @@ public class IntCompareNodeData : ConditionalNodeData<int>
         switch (comparisonOperator)
         {
             case ComparisonOperator.EqualTo:
-                return (intToCompare == value);
+                return value == intToCompare;
             case ComparisonOperator.LessThan:
-                return (intToCompare < value);
+                return value < intToCompare;
             case ComparisonOperator.GreaterThan:
-                return (intToCompare > value);
+                return value > intToCompare;
             case ComparisonOperator.LessThanOrEqualTo:
-                return intToCompare <= value;
+                return value <= intToCompare;
             case ComparisonOperator.GreaterThanOrEqualTo:
-                return intToCompare >= value;
+                return value >= intToCompare;
             default:
                 return true;
         }
@@ -110,7 +117,14 @@ public class IntCompareNodeData : ConditionalNodeData<int>
 
     public override void Parse()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Parsing icn");
     }
 
+}
+
+public enum ComparisonOperator
+{
+    EqualTo,
+    LessThan, GreaterThan,
+    LessThanOrEqualTo, GreaterThanOrEqualTo,
 }

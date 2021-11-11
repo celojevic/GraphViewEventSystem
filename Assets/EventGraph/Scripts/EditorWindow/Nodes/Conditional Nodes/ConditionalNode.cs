@@ -40,15 +40,10 @@ public abstract class ConditionalNode<T> : NodeBase
 public abstract class ConditionalNodeData<T> : NodeDataBase
 {
 
+    public ConditionalNodeData(NodeDataBase data) : base(data) { }
+
     public ConditionalNodeData(NodeBase node) : base(node) { }
 
     public abstract bool EvaluateCondition(T value);
 
-}
-
-public enum ComparisonOperator
-{
-    EqualTo,
-    LessThan, GreaterThan,
-    LessThanOrEqualTo, GreaterThanOrEqualTo,
 }

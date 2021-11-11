@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Reflection;
 using UnityEngine;
 
 public class EventGraphParser : MonoBehaviour
@@ -9,11 +9,15 @@ public class EventGraphParser : MonoBehaviour
 
     public string fileName = "NewEventGraph";
 
+    [SerializeField] private int _testVal = 4;
+
     private Dictionary<string, NodeDataBase> nodes = new Dictionary<string, NodeDataBase>();
     private string _curNodeGuid;
 
     private void Start()
     {
+        // TODO load all events into memory on start
+        //      cache in dict<EventGraphData, fileName string>
         LoadFile();
         Next();
     }
@@ -46,6 +50,10 @@ public class EventGraphParser : MonoBehaviour
 
     void Next()
     {
+        // construct the data from nodeDataType
+        // call Parse() on data
+        // for cndNodes, have Parse() call EvaluateCnd()
+
         if (nodes[_curNodeGuid].nodeType == nameof(ChoiceNode))
         {
             HandleChoiceNode();
@@ -64,8 +72,16 @@ public class EventGraphParser : MonoBehaviour
     // TODO make generic
     void HandleConditionalNode()
     {
+        // create data class from type string
+        Type dataType = Type.GetType(nodes[_curNodeGuid].nodeDataType);
+        var nodeData = Activator.CreateInstance(dataType, nodes[_curNodeGuid]);
 
-        IntCompareNodeData data = nodes[_curNodeGuid] as IntCompareNodeData;
+        // get the evaluation result by passing in the appropriate comparison value
+        object[] parameters = new object[] { _testVal };
+        bool result = (bool)nodeData.GetType().GetMethod("EvaluateCondition").Invoke(nodeData, parameters);
+
+
+        // move next based on result
 
     }
 
