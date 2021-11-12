@@ -15,6 +15,22 @@ using UnityEngine.UIElements;
 // TODO draw mouse coordinates on cursor
 // TODO look into Placemat and StickyNote classes
 
+public class ReconnectEdgeData
+{
+    public int portIndex;
+    public string oldParentGuid;
+    public string newParentGuid;
+    public string oldNextGuid;
+    public string newNextGuid;
+
+    public override string ToString()
+    {
+        return $"PortIndex: {portIndex}\n" +
+            $"old parent guid: {oldParentGuid} | old next guid: {oldNextGuid}\n" +
+            $"new parent guid: {newParentGuid} | new next guid: {newNextGuid}";
+    }
+}
+
 public class EventGraphClipboard : ScriptableObject
 {
     public List<GraphElement> graphElements;
@@ -40,7 +56,6 @@ public class EventGraphView : GraphView
         CreateEntryNode();
         SetupCallbacks();
         SetupClipboard();
-
     }
 
     #region Clipboard, Copy/Paste Functionality
@@ -52,7 +67,7 @@ public class EventGraphView : GraphView
         serializeGraphElements += Copy;
         unserializeAndPaste += Paste;
         canPasteSerializedData += CanPaste;
-        deleteSelection += Delete;
+        //deleteSelection += Delete;
 
         RegisterCallback<MouseMoveEvent>(evt =>
         {
@@ -62,10 +77,10 @@ public class EventGraphView : GraphView
         _clipboard = ScriptableObject.CreateInstance<EventGraphClipboard>();
     }
 
-    private void Delete(string operationName, AskUser askUser)
-    {
-        // TODO undo/redo functionality
-    }
+    //private void Delete(string operationName, AskUser askUser)
+    //{
+    //    // TODO undo/redo functionality
+    //}
 
     /// <summary>
     /// Simply allows paste functionality.
@@ -77,16 +92,24 @@ public class EventGraphView : GraphView
         return true;
     }
 
+    private void DeselectEverything()
+    {
+        graphElements.ForEach(x => x.Unselect(this));
+    }
+
+    // TODO the reconnectEdge stuff is very slow with large amounts of nodes selected
+    //      marked all the relevant blocks as //SLOW
+    //      might just need to change the list looping to dicts/hashsets
     private void Paste(string operationName, string data)
     {
         if (_clipboard.graphElements.HasElements())
         {
             // cache new ports to be connected
-            List<EdgeData> newEdges = new List<EdgeData>();
+            List<ReconnectEdgeData> newEdges = new List<ReconnectEdgeData>();
 
             // select the newly created node(s)
             List<ISelectable> newSelection = new List<ISelectable>();
-            selection.Clear();
+            DeselectEverything();
 
             // need an origin point to relatively place copied elements
             Vector2 posOrigin = default;
@@ -108,16 +131,80 @@ public class EventGraphView : GraphView
                     AddElement(newNode);
 
                     // mark new node as selected
-                    newNode.selected = true;
+                    newNode.Select(this, true);
                     newSelection.Add(newNode);
 
+                    // SLOW
+                    // cache data for new edges to be made
+                    List<Port> outputPorts = node.GetOutputPorts();
+                    if (outputPorts.Count > 0)
+                    {
+                        for (int i = 0; i < outputPorts.Count; i++)
+                        {
+                            // only one connection per output port
+                            Edge edge = null;
+                            if (outputPorts[i].connections.HasElements())
+                                edge = outputPorts[i].connections?.FirstElement();
+
+                            var reconnect = new ReconnectEdgeData
+                            {
+                                portIndex = i,
+                                oldNextGuid = edge != null ? (edge.input.node as NodeBase).guid : "",
+                                oldParentGuid = node.guid,
+                                newParentGuid = newNode.guid,
+                                // newNextGuid will be found later
+                                newNextGuid = ""
+                            };
+                            newEdges.Add(reconnect);
+                        }
+                    }
+
 
                 }
-                else if (graphElement is Edge edge)
+            }
+
+            // SLOW
+            // find the newNextGuids for each new edge
+            for (int i = 0; i < newEdges.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(newEdges[i].newNextGuid)) continue;
+
+                for (int j = 0; j < newEdges.Count; j++)
                 {
-                    // connect existing edge?
+                    if (newEdges[i].oldParentGuid == newEdges[j].oldParentGuid) continue;
+
+                    if (newEdges[i].oldNextGuid == newEdges[j].oldParentGuid)
+                    {
+                        newEdges[i].newNextGuid = newEdges[j].newParentGuid;
+                        break;
+                    }
+
+                }
+            }
+
+            // SLOW
+            // loop again thru newEdges and create them
+            foreach (var edge in newEdges)
+            {
+                // no output edge
+                if (string.IsNullOrEmpty(edge.newNextGuid)) continue;
+
+                NodeBase fromNode = GetNodeByGuid(edge.newParentGuid) as NodeBase;
+                if (fromNode == null)
+                {
+                    Debug.LogError("fromNode was null");
+                    continue;
                 }
 
+                NodeBase toNode = GetNodeByGuid(edge.newNextGuid) as NodeBase;
+                if (toNode == null)
+                {
+                    Debug.LogError("toNode was null");
+                    continue;
+                }
+
+                Edge newEdge = fromNode?.GetOutputPort(edge.portIndex)?.ConnectTo(toNode?.GetInputPort());
+                AddElement(newEdge);
             }
 
             // auto-select the newly copied elements
@@ -127,10 +214,9 @@ public class EventGraphView : GraphView
 
     private string Copy(IEnumerable<GraphElement> elements)
     {
-        _clipboard.graphElements = null;
-        _clipboard.graphElements = new List<GraphElement>(elements);
+        _clipboard.graphElements = elements != null ? new List<GraphElement>(elements) : null;
 
-        // loop thru elements and create/cache new instances of them here instead of on paste
+        // loop thru elements and create/cache new instances of them here instead of on paste?
 
         return null;
     }

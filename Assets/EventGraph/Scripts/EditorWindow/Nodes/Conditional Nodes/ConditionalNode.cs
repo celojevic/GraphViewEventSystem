@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [System.Serializable]
 public abstract class ConditionalNode<T> : NodeBase
@@ -24,6 +25,8 @@ public abstract class ConditionalNode<T> : NodeBase
     protected override void DrawNode()
     {
         DrawInputContainer();
+
+        mainContainer.Add(new Label(viewDataKey));
         DrawOutputContainer();
     }
 

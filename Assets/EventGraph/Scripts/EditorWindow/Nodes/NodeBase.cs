@@ -95,6 +95,32 @@ public abstract class NodeBase : Node
         return null;
     }
 
+    public List<Port> GetOutputPorts()
+    {
+        List<Port> outputPorts = new List<Port>();
+        foreach (var item in this.outputContainer.Children())
+            if (item is Port)
+                outputPorts.Add(item as Port);
+        return outputPorts;
+    }
+
+    public Port GetOutputPort(int index)
+    {
+        int count = 0;
+        foreach (var item in this.outputContainer.Children())
+        {
+            if (!(item is Port port)) continue;
+
+            if (index == count)
+                return port;
+            else
+                count++;
+        }
+
+        Debug.LogError("Couldnt find output port with index: " + index);
+        return null;
+    }
+
     public Port GetInputPort()
     {
         if (inputContainer.Children().FirstElement() is Port port)
