@@ -59,12 +59,17 @@ public abstract class NodeDataBase : EventGraphElementData
         }
     }
 
-    public abstract void Parse();
+    protected string GetFirstNextNodeGuid() => edges[0].toNodeGuid;
+
+    public abstract void Parse(EventGraphParser parser);
 }
 
+/// <summary>
+/// Use this class instead of NodeDataBase to create base instances for things like Reflection.
+/// </summary>
 public class NodeDataWrapper : NodeDataBase
 {
     public NodeDataWrapper(NodeBase node) : base(node) { }
 
-    public override void Parse() { }
+    public override void Parse(EventGraphParser parser) { }
 }

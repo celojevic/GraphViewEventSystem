@@ -1,18 +1,20 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
+// TODO can use RuntimeInitializeOnLoadMethod and make this a regular class?
 public class EventGraphParser : MonoBehaviour
 {
+
+    public string curNodeGuid { get; set; }
+    public NodeDataBase curNodeData => nodes.ContainsKey(curNodeGuid) ? nodes[curNodeGuid] : null;
 
     public string fileName = "NewEventGraph";
 
     [SerializeField] private int _testVal = 4;
 
     private Dictionary<string, NodeDataBase> nodes = new Dictionary<string, NodeDataBase>();
-    private string _curNodeGuid;
 
     private void Start()
     {
@@ -44,37 +46,31 @@ public class EventGraphParser : MonoBehaviour
         }
         
         EntryNodeData entryNodeData = JsonUtility.FromJson<EntryNodeData>(data.entryNode);
-        _curNodeGuid = entryNodeData.edges[0].toNodeGuid;
+        curNodeGuid = entryNodeData.edges[0].toNodeGuid;
 
     }
 
-    void Next()
+    public void Next()
     {
-        // construct the data from nodeDataType
-        // call Parse() on data
-        // for cndNodes, have Parse() call EvaluateCnd()
+        Type dataType = Type.GetType(curNodeData.nodeDataType);
+        NodeDataBase nodeData = (NodeDataBase)Activator.CreateInstance(dataType, nodes[curNodeGuid]);
 
-        if (nodes[_curNodeGuid].nodeType == nameof(ChoiceNode))
+        if (nodeData.GetType().BaseType == typeof(NodeDataBase))
         {
-            HandleChoiceNode();
+            nodeData.Parse(this);
         }
-        else if (nodes[_curNodeGuid].nodeType == nameof(WaitNode))
-        {
-            HandleWaitNode();
-        }
-        else if (nodes[_curNodeGuid].nodeType == nameof(IntCompareNode))
+        else // BaseType is ConditionalNodeData<>
         {
             HandleConditionalNode();
         }
 
     }
 
-    // TODO make generic
     void HandleConditionalNode()
     {
         // create data class from type string
-        Type dataType = Type.GetType(nodes[_curNodeGuid].nodeDataType);
-        NodeDataBase nodeData = (NodeDataBase)Activator.CreateInstance(dataType, nodes[_curNodeGuid]);
+        Type dataType = Type.GetType(curNodeData.nodeDataType);
+        NodeDataBase nodeData = (NodeDataBase)Activator.CreateInstance(dataType, curNodeData);
 
         // get the evaluation result by passing in the appropriate comparison value
         object[] parameters = new object[] { _testVal };
@@ -83,54 +79,15 @@ public class EventGraphParser : MonoBehaviour
         if (result)
         {
             // 0 is always true port
-            _curNodeGuid = nodeData.edges[0].toNodeGuid;
+            curNodeGuid = nodeData.edges[0].toNodeGuid;
         }
         else
         {
             // 1 is always false port
-            _curNodeGuid = nodeData.edges[1].toNodeGuid;
-        }
-        Next();
-    }
-
-    void HandleWaitNode()
-    {
-        WaitNodeData data = nodes[_curNodeGuid] as WaitNodeData;
-        StartCoroutine(WaitNodeCo(data));
-    }
-
-    IEnumerator WaitNodeCo(WaitNodeData data)
-    {
-        yield return new WaitForSeconds(data.timeToWait);
-
-        _curNodeGuid = data.edges[0].toNodeGuid;
-        Next();
-    }
-
-    void HandleChoiceNode()
-    {
-        ChoiceNodeData choiceData = nodes[_curNodeGuid] as ChoiceNodeData;
-        List<ChoiceAction> choices = new List<ChoiceAction>();
-        for (int i = 0; i < choiceData.choices.Count; i++)
-        {
-            var index = i;
-            choices.Add(new ChoiceAction
-            {
-                choice = choiceData.choices[i],
-                callback = () =>
-                {
-                    if (choiceData.edges.Count <= index)
-                    {
-                        Debug.LogWarning("ChoiceNode with edge at index doesn't go anywhere: " + index);
-                        return;
-                    }
-                    _curNodeGuid = choiceData.edges[index].toNodeGuid;
-                    Next();
-                }
-            });
+            curNodeGuid = nodeData.edges[1].toNodeGuid;
         }
 
-        UIDialogue.instance.ShowMessage(choiceData.message, choices);
+        Next();
     }
 
 }

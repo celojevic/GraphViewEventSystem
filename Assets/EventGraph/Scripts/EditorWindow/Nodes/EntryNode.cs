@@ -38,7 +38,7 @@ public class EntryNodeData : NodeDataBase
     {
     }
 
-    public override void Parse()
+    public override void Parse(EventGraphParser parser)
     {
         throw new System.NotImplementedException();
     }

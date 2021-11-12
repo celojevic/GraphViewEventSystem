@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -6,6 +7,14 @@ public class WaitNode : NodeBase
 {
 
     public float timeToWait;
+
+    #region Constructors
+
+    public WaitNode(WaitNode copy) : base(copy)
+    {
+        this.timeToWait = copy.timeToWait;
+        DrawNode();
+    }
 
     public WaitNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
@@ -21,6 +30,8 @@ public class WaitNode : NodeBase
 
         DrawNode();
     }
+
+    #endregion
 
     public override string Serialize()
     {
@@ -50,14 +61,32 @@ public class WaitNodeData : NodeDataBase
 
     public float timeToWait;
 
+    #region Constructors
+
+    public WaitNodeData(WaitNodeData copy) : base(copy)
+    {
+        this.timeToWait = copy.timeToWait;
+    }
+
     public WaitNodeData(NodeBase node) : base(node)
     {
         WaitNode waitNode = node as WaitNode;
         this.timeToWait = waitNode.timeToWait;
     }
 
-    public override void Parse()
+    #endregion
+
+    public override void Parse(EventGraphParser parser)
     {
-        throw new System.NotImplementedException();
+        parser.StartCoroutine(WaitNodeCo(parser));
     }
+
+    IEnumerator WaitNodeCo(EventGraphParser parser)
+    {
+        yield return new WaitForSeconds(this.timeToWait);
+
+        parser.curNodeGuid = GetFirstNextNodeGuid();
+        parser.Next();
+    }
+
 }

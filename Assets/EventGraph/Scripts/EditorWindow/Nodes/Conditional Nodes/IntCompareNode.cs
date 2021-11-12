@@ -130,7 +130,7 @@ public class IntCompareNodeData : ConditionalNodeData<int>
         }
     }
 
-    public override void Parse()
+    public override void Parse(EventGraphParser parser)
     {
         Debug.Log("Parsing icn");
     }

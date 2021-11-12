@@ -137,6 +137,13 @@ public class ChoiceNodeData : NodeDataBase
     public string message;
     public List<string> choices = new List<string>();
 
+    public ChoiceNodeData(NodeDataBase data) : base(data)
+    {
+        ChoiceNodeData oldData = data as ChoiceNodeData;
+        this.message = oldData.message;
+        this.choices = oldData.choices;
+    }
+
     public ChoiceNodeData(NodeBase node) : base(node)
     {
         ChoiceNode cn = node as ChoiceNode;
@@ -157,10 +164,33 @@ public class ChoiceNodeData : NodeDataBase
         }
     }
 
-    public override void Parse()
+    public override void Parse(EventGraphParser parser)
     {
-        throw new System.NotImplementedException();
+        List<ChoiceAction> choiceActions = new List<ChoiceAction>();
+        for (int i = 0; i < this.choices.Count; i++)
+        {
+            var index = i;
+            choiceActions.Add(new ChoiceAction
+            {
+                choice = choices[i],
+                callback = () =>
+                {
+                    if (edges.Count <= index)
+                    {
+                        // TODO end dialogue if nothing next and button pressed
+                        Debug.LogWarning("ChoiceNode with edge at index doesn't go anywhere: " + index);
+                        return;
+                    }
+
+                    parser.curNodeGuid = edges[index].toNodeGuid;
+                    parser.Next();
+                }
+            });
+        }
+
+        UIDialogue.instance.ShowMessage(message, choiceActions);
     }
+
 }
 
 [System.Serializable]
