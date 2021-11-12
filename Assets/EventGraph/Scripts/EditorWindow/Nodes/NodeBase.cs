@@ -11,29 +11,22 @@ public abstract class NodeBase : Node
     public string groupGuid;
 
     protected EventGraphView graphView;
-    protected Vector2 position;
 
     #region Constructors
 
-    /// <summary>
-    /// Allows for derived classes to have their own constructors.
-    /// </summary>
     public NodeBase(NodeBase copy)
     {
-        this.position = copy.position;
         this.graphView = copy.graphView;
     }
 
     public NodeBase(Vector2 pos, EventGraphView graphView)
     {
-        this.position = pos;
         this.graphView = graphView;
         SetPosition(new Rect(pos, Vector2.zero));
     }
 
     public NodeBase(EventGraphView graphView, NodeDataBase nodeData)
     {
-        this.position = nodeData.position;
         this.graphView = graphView;
         this.viewDataKey = nodeData.guid;
         this.groupGuid = nodeData.groupGuid;
@@ -49,6 +42,10 @@ public abstract class NodeBase : Node
     /// </summary>
     protected abstract void DrawNode();
 
+    /// <summary>
+    /// Serialize this class into a JSON string for saving.
+    /// </summary>
+    /// <returns></returns>
     public abstract string Serialize();
 
     #endregion

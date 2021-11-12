@@ -10,31 +10,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 
-// TODO duplicate nodes in graph
+// TODO ctrl+D duplicate nodes in graph
 // TODO drop edge on graph to open search window
 // TODO draw mouse coordinates on cursor
-// TODO look into Placemat and StickyNote classes
+// TODO look into Placemat and StickyNote classes, blackboard maybe?
 
-public class ReconnectEdgeData
-{
-    public int portIndex;
-    public string oldParentGuid;
-    public string newParentGuid;
-    public string oldNextGuid;
-    public string newNextGuid;
-
-    public override string ToString()
-    {
-        return $"PortIndex: {portIndex}\n" +
-            $"old parent guid: {oldParentGuid} | old next guid: {oldNextGuid}\n" +
-            $"new parent guid: {newParentGuid} | new next guid: {newNextGuid}";
-    }
-}
-
-public class EventGraphClipboard : ScriptableObject
-{
-    public List<GraphElement> graphElements;
-}
 
 public class EventGraphView : GraphView
 {
