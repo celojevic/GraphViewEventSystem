@@ -17,7 +17,7 @@ using UnityEngine.UIElements;
 
 public class EventGraphClipboard : ScriptableObject
 {
-    public IEnumerable<GraphElement> graphElements;
+    public List<GraphElement> graphElements;
 }
 
 public class EventGraphView : GraphView
@@ -81,6 +81,13 @@ public class EventGraphView : GraphView
     {
         if (_clipboard.graphElements.HasElements())
         {
+            // cache new ports to be connected
+            List<EdgeData> newEdges = new List<EdgeData>();
+
+            // select the newly created node(s)
+            List<ISelectable> newSelection = new List<ISelectable>();
+            selection.Clear();
+
             // need an origin point to relatively place copied elements
             Vector2 posOrigin = default;
 
@@ -94,26 +101,34 @@ public class EventGraphView : GraphView
                     if (posOrigin == default)
                         posOrigin = node.GetPosition().position;
 
+                    // create new node
                     Vector2 posOffset = node.GetPosition().position - posOrigin;
                     NodeBase newNode = (NodeBase)Activator.CreateInstance(node.GetType(), node);
                     newNode.SetPosition(new Rect(mousePos + posOffset, Vector2.zero));
                     AddElement(newNode);
+
+                    // mark new node as selected
+                    newNode.selected = true;
+                    newSelection.Add(newNode);
+
+
                 }
                 else if (graphElement is Edge edge)
                 {
                     // connect existing edge?
                 }
+
             }
 
-
-            // TODO automatically select the newly copied elements
+            // auto-select the newly copied elements
+            selection = newSelection;
         }
     }
 
     private string Copy(IEnumerable<GraphElement> elements)
     {
         _clipboard.graphElements = null;
-        _clipboard.graphElements = elements;
+        _clipboard.graphElements = new List<GraphElement>(elements);
 
         // loop thru elements and create/cache new instances of them here instead of on paste
 
