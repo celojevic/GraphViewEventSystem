@@ -15,6 +15,11 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
     private const string DEFAULT_FILE_NAME = "NewEventGraph";
     private string _fileName = DEFAULT_FILE_NAME;
 
+    private EnumFlagsField _saveTypeFlagsField;
+    public EventGraphSaveType saveTypeFlags => (EventGraphSaveType)_saveTypeFlagsField.value;
+
+    const string SAVE_TYPE_KEY = "EventGraphSaveType";
+
     [MenuItem("Window/Event Graph")]
     static void Init()
     {
@@ -45,9 +50,14 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         toolbar.Add(saveButton);
 
         // save type flags dropdown
-        EnumFlagsField saveTypePopup = new EnumFlagsField(SaveType.JSON);
-        // TODO callback for type and save as selected type when implemented
-        toolbar.Add(saveTypePopup);
+        _saveTypeFlagsField = new EnumFlagsField(EventGraphSaveType.JSON);
+        _saveTypeFlagsField.RegisterValueChangedCallback(evt =>
+        {
+            PlayerPrefs.SetInt(SAVE_TYPE_KEY, (int)(SaveType)evt.newValue);
+            PlayerPrefs.Save(); 
+        });
+        _saveTypeFlagsField.value = (SaveType)PlayerPrefs.GetInt(SAVE_TYPE_KEY);
+        toolbar.Add(_saveTypeFlagsField);
 
         // load button
         Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
@@ -99,12 +109,13 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         rootVisualElement.Add(_graphView);
     }
 
-    [Flags]
-    public enum SaveType
-    {
-        JSON=1,
-        ScriptableObject=2,
-        SQLite=4,
-    }
 
+}
+
+[Flags]
+public enum EventGraphSaveType
+{
+    JSON = 1,
+    ScriptableObject = 2,
+    SQLite = 4,
 }

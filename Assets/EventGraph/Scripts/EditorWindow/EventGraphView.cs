@@ -24,6 +24,8 @@ public class EventGraphView : GraphView
     private EventGraphClipboard _clipboard;
     private MiniMap _minimap;
 
+    public EventGraphSaveType saveFlags => _editorWindow.saveTypeFlags;
+
     public EventGraphView(EventGraphEditorWindow editorWindow)
     {
         _editorWindow = editorWindow;

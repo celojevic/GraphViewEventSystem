@@ -1,21 +1,56 @@
 using UnityEngine;
-using System.IO;
-using UnityEditor.Experimental.GraphView;
+
 using UnityEditor;
-using System.Collections.Generic;
-using UnityEngine.UIElements;
+using UnityEditor.Experimental.GraphView;
+
 using System;
+using System.IO;
+using System.Collections.Generic;
 
 public static class EventGraphSaver 
 {
 
+    #region Saving
+
     // TODO add option to open file location after save
     public static void Save(EventGraphView graphView, string fileName)
     {
-        if (graphView.graphElements.ToList().Count <= 1) return;
+        if (graphView.graphElements.ToList().Count <= 1)
+        {
+            Debug.LogWarning("Nothing in graph to save.");
+            return;
+        }
+
+        if (graphView.saveFlags == 0) // nothing
+        {
+            Debug.LogWarning("No save flags selected. Make sure you check at least one save flag in the toolbar.");
+            return;
+        }
 
         CreateFolders();
+        
+        if (graphView.saveFlags.HasFlag(EventGraphSaveType.JSON))
+        {
+            SaveAsJSON(graphView, fileName);
+        }
+        if (graphView.saveFlags.HasFlag(EventGraphSaveType.ScriptableObject))
+        {
+            SaveAsSO(graphView, fileName);
+        }
 
+    }
+
+    static void SaveAsSO(EventGraphView graphView, string fileName)
+    {
+
+        string path = $"{Application.dataPath}/EventGraph/SaveData/{fileName}.asset";
+        Debug.Log(path);
+
+
+    }
+
+    static void SaveAsJSON(EventGraphView graphView, string fileName)
+    {
         string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
         if (File.Exists(path))
         {
@@ -51,8 +86,10 @@ public static class EventGraphSaver
         string json = JsonUtility.ToJson(graphData, true);
         File.WriteAllText(path, json);
 
-        Debug.Log("Save successful! Path: " + path);
+        Debug.Log("JSON Save successful! Path: " + path);
     }
+
+    #endregion
 
     public static void Load(EventGraphView graphView, string fileName)
     {
@@ -125,7 +162,15 @@ public static class EventGraphSaver
 
     static void CreateFolders()
     {
+        // json save path
         CreateFolder($"{Application.persistentDataPath}/EventGraphs");
+
+        // SO save path
+        if (!AssetDatabase.IsValidFolder("Assets/EventGraph"))
+            AssetDatabase.CreateFolder("Assets", "EventGraph");
+        if (!AssetDatabase.IsValidFolder("Assets/EventGraph/SaveData"))
+            AssetDatabase.CreateFolder("Assets/EventGraph", "SaveData");
+        AssetDatabase.Refresh();
     }
 
     static void CreateFolder(string path)
