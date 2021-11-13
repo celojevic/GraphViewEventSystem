@@ -42,11 +42,16 @@ public static class EventGraphSaver
 
     static void SaveAsSO(EventGraphView graphView, string fileName)
     {
-
-        string path = $"{Application.dataPath}/EventGraph/SaveData/{fileName}.asset";
+        string path = $"Assets/EventGraph/SaveData/{fileName}.asset";
         Debug.Log(path);
 
+        var so = ScriptableObject.CreateInstance<EventGraphDataObject>();
+        so.graphData = GetGraphData(graphView);
 
+        AssetDatabase.CreateAsset(so, path);
+        AssetDatabase.SaveAssets();
+
+        Debug.Log("ScriptableObject - Save successful! Path: " + path);
     }
 
     static void SaveAsJSON(EventGraphView graphView, string fileName)
@@ -62,6 +67,14 @@ public static class EventGraphSaver
             }
         }
 
+        string json = JsonUtility.ToJson(GetGraphData(graphView), true);
+        File.WriteAllText(path, json);
+
+        Debug.Log("JSON - Save successful! Path: " + path);
+    }
+
+    static EventGraphData GetGraphData(EventGraphView graphView)
+    {
         EventGraphData graphData = new EventGraphData();
 
         graphView.graphElements.ForEach(graphElement =>
@@ -83,10 +96,7 @@ public static class EventGraphSaver
             }
         });
 
-        string json = JsonUtility.ToJson(graphData, true);
-        File.WriteAllText(path, json);
-
-        Debug.Log("JSON Save successful! Path: " + path);
+        return graphData;
     }
 
     #endregion
