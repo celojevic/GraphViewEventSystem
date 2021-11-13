@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-
+using UnityEngine;
 using UnityEngine.UIElements;
 
 public static class EventGraphEditorUtils
@@ -73,6 +73,17 @@ public static class EventGraphEditorUtils
     public static string RemoveString(this string s, string toRemove)
     {
         return s.Replace(toRemove, "");
+    }
+
+    public static List<T> FindScriptableObjects<T>() where T : ScriptableObject
+    {
+        List<T> list = new List<T>();
+        string[] guids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
+
+        for (int i = 0; i < guids.Length; i++)
+            list.Add(AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(guids[i])));
+
+        return list;
     }
 
 }

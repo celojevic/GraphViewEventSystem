@@ -103,7 +103,17 @@ public static class EventGraphSaver
 
     #endregion
 
-    public static void Load(EventGraphView graphView, string fileName)
+    public static void LoadFromSo(EventGraphView graphView, string fileName)
+    {
+        string path = $"Assets/EventGraph/SaveData/{fileName}.asset";
+        EventGraphDataObject data = AssetDatabase.LoadAssetAtPath<EventGraphDataObject>(path);
+        if (data != null)
+            ReconstructGraph(graphView, data?.graphData);
+        else
+            Debug.LogError("Couldn't find data object at path: "+path);
+    }
+
+    public static void LoadFromJson(EventGraphView graphView, string fileName)
     {
         if (!Directory.Exists($"{Application.persistentDataPath}/EventGraphs"))
         {
@@ -111,18 +121,25 @@ public static class EventGraphSaver
             return;
         }
 
-        graphView.ClearGraph();
-
         string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
         string json = File.ReadAllText(path);
 
+        EventGraphData graphData = (EventGraphData)JsonUtility.FromJson(json, typeof(EventGraphData));
+        if (graphData != null)
+            ReconstructGraph(graphView, graphData);
+        else
+            Debug.LogError("Loaded graphData was null.");
+    }
 
+    static void ReconstructGraph(EventGraphView graphView, EventGraphData graphData)
+    {
+        if (graphView == null) return;
+        if (graphData == null) return;
 
         // TODO load groups first
 
+        graphView.ClearGraph();
 
-
-        EventGraphData graphData = (EventGraphData)JsonUtility.FromJson(json, typeof(EventGraphData));
         List<EdgeData> savedConnections = new List<EdgeData>();
 
         for (int i = 0; i < graphData.nodeJsons.Count; i++)

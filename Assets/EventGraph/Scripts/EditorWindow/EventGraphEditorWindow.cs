@@ -71,7 +71,19 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         // load button
         Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
         {
-            EventGraphSaver.Load(_graphView, _jsonFilesPopup.value.RemoveString(".json"));
+            switch ((DataOperation)_loadTypeField.value)
+            {
+                case DataOperation.JSON:
+                    EventGraphSaver.LoadFromJson(_graphView, _jsonFilesPopup.value.RemoveString(".json"));
+                    break;
+
+                case DataOperation.ScriptableObject:
+                    EventGraphSaver.LoadFromSo(_graphView, _jsonFilesPopup.value);
+                    break;
+            }
+
+            
+
             _fileName = _jsonFilesPopup.value.RemoveString(".json");
             _fileNameTextField.value = _fileName;
         });
@@ -100,9 +112,8 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
         _saveBar.Add(_loadTypeField);
 
-        // appear after dropdown
+        // appear after DataOperation dropdown
         HandleLoadTypeChanged();
-
     }
 
     void HandleLoadTypeChanged()
@@ -126,6 +137,8 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         }
     }
 
+
+
     void RemoveSoPopup()
     {
 
@@ -133,7 +146,24 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
     void PopulateSoPopup()
     {
+        var list = EventGraphEditorUtils.FindScriptableObjects<EventGraphDataObject>();
+        if (list.Count == 0)
+        {
+            _noFilesLabel = new Label("No files found.");
+            _saveBar.Add(_noFilesLabel);
+        }
+        else
+        {
+            List<string> concatFiles = new List<string>();
+            foreach (var item in list)
+            {
+                concatFiles.Add(item.name);
+            }
 
+            _jsonFilesPopup = new PopupField<string>(concatFiles, 0);
+            _saveBar.Add(_jsonFilesPopup);
+
+        }
     }
 
 
@@ -167,8 +197,6 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         else
         {
             _jsonFilesPopup = new PopupField<string>(concatFiles, 0);
-            // TODO callback for index and load that file
-            // TODO change fileName to be selected file
             _saveBar.Add(_jsonFilesPopup);
         }
     }
