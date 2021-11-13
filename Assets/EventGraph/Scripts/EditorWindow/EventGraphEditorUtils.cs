@@ -70,6 +70,10 @@ public static class EventGraphEditorUtils
         return new List<T>(arr)[0];
     }
 
+    public static string RemoveString(this string s, string toRemove)
+    {
+        return s.Replace(toRemove, "");
+    }
 
 }
 

@@ -29,15 +29,17 @@ public static class EventGraphSaver
 
         CreateFolders();
         
-        if (graphView.saveFlags.HasFlag(EventGraphSaveType.JSON))
+        if (graphView.saveFlags.HasFlag(DataOperation.JSON))
         {
             SaveAsJSON(graphView, fileName);
         }
-        if (graphView.saveFlags.HasFlag(EventGraphSaveType.ScriptableObject))
+        if (graphView.saveFlags.HasFlag(DataOperation.ScriptableObject))
         {
             SaveAsSO(graphView, fileName);
         }
 
+        // reload the files in the toolbar
+        graphView.editorWindow.PopulateJsonPopup();
     }
 
     static void SaveAsSO(EventGraphView graphView, string fileName)

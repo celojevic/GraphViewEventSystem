@@ -19,16 +19,17 @@ using UnityEngine.UIElements;
 public class EventGraphView : GraphView
 {
 
+    public EventGraphEditorWindow editorWindow;
+
     private EventGraphSearchWindow _searchWindow;
-    private EventGraphEditorWindow _editorWindow;
     private EventGraphClipboard _clipboard;
     private MiniMap _minimap;
 
-    public EventGraphSaveType saveFlags => _editorWindow.saveTypeFlags;
+    public DataOperation saveFlags => editorWindow.saveTypeFlags;
 
     public EventGraphView(EventGraphEditorWindow editorWindow)
     {
-        _editorWindow = editorWindow;
+        this.editorWindow = editorWindow;
 
         CreateSearchWindow();
         CreateGridBg();
@@ -330,7 +331,7 @@ public class EventGraphView : GraphView
     internal Vector2 GetLocalMousePos(Vector2 mousePos, bool isSearchWindow = false)
     {
         if (isSearchWindow)
-            mousePos -= _editorWindow.position.position;
+            mousePos -= editorWindow.position.position;
         return contentViewContainer.WorldToLocal(mousePos);
     }
 

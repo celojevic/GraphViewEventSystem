@@ -10,15 +10,21 @@ using System;
 public class EventGraphEditorWindow : GraphViewEditorWindow
 {
 
-    private EventGraphView _graphView;
-
+    const string SAVE_TYPE_KEY = "EventGraphSaveType";
+    const string LOAD_TYPE_KEY = "EventGraphLoadType";
     private const string DEFAULT_FILE_NAME = "NewEventGraph";
+
+    private EventGraphView _graphView;
     private string _fileName = DEFAULT_FILE_NAME;
 
     private EnumFlagsField _saveTypeFlagsField;
-    public EventGraphSaveType saveTypeFlags => (EventGraphSaveType)_saveTypeFlagsField.value;
+    public DataOperation saveTypeFlags => (DataOperation)_saveTypeFlagsField.value;
 
-    const string SAVE_TYPE_KEY = "EventGraphSaveType";
+    private Toolbar _saveBar;
+    private PopupField<string> _jsonFilesPopup;
+    private Label _noFilesLabel;
+    private TextField _fileNameTextField;
+    private EnumField _loadTypeField;
 
     [MenuItem("Window/Event Graph")]
     static void Init()
@@ -30,7 +36,141 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
     private void OnEnable()
     {
         CreateGraphView();
+        CreateToolbars();
+    }
+
+    public void CreateToolbars()
+    {
         CreateToolbar();
+        CreateSaveBar();
+    }
+
+    void CreateSaveBar()
+    {
+        _saveBar = new Toolbar();
+
+        // save button
+        Button saveButton = EventGraphEditorUtils.CreateButton("Save", () =>
+        {
+            EventGraphSaver.Save(_graphView, _fileName);
+        });
+        _saveBar.Add(saveButton);
+
+        // save type flags dropdown
+        _saveTypeFlagsField = new EnumFlagsField(DataOperation.JSON);
+        _saveTypeFlagsField.RegisterValueChangedCallback(evt =>
+        {
+            PlayerPrefs.SetInt(SAVE_TYPE_KEY, (int)(SaveType)evt.newValue);
+            PlayerPrefs.Save();
+        });
+        _saveTypeFlagsField.value = (SaveType)PlayerPrefs.GetInt(SAVE_TYPE_KEY);
+        _saveBar.Add(_saveTypeFlagsField);
+
+        _saveBar.Add(new Label("   "));
+
+        // load button
+        Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
+        {
+            EventGraphSaver.Load(_graphView, _jsonFilesPopup.value.RemoveString(".json"));
+            _fileName = _jsonFilesPopup.value.RemoveString(".json");
+            _fileNameTextField.value = _fileName;
+        });
+        _saveBar.Add(loadButton);
+
+        SetupLoadTypeField();
+
+        // TODO only show if loadTypeField is JSON
+        //PopulateJSONDropdown();
+
+        rootVisualElement.Add(_saveBar);
+    }
+
+    void SetupLoadTypeField()
+    {
+        _loadTypeField = new EnumField(DataOperation.JSON);
+
+        _loadTypeField.RegisterValueChangedCallback(evt =>
+        {
+            PlayerPrefs.SetInt(LOAD_TYPE_KEY, (int)(DataOperation)evt.newValue);
+            PlayerPrefs.Save();
+            HandleLoadTypeChanged();
+        });
+
+        _loadTypeField.value = (DataOperation)PlayerPrefs.GetInt(LOAD_TYPE_KEY, (int)DataOperation.JSON);
+
+        _saveBar.Add(_loadTypeField);
+
+        // appear after dropdown
+        HandleLoadTypeChanged();
+
+    }
+
+    void HandleLoadTypeChanged()
+    {
+        RemoveJsonPopup();
+        RemoveSoPopup();
+
+        switch ((DataOperation)_loadTypeField.value)
+        {
+            case DataOperation.JSON:
+                PopulateJsonPopup();
+                break;
+
+            case DataOperation.ScriptableObject:
+                PopulateSoPopup();
+                break;
+
+            case DataOperation.SQLite:
+
+                break;
+        }
+    }
+
+    void RemoveSoPopup()
+    {
+
+    }
+
+    void PopulateSoPopup()
+    {
+
+    }
+
+
+
+    void RemoveJsonPopup()
+    {
+        if (_jsonFilesPopup != null && _saveBar.Contains(_jsonFilesPopup))
+            _saveBar.Remove(_jsonFilesPopup);
+        if (_noFilesLabel != null && _saveBar.Contains(_jsonFilesPopup))
+            _saveBar.Remove(_noFilesLabel);
+    }
+
+    public void PopulateJsonPopup()
+    {
+        // load files dropdown list
+        string savePath = $"{Application.persistentDataPath}/EventGraphs";
+        string[] files = Directory.GetFiles(savePath);
+        List<string> concatFiles = new List<string>();
+
+        foreach (var item in files)
+        {
+            // +1 to remove last '/'
+            concatFiles.Add(item.Remove(0, savePath.Length + 1));
+        }
+
+        if (files.Length == 0)
+        {
+            _noFilesLabel = new Label("No files found.");
+            _saveBar.Add(_noFilesLabel);
+        }
+        else
+        {
+            _jsonFilesPopup = new PopupField<string>(concatFiles, 0);
+            // TODO callback for index and load that file
+            // TODO change fileName to be selected file
+            _saveBar.Add(_jsonFilesPopup);
+        }
     }
 
     void CreateToolbar()
@@ -38,55 +178,9 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         Toolbar toolbar = new Toolbar();
 
         // file name text field
-        TextField fileNameField = EventGraphEditorUtils.CreateTextField(
+        _fileNameTextField = EventGraphEditorUtils.CreateTextField(
             DEFAULT_FILE_NAME, "Filename:", (evt) => { _fileName = evt.newValue; });
-        toolbar.Add(fileNameField);
-
-        // save button
-        Button saveButton = EventGraphEditorUtils.CreateButton("Save", ()=> 
-        {
-            EventGraphSaver.Save(_graphView, _fileName);
-        });
-        toolbar.Add(saveButton);
-
-        // save type flags dropdown
-        _saveTypeFlagsField = new EnumFlagsField(EventGraphSaveType.JSON);
-        _saveTypeFlagsField.RegisterValueChangedCallback(evt =>
-        {
-            PlayerPrefs.SetInt(SAVE_TYPE_KEY, (int)(SaveType)evt.newValue);
-            PlayerPrefs.Save(); 
-        });
-        _saveTypeFlagsField.value = (SaveType)PlayerPrefs.GetInt(SAVE_TYPE_KEY);
-        toolbar.Add(_saveTypeFlagsField);
-
-        // load button
-        Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
-        {
-            EventGraphSaver.Load(_graphView, _fileName);
-        });
-        toolbar.Add(loadButton);
-
-        // load files dropdown list
-        string savePath = $"{Application.persistentDataPath}/EventGraphs";
-        string[] files = Directory.GetFiles(savePath);
-        List<string> concatFiles = new List<string>();
-        foreach (var item in files)
-        {
-            // +1 to remove last '/'
-            concatFiles.Add(item.Remove(0, savePath.Length + 1));
-        }
-        if (files.Length == 0)
-        {
-            Label label = new Label("No files found.");
-            toolbar.Add(label);
-        }
-        else
-        {
-            PopupField<string> filesPopup = new PopupField<string>(concatFiles, 0);
-            // TODO callback for index and load that file
-            // TODO change fileName to be selected file
-            toolbar.Add(filesPopup);
-        }
+        toolbar.Add(_fileNameTextField);
 
         // minimap toggle
         ToolbarToggle minimapToggle = new ToolbarToggle();
@@ -113,7 +207,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 }
 
 [Flags]
-public enum EventGraphSaveType
+public enum DataOperation
 {
     JSON = 1,
     ScriptableObject = 2,
