@@ -63,14 +63,12 @@ public class IntVariableNode : VariableNodeBase<int>
 
     protected override void DrawNode()
     {
+        this.RemoveCollapse();
+
         ObjectField objField = EventGraphEditorUtils.CreateObjectField(typeof(IntVariable));
-        titleContainer.Add(objField);
+        titleContainer.Insert(0, objField);
 
         titleContainer.Add(this.CreatePort());
-
-        // TODO remove the collapse symbol thing to make look nice
-        this.expanded = false;
-        this.capabilities &= ~Capabilities.Collapsible;
 
         RefreshExpandedState();
     }

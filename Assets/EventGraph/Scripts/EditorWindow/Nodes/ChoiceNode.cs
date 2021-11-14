@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -57,6 +58,8 @@ public class ChoiceNode : NodeBase
 
     void DrawTitleContainer()
     {
+        this.RemoveCollapse();
+
         TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
             (evt) => 
             { 
@@ -64,6 +67,8 @@ public class ChoiceNode : NodeBase
             }
         );
         titleContainer.Insert(0, messageTextField);
+
+        titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("Dialogue"));
     }
 
     void DrawInputContainer()

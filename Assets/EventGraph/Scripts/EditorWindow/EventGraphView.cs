@@ -14,7 +14,7 @@ using UnityEngine.UIElements;
 // TODO drop edge on graph to open search window
 // TODO draw mouse coordinates on cursor
 // TODO look into Placemat and StickyNote classes, blackboard maybe?
-
+// TODO color gradient edges. color depends on nodes connected
 
 public class EventGraphView : GraphView
 {

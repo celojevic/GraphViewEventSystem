@@ -12,6 +12,13 @@ using UnityEngine.UIElements;
 public static class EventGraphEditorUtils
 {
 
+    public static Image CreateImage(string iconName)
+    {
+        Image icon = new Image();
+        icon.image = LoadIcon(iconName);
+        return icon;
+    }
+
     public static TextField CreateTextField(string value = null, string label = null,
         EventCallback<ChangeEvent<string>> onValueChanged = null)
     {
@@ -32,6 +39,11 @@ public static class EventGraphEditorUtils
     public static Button CreateButton(string text, Action onClick = null)
     {
         return new Button(onClick) { text = text };
+    }
+
+    public static void RemoveCollapse(this Node node)
+    {
+        node.titleContainer.RemoveAt(1);
     }
 
     public static ObjectField CreateObjectField(Type type)
@@ -61,6 +73,16 @@ public static class EventGraphEditorUtils
         foreach (var item in styleSheets)
             element.styleSheets.Add((StyleSheet)EditorGUIUtility.Load(item));
         return element;
+    }
+
+    /// <summary>
+    /// Loads a texture from "EventGraph/Icons".
+    /// </summary>
+    /// <param name="iconName"></param>
+    /// <returns></returns>
+    public static Texture2D LoadIcon(string iconName)
+    {
+        return AssetDatabase.LoadAssetAtPath<Texture2D>($"Assets/EventGraph/Icons/{iconName}.png");
     }
 
     public static bool HasElements<T>(this List<T> elements)
