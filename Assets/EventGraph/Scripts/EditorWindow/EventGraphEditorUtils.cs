@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,6 +32,14 @@ public static class EventGraphEditorUtils
     public static Button CreateButton(string text, Action onClick = null)
     {
         return new Button(onClick) { text = text };
+    }
+
+    public static ObjectField CreateObjectField(Type type)
+    {
+        ObjectField objField = new ObjectField();
+        objField.objectType = type;
+
+        return objField;
     }
 
     public static Port CreatePort(this NodeBase node, string portName = "", 

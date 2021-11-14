@@ -265,7 +265,7 @@ public class EventGraphView : GraphView
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
 
-        //CreateRightClickMenu();
+        CreateRightClickMenu();
     }
 
     void CreateRightClickMenu()
@@ -284,8 +284,15 @@ public class EventGraphView : GraphView
             )));
 
         this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
-                "Add Level Compare Node",
+                "Add Int Compare Node",
                 actionEvent => AddElement(new IntCompareNode(
+                    GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
+                )
+            )));
+
+        this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
+                "Add IntVar Node",
+                actionEvent => AddElement(new IntVariableNode(
                     GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
                 )
             )));

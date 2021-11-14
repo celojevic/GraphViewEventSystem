@@ -60,11 +60,12 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
         Vector2 localMousePos = _graphView.GetLocalMousePos(context.screenMousePosition, true);
 
         // TODO doesnt work for groups, either make a type check here or make 
-        //      a custome group class EventGraphGroup with proper constructor
-        var node = (GraphElement)Activator.CreateInstance((Type)SearchTreeEntry.userData, localMousePos, _graphView);
+        //      a custom group class EventGraphGroup with proper constructor
+        var node = (GraphElement)Activator.CreateInstance(
+            (Type)SearchTreeEntry.userData, localMousePos, _graphView);
         _graphView.AddElement(node);
 
-        // if no other elements, automatically connect startNode to this new one
+        // if no other elements, automatically connect startNosde to this new one
         if (_graphView.graphElements.ToList().Count == 2)
         {
             EntryNode entryNode = (EntryNode)_graphView.graphElements.ToList()[0];
