@@ -25,8 +25,6 @@ public abstract class ConditionalNode<T> : NodeBase
     protected override void DrawNode()
     {
         DrawInputContainer();
-
-        mainContainer.Add(new Label(viewDataKey));
         DrawOutputContainer();
     }
 

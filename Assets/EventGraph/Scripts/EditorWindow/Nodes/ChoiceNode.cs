@@ -52,8 +52,6 @@ public class ChoiceNode : NodeBase
         DrawInputContainer();
         DrawOutputContainer();
 
-        mainContainer.Add(new Label(viewDataKey));
-
         RefreshExpandedState();
     }
 

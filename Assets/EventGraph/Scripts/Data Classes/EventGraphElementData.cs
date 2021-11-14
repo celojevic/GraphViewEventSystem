@@ -17,10 +17,10 @@ public class EventGraphElementData
         this.position = data.position;
     }
 
-    public EventGraphElementData(GraphElement ge)
+    public EventGraphElementData(GraphElement graphElement)
     {
-        this.guid = ge.viewDataKey;
-        this.position = ge.GetPosition().position;
+        this.guid = graphElement.viewDataKey;
+        this.position = graphElement.GetPosition().position;
     }
 
 }
