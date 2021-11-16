@@ -26,7 +26,9 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
         var types = Assembly.GetExecutingAssembly().GetTypes();
         for (int i = 0; i < types.Length; i++)
         {
-            if ((types[i].BaseType == typeof(NodeBase) || types[i].BaseType.BaseType == typeof(NodeBase))
+            if (types[i] == null) continue;
+
+            if ((types[i].BaseType == typeof(NodeBase) || types[i].BaseType?.BaseType == typeof(NodeBase))
                 && !types[i].IsAbstract && !types[i].IsGenericType && types[i] != typeof(EntryNode))
             {
                 nodeEntries.Add(new SearchTreeEntry(new GUIContent(types[i].ToString(), _indentIcon))
@@ -71,7 +73,7 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
             EntryNode entryNode = (EntryNode)_graphView.graphElements.ToList()[0];
             entryNode.ConnectEdge(new EdgeData
             {
-                choiceIndex = 0,
+                portIndex = 0,
                 parentNodeGuid = entryNode.guid,
                 toNodeGuid = node.viewDataKey
             });

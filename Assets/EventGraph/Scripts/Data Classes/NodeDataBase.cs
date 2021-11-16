@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [System.Serializable]
-public abstract class NodeDataBase : EventGraphElementData
+public abstract class NodeDataBase : EventGraphElementData, INodeParser
 {
 
     public string nodeType;
@@ -50,22 +50,21 @@ public abstract class NodeDataBase : EventGraphElementData
 
                     edges.Add(new EdgeData()
                     {
-                        choiceIndex = i,
+                        portIndex = i,
                         parentNodeGuid = this.guid,
                         toNodeGuid = toNodeGuid,
+                        edgeType = this.nodeDataType.Contains("VariableNodeData") ? "var" : ""
                     });
                 }
             }
         }
     }
 
-    protected string GetFirstNextNodeGuid() => edges[0].toNodeGuid;
-
     public abstract void Parse(EventGraphParser parser);
 }
 
 /// <summary>
-/// Use this class instead of NodeDataBase to create base instances for things like Reflection.
+/// Use this class instead of NodeDataBase to create base instances to use in Reflection.
 /// </summary>
 public class NodeDataWrapper : NodeDataBase
 {

@@ -166,8 +166,6 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         }
     }
 
-
-
     void RemoveJsonPopup()
     {
         if (_jsonFilesPopup != null && _saveBar.Contains(_jsonFilesPopup))
@@ -178,6 +176,8 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
     public void PopulateJsonPopup()
     {
+        RemoveJsonPopup();
+
         // load files dropdown list
         string savePath = $"{Application.persistentDataPath}/EventGraphs";
         string[] files = Directory.GetFiles(savePath);

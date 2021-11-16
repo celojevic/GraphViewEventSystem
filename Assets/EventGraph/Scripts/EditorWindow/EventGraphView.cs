@@ -11,7 +11,7 @@ using UnityEngine.UIElements;
 
 
 // TODO ctrl+D duplicate nodes in graph
-// TODO drop edge on graph to open search window
+// TODO drop edge on graph to open search window - much more complicated than it seems
 // TODO draw mouse coordinates on cursor
 // TODO look into Placemat and StickyNote classes, blackboard maybe?
 // TODO color gradient edges. color depends on nodes connected
@@ -20,12 +20,14 @@ public class EventGraphView : GraphView
 {
 
     public EventGraphEditorWindow editorWindow;
+    public Dictionary<string, EventGraphDataObject> dictSaveData = new Dictionary<string, EventGraphDataObject>();
+
+    public DataOperation saveFlags => editorWindow.saveTypeFlags;
 
     private EventGraphSearchWindow _searchWindow;
     private EventGraphClipboard _clipboard;
     private MiniMap _minimap;
 
-    public DataOperation saveFlags => editorWindow.saveTypeFlags;
 
     public EventGraphView(EventGraphEditorWindow editorWindow)
     {
@@ -223,6 +225,7 @@ public class EventGraphView : GraphView
     }
 
     #endregion
+
 
     void CreateEntryNode()
     {

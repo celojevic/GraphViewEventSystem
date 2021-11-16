@@ -202,7 +202,7 @@ public struct EdgeData
     /// <summary>
     /// Index of the edge in the parent node's output container.
     /// </summary>
-    public int choiceIndex;
+    public int portIndex;
     /// <summary>
     /// Guid of the parent node the edge originates from.
     /// </summary>
@@ -211,4 +211,8 @@ public struct EdgeData
     /// Guid of the node the edge connects to.
     /// </summary>
     public string toNodeGuid;
+    /// <summary>
+    /// Type of edge connection. Can be "" or "var".
+    /// </summary>
+    public string edgeType;
 }

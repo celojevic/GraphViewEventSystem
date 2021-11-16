@@ -1,5 +1,7 @@
+#if UNITY_EDITOR
+
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEditor.Experimental.GraphView;
 
 [System.Serializable]
 public abstract class ConditionalNode<T> : NodeBase
@@ -26,6 +28,8 @@ public abstract class ConditionalNode<T> : NodeBase
     {
         DrawInputContainer();
         DrawOutputContainer();
+
+        mainContainer.Add(this.CreatePort("Value", Direction.Input));
     }
 
     void DrawInputContainer()
@@ -40,6 +44,8 @@ public abstract class ConditionalNode<T> : NodeBase
     }
 
 }
+
+#endif
 
 [System.Serializable]
 public abstract class ConditionalNodeData<T> : NodeDataBase

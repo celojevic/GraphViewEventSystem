@@ -103,14 +103,15 @@ public static class EventGraphSaver
 
     #endregion
 
+
+
+    #region Loading
+
     public static void LoadFromSo(EventGraphView graphView, string fileName)
     {
         string path = $"Assets/EventGraph/SaveData/{fileName}.asset";
         EventGraphDataObject data = AssetDatabase.LoadAssetAtPath<EventGraphDataObject>(path);
-        if (data != null)
-            ReconstructGraph(graphView, data?.graphData);
-        else
-            Debug.LogError("Couldn't find data object at path: "+path);
+        LoadFromData(graphView, data?.graphData);
     }
 
     public static void LoadFromJson(EventGraphView graphView, string fileName)
@@ -125,10 +126,19 @@ public static class EventGraphSaver
         string json = File.ReadAllText(path);
 
         EventGraphData graphData = (EventGraphData)JsonUtility.FromJson(json, typeof(EventGraphData));
-        if (graphData != null)
+        LoadFromData(graphView, graphData);
+    }
+
+    static void LoadFromData(EventGraphView graphView, EventGraphData graphData)
+    {
+        if (graphData != null && graphData != null)
+        {
             ReconstructGraph(graphView, graphData);
+        }
         else
+        {
             Debug.LogError("Loaded graphData was null.");
+        }
     }
 
     static void ReconstructGraph(EventGraphView graphView, EventGraphData graphData)
@@ -188,6 +198,8 @@ public static class EventGraphSaver
         Edge edge = entryNode.GetFirstOutputPort().ConnectTo(toNode.GetInputPort());
         graphView.AddElement(edge);
     }
+
+    #endregion
 
     static void CreateFolders()
     {

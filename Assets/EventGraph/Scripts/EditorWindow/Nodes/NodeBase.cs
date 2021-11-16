@@ -53,7 +53,7 @@ public abstract class NodeBase : Node
     public void ConnectEdge(EdgeData conn)
     {
         List<VisualElement> elements = new List<VisualElement>(this.outputContainer.Children());
-        if (elements[conn.choiceIndex] is Port port)
+        if (elements[conn.portIndex] is Port port)
         {
             NodeBase nextNode = graphView.GetElementByGuid(conn.toNodeGuid) as NodeBase;
             if (nextNode == null)
@@ -62,14 +62,18 @@ public abstract class NodeBase : Node
                 return;
             }
 
-            Port nextNodeInputPort = nextNode.GetInputPort();
-            if (nextNodeInputPort == null)
-            {
-                Debug.LogError("NextNodeInputPort was null");
-                return;
-            }
+            Port nextInputPort = null;
 
-            Edge edge = port.ConnectTo(nextNodeInputPort);
+            // get next port based on edge type
+            // i.e. "var" edge type will connect a VarNode output to the mainContainer
+            if (conn.edgeType == "var")
+                nextInputPort = nextNode.GetVarInputPort();
+            else
+                nextInputPort = nextNode.GetInputPort();
+
+            if (nextInputPort == null) return;
+
+            Edge edge = port.ConnectTo(nextInputPort);
             graphView.AddElement(edge);
         }
         else
@@ -126,9 +130,20 @@ public abstract class NodeBase : Node
         }
         else
         {
-            Debug.LogError("Couldn't find input port for node");
+            //Debug.LogError("Couldn't find input port for node");
             return null;
         }
+    }
+
+    public Port GetVarInputPort()
+    {
+        foreach (var item in mainContainer.Children())
+        {
+            if (item is Port port)
+                return port;
+        }
+
+        return null;
     }
 
 }

@@ -76,6 +76,8 @@ public class WaitNodeData : NodeDataBase
 
     #endregion
 
+    #region Runtime
+
     public override void Parse(EventGraphParser parser)
     {
         parser.StartCoroutine(WaitNodeCo(parser));
@@ -85,8 +87,10 @@ public class WaitNodeData : NodeDataBase
     {
         yield return new WaitForSeconds(this.timeToWait);
 
-        parser.curNodeGuid = GetFirstNextNodeGuid();
+        parser.curNodeGuid = edges[0].toNodeGuid;
         parser.Next();
     }
+
+    #endregion
 
 }

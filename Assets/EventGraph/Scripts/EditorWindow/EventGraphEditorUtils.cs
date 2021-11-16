@@ -46,10 +46,11 @@ public static class EventGraphEditorUtils
         node.titleContainer.RemoveAt(1);
     }
 
-    public static ObjectField CreateObjectField(Type type)
+    public static ObjectField CreateObjectField(Type type, UnityEngine.Object value, string title = "")
     {
-        ObjectField objField = new ObjectField();
+        ObjectField objField = new ObjectField(title);
         objField.objectType = type;
+        objField.value = value;
 
         return objField;
     }
@@ -98,7 +99,8 @@ public static class EventGraphEditorUtils
     public static T FirstElement<T>(this IEnumerable<T> arr)
     {
         if (arr == null) return default(T);
-        return new List<T>(arr)[0];
+        var list = new List<T>(arr);
+        return list.HasElements() ? list[0] : default(T);
     }
 
     public static string RemoveString(this string s, string toRemove)

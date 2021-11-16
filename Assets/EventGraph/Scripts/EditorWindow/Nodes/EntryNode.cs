@@ -43,3 +43,8 @@ public class EntryNodeData : NodeDataBase
         throw new System.NotImplementedException();
     }
 }
+
+public interface INodeParser
+{
+    void Parse(EventGraphParser parser);
+}
