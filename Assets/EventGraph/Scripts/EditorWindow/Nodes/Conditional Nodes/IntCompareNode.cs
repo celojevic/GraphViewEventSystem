@@ -7,39 +7,27 @@ using UnityEngine.UIElements;
 [System.Serializable]
 public class IntCompareNode : ConditionalNode<int>
 {
+
     public int intToCompare;
     public ComparisonOperator comparisonOperator;
 
     #region Constructors
 
-    public IntCompareNode(NodeBase copy) : base(copy)
+    public IntCompareNode(IntCompareNode copy) : base(copy)
     {
-        if (!(copy is IntCompareNode))
-        {
-            Debug.LogError("Tried to copy node that isn't an IntCompareNode.");
-            return;
-        }
-
-        IntCompareNode node = copy as IntCompareNode;
-        this.intToCompare = node.intToCompare;
-        this.comparisonOperator = node.comparisonOperator;
+        this.intToCompare = copy.intToCompare;
+        this.comparisonOperator = copy.comparisonOperator;
 
         DrawNode();
     }
 
     public IntCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
     
-    public IntCompareNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)
+    public IntCompareNode(EventGraphView graphView, IntCompareNodeData data) 
+        : base(graphView, data)
     {
-        if (!(nodeData is IntCompareNodeData))
-        {
-            Debug.LogError("Save data was not the same type but tried to load it as such.");
-            return;
-        }
-
-        IntCompareNodeData lcn = nodeData as IntCompareNodeData;
-        this.intToCompare = lcn.intToCompare;
-        this.comparisonOperator = lcn.comparisonOperator;
+        this.intToCompare = data.intToCompare;
+        this.comparisonOperator = data.comparisonOperator;
 
         DrawNode();
     }
@@ -84,7 +72,6 @@ public class IntCompareNode : ConditionalNode<int>
 
 }
 
-// TODO also make this generic and have base class like conditionalNode
 [System.Serializable]
 public class IntCompareNodeData : ConditionalNodeData<int>
 {
@@ -92,24 +79,19 @@ public class IntCompareNodeData : ConditionalNodeData<int>
     public int intToCompare;
     public ComparisonOperator comparisonOperator;
 
-    public IntCompareNodeData(NodeDataBase data):base(data)
+    public IntCompareNodeData(IntCompareNodeData data) : base(data)
     {
-        IntCompareNodeData cndData = data as IntCompareNodeData;
-        this.intToCompare = cndData.intToCompare;
-        this.comparisonOperator = cndData.comparisonOperator;
+        this.intToCompare = data.intToCompare;
+        this.comparisonOperator = data.comparisonOperator;
     }
 
-    public IntCompareNodeData(NodeBase node) : base(node)
+    public IntCompareNodeData(IntCompareNode node) : base(node)
     {
-        if (!(node is IntCompareNode icNode))
-        {
-            Debug.LogError("Node is not IntCompareNode but tried to load it as such.");
-            return;
-        }
-
-        this.intToCompare = icNode.intToCompare;
-        this.comparisonOperator = icNode.comparisonOperator;
+        this.intToCompare = node.intToCompare;
+        this.comparisonOperator = node.comparisonOperator;
     }
+
+    #region Runtime
 
     public override bool EvaluateCondition(int value)
     {
@@ -132,8 +114,10 @@ public class IntCompareNodeData : ConditionalNodeData<int>
 
     public override void Parse(EventGraphParser parser)
     {
-        Debug.Log("Parsing icn");
+        throw new System.NotImplementedException();
     }
+
+    #endregion
 
 }
 

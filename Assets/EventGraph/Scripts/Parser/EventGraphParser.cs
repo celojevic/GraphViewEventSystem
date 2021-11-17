@@ -73,9 +73,7 @@ public class EventGraphParser : MonoBehaviour
         NodeDataBase nodeData = (NodeDataBase)Activator.CreateInstance(dataType, curNodeData);
 
         // get the evaluation result by passing in the appropriate comparison value
-        object[] parameters = new object[] { _testVal };
-        bool result = (bool)nodeData.GetType().GetMethod("EvaluateCondition").Invoke(nodeData, parameters);
-
+        bool result = (bool)nodeData.GetType().GetMethod("EvaluateCondition").Invoke(nodeData, null);
         if (result)
         {
             // 0 is always true port

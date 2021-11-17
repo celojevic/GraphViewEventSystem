@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 [System.Serializable]
-public abstract class NodeDataBase : EventGraphElementData, INodeParser
+public abstract class NodeDataBase : EventGraphElementData
 {
 
     public string nodeType;
@@ -55,6 +55,29 @@ public abstract class NodeDataBase : EventGraphElementData, INodeParser
                         toNodeGuid = toNodeGuid,
                         edgeType = this.nodeDataType.Contains("VariableNodeData") ? "var" : ""
                     });
+
+                    //// cache this value node guid in the next ConditionalNode
+                    //if (this.nodeDataType.Contains("VariableNodeData"))
+                    //{
+                    //    foreach (Edge item in port.connections)
+                    //    {
+                    //        var type = item.input.node.GetType().BaseType;
+                    //        Debug.Log(type);
+                    //        if (type.IsGenericType)
+                    //        {
+                    //            Debug.Log("is generic");
+                    //            if (type.GetGenericTypeDefinition() == typeof(ConditionalNode<>))
+                    //            {
+                    //                Debug.Log("is cnd Node");
+                    //                var prop = type.GetProperty("valueNodeGuid");
+                    //                Debug.Log(prop.Name);
+                    //                prop.SetValue(this, guid);
+                    //            }
+                    //        }
+                    //    }
+                    //}
+
+
                 }
             }
         }
@@ -72,3 +95,4 @@ public class NodeDataWrapper : NodeDataBase
 
     public override void Parse(EventGraphParser parser) { }
 }
+

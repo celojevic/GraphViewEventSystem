@@ -7,6 +7,8 @@ using UnityEditor.Experimental.GraphView;
 public abstract class ConditionalNode<T> : NodeBase
 {
 
+    public string valueNodeGuid { get; set; }
+
     #region Constructors
 
     public ConditionalNode(NodeBase copy) : base(copy)
@@ -18,7 +20,8 @@ public abstract class ConditionalNode<T> : NodeBase
         DrawNode();
     }
 
-    public ConditionalNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)
+    public ConditionalNode(EventGraphView graphView, ConditionalNodeData<T> nodeData) 
+        : base(graphView, nodeData)
     { 
     }
 
@@ -51,9 +54,11 @@ public abstract class ConditionalNode<T> : NodeBase
 public abstract class ConditionalNodeData<T> : NodeDataBase
 {
 
-    public ConditionalNodeData(NodeDataBase data) : base(data) { }
+    public string valueNodeGuid;
 
-    public ConditionalNodeData(NodeBase node) : base(node) { }
+    public ConditionalNodeData(ConditionalNodeData<T> data) : base(data) { }
+
+    public ConditionalNodeData(ConditionalNode<T> node) : base(node) { }
 
     public abstract bool EvaluateCondition(T value);
 
