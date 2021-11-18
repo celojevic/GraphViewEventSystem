@@ -62,7 +62,7 @@ public abstract class NodeBase : Node
                 return;
             }
 
-            Port nextInputPort = null;
+            Port nextInputPort;
 
             // get next port based on edge type
             // i.e. "var" edge type will connect a VarNode output to the mainContainer

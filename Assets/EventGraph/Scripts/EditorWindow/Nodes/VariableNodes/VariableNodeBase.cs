@@ -20,19 +20,14 @@ public class VariableNodeBase<T> : NodeBase
     {
 
         // TODO make generic somehow
-        if (!string.IsNullOrEmpty(nodeData?.varObjName))
+        var list = EventGraphEditorUtils.FindScriptableObjects<IntVariable>();
+        foreach (var item in list)
         {
-            var list = EventGraphEditorUtils.FindScriptableObjects<IntVariable>();
-            foreach (var item in list)
+            if (item.guid == nodeData.soGuid)
             {
-                if (item.name == nodeData.varObjName)
-                {
-                    variable = item as VariableBase<T>;
-                    break;
-                }
+                variable = item as VariableBase<T>;
+                break;
             }
-
-
         }
     }
 
@@ -54,15 +49,15 @@ public class VariableNodeBase<T> : NodeBase
 public class VariableNodeData<T> : NodeDataBase
 {
 
-    public string varObjName;
+    public string soGuid;
 
     public VariableNodeData(NodeDataBase data) : base(data)
     {
-        this.varObjName = (data as VariableNodeData<T>)?.varObjName;
+        this.soGuid = (data as VariableNodeData<T>)?.soGuid;
     }
     public VariableNodeData(NodeBase node) : base(node)
     {
-        this.varObjName = (node as VariableNodeBase<T>)?.variable.name;
+        this.soGuid = (node as VariableNodeBase<T>)?.variable?.guid;
     }
 
     public override void Parse(EventGraphParser parser)

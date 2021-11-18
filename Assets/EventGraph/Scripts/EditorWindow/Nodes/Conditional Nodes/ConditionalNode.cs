@@ -54,8 +54,6 @@ public abstract class ConditionalNode<T> : NodeBase
 public abstract class ConditionalNodeData<T> : NodeDataBase
 {
 
-    public string valueNodeGuid;
-
     public ConditionalNodeData(ConditionalNodeData<T> data) : base(data) { }
 
     public ConditionalNodeData(ConditionalNode<T> node) : base(node) { }
