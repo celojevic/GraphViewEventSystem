@@ -60,10 +60,9 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         _saveTypeFlagsField = new EnumFlagsField(DataOperation.JSON);
         _saveTypeFlagsField.RegisterValueChangedCallback(evt =>
         {
-            PlayerPrefs.SetInt(SAVE_TYPE_KEY, (int)(SaveType)evt.newValue);
-            PlayerPrefs.Save();
+            EditorPrefs.SetInt(SAVE_TYPE_KEY, (int)(SaveType)evt.newValue);
         });
-        _saveTypeFlagsField.value = (SaveType)PlayerPrefs.GetInt(SAVE_TYPE_KEY);
+        _saveTypeFlagsField.value = (SaveType)EditorPrefs.GetInt(SAVE_TYPE_KEY);
         _saveBar.Add(_saveTypeFlagsField);
 
         _saveBar.Add(new Label("   "));
@@ -103,12 +102,11 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
         _loadTypeField.RegisterValueChangedCallback(evt =>
         {
-            PlayerPrefs.SetInt(LOAD_TYPE_KEY, (int)(DataOperation)evt.newValue);
-            PlayerPrefs.Save();
+            EditorPrefs.SetInt(LOAD_TYPE_KEY, (int)(DataOperation)evt.newValue);
             HandleLoadTypeChanged();
         });
 
-        _loadTypeField.value = (DataOperation)PlayerPrefs.GetInt(LOAD_TYPE_KEY, (int)DataOperation.JSON);
+        _loadTypeField.value = (DataOperation)EditorPrefs.GetInt(LOAD_TYPE_KEY, (int)DataOperation.JSON);
 
         _saveBar.Add(_loadTypeField);
 
