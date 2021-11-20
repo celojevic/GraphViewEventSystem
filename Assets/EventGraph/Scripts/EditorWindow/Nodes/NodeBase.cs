@@ -59,7 +59,7 @@ public abstract class NodeBase : Node
         PortBase port = new PortBase(orientation, direction, capacity, type);
         EdgeConnectorListenerBase listener = new EdgeConnectorListenerBase(graphView, port);
         // TODO make custom edgeConnector, Edge classes
-        port.SetEdgeConnector(new EdgeConnector<Edge>(listener));
+        port.SetEdgeConnector(new EdgeConnector<EdgeBase>(listener));
         port.AddManipulator(port.edgeConnector);
 
         return port;

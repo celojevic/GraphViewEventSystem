@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -39,8 +40,22 @@ public class EdgeConnectorListenerBase : IEdgeConnectorListener
 
     public void OnDrop(GraphView graphView, Edge edge)
     {
+
+        EdgeBase e = edge as EdgeBase;
+
         _edgesToCreate.Clear();
+
+        // TODO prevent dropping value nodes on anything but value ports
+        //if (e.input.node.GetType().BaseType.IsGenericType && e.output.node.GetType().BaseType.IsGenericType
+        //    && e.input.portName == "Value"
+        //    && e.input.node.GetType().BaseType.GetGenericTypeDefinition() != typeof(ConditionalNode<>)
+        //    || e.output.node.GetType().BaseType.GetGenericTypeDefinition() != typeof(VariableNodeBase<>))
+        //{
+        //    return;
+        //}
+
         _edgesToCreate.Add(edge);
+
         _edgesToDelete.Clear();
 
         if (edge.input.capacity == Port.Capacity.Single)
@@ -83,6 +98,14 @@ public class EdgeConnectorListenerBase : IEdgeConnectorListener
             edge.output.Connect(item);
         }
 
+        // check if var node was dropped on cndNode value port
+        if (e.input.node.GetType().BaseType.IsGenericType
+            && e.input.node.GetType().BaseType.GetGenericTypeDefinition() == typeof(ConditionalNode<>)
+            && e.input.portName == "Value")
+        {
+            e.input.node.GetType().GetProperty("valueNodeGuid")
+                .SetValue(e.input.node, (e.output.node as NodeBase).guid);
+        }
     }
 
 }
