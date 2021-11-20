@@ -6,6 +6,7 @@ using UnityEngine;
 public class PortBase : Port
 {
 
+    public string guid => viewDataKey;
 
     public PortBase(Orientation orientation, Direction direction, Capacity capacity, Type type)
         : base(orientation, direction, capacity, type)

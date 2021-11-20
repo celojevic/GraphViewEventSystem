@@ -56,8 +56,8 @@ public abstract class NodeBase : Node
     public override Port InstantiatePort(Orientation orientation, Direction direction, 
         Port.Capacity capacity, Type type)
     {
-        EdgeConnectorListenerBase listener = new EdgeConnectorListenerBase(graphView);
         PortBase port = new PortBase(orientation, direction, capacity, type);
+        EdgeConnectorListenerBase listener = new EdgeConnectorListenerBase(graphView, port);
         // TODO make custom edgeConnector, Edge classes
         port.SetEdgeConnector(new EdgeConnector<Edge>(listener));
         port.AddManipulator(port.edgeConnector);

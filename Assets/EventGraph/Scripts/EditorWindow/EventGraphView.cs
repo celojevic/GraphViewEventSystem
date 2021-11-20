@@ -24,8 +24,8 @@ public class EventGraphView : GraphView
 
     public DataOperation saveFlags => editorWindow.saveTypeFlags;
 
-    private EventGraphSearchWindow _searchWindow;
-    private EventGraphClipboard _clipboard;
+    private SearchWindowBase _searchWindow;
+    private ClipboardBase _clipboard;
     private MiniMap _minimap;
 
 
@@ -59,7 +59,7 @@ public class EventGraphView : GraphView
             _localMousePos = evt.localMousePosition;
         });
 
-        _clipboard = ScriptableObject.CreateInstance<EventGraphClipboard>();
+        _clipboard = ScriptableObject.CreateInstance<ClipboardBase>();
     }
 
     //private void Delete(string operationName, AskUser askUser)
@@ -226,7 +226,6 @@ public class EventGraphView : GraphView
 
     #endregion
 
-
     void CreateEntryNode()
     {
         AddElement(new EntryNode(Vector2.zero, this));
@@ -256,13 +255,15 @@ public class EventGraphView : GraphView
         nodeCreationRequest = (context) => OpenSearchWindow(context.screenMousePosition);
     }
 
-    public void OpenSearchWindow(Vector2 position)
+    public void OpenSearchWindow(Vector2 position, PortBase portDroppedFrom = null)
     {
         if (_searchWindow == null)
         {
-            _searchWindow = ScriptableObject.CreateInstance<EventGraphSearchWindow>();
+            _searchWindow = ScriptableObject.CreateInstance<SearchWindowBase>();
             _searchWindow.Init(this);
         }
+
+        _searchWindow.portDroppedFrom = portDroppedFrom;
 
         SearchWindow.Open(new SearchWindowContext(position), _searchWindow);
     }

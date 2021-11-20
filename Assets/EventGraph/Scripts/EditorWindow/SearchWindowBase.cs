@@ -4,8 +4,10 @@ using UnityEngine;
 using System.Reflection;
 using System;
 
-public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
+public class SearchWindowBase : ScriptableObject, ISearchWindowProvider
 {
+
+    public PortBase portDroppedFrom = null;
 
     private EventGraphView _graphView;
     private Texture2D _indentIcon;
@@ -77,6 +79,17 @@ public class EventGraphSearchWindow : ScriptableObject, ISearchWindowProvider
                 parentNodeGuid = entryNode.guid,
                 toNodeGuid = node.viewDataKey
             });
+        }
+        else if (portDroppedFrom != null)
+        {
+            if (portDroppedFrom.connected)
+            {
+                _graphView.DeleteElements(portDroppedFrom.connections);
+                portDroppedFrom.DisconnectAll();
+            }
+
+            Edge edge = portDroppedFrom.ConnectTo((node as NodeBase).GetInputPort());
+            _graphView.AddElement(edge);
         }
 
         return true;
