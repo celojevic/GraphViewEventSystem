@@ -6,10 +6,6 @@ using UnityEngine;
 public class PortBase : Port
 {
 
-    public void SetEdgeConnector(EdgeConnector value)
-    { 
-        m_EdgeConnector = value; 
-    }
 
     public PortBase(Orientation orientation, Direction direction, Capacity capacity, Type type)
         : base(orientation, direction, capacity, type)
@@ -17,10 +13,9 @@ public class PortBase : Port
 
     }
 
-    public override void OnStopEdgeDragging()
+    public void SetEdgeConnector(EdgeConnector value)
     {
-        base.OnStopEdgeDragging();
-        Debug.Log("Stopped dragging");
+        m_EdgeConnector = value;
     }
 
 

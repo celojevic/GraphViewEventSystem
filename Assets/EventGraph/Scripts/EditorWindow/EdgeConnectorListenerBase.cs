@@ -1,39 +1,48 @@
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EdgeConnectorListenerBase : IEdgeConnectorListener
 {
-    private GraphViewChange m_GraphViewChange;
 
-    private List<Edge> m_EdgesToCreate;
+    private EventGraphView _graphView;
+    private GraphViewChange _graphViewChange;
+    private List<Edge> _edgesToCreate;
+    private List<GraphElement> _edgesToDelete;
 
-    private List<GraphElement> m_EdgesToDelete;
-
-    public EdgeConnectorListenerBase()
+    public EdgeConnectorListenerBase(EventGraphView graphView)
     {
-        m_EdgesToCreate = new List<Edge>();
-        m_EdgesToDelete = new List<GraphElement>();
-        m_GraphViewChange.edgesToCreate = m_EdgesToCreate;
+        _edgesToCreate = new List<Edge>();
+        _edgesToDelete = new List<GraphElement>();
+        _graphViewChange.edgesToCreate = _edgesToCreate;
+        _graphView = graphView;
     }
 
     public void OnDropOutsidePort(Edge edge, Vector2 position)
     {
-        Debug.Log("Dropped outside port");
+        Vector2 worldMousePosition = _graphView.editorWindow.rootVisualElement.ChangeCoordinatesTo(
+            _graphView.editorWindow.rootVisualElement.parent, 
+            position + _graphView.editorWindow.position.position // (+) gives the right coords here
+        );
+        Vector2 localMousePosition = _graphView.contentViewContainer.WorldToLocal(worldMousePosition);
+
+        _graphView.OpenSearchWindow(localMousePosition);
     }
 
     public void OnDrop(GraphView graphView, Edge edge)
     {
-        m_EdgesToCreate.Clear();
-        m_EdgesToCreate.Add(edge);
-        m_EdgesToDelete.Clear();
+        _edgesToCreate.Clear();
+        _edgesToCreate.Add(edge);
+        _edgesToDelete.Clear();
+
         if (edge.input.capacity == Port.Capacity.Single)
         {
             foreach (Edge connection in edge.input.connections)
             {
                 if (connection != edge)
                 {
-                    m_EdgesToDelete.Add(connection);
+                    _edgesToDelete.Add(connection);
                 }
             }
         }
@@ -44,20 +53,20 @@ public class EdgeConnectorListenerBase : IEdgeConnectorListener
             {
                 if (connection2 != edge)
                 {
-                    m_EdgesToDelete.Add(connection2);
+                    _edgesToDelete.Add(connection2);
                 }
             }
         }
 
-        if (m_EdgesToDelete.Count > 0)
+        if (_edgesToDelete.Count > 0)
         {
-            graphView.DeleteElements(m_EdgesToDelete);
+            graphView.DeleteElements(_edgesToDelete);
         }
 
-        List<Edge> edgesToCreate = m_EdgesToCreate;
+        List<Edge> edgesToCreate = _edgesToCreate;
         if (graphView.graphViewChanged != null)
         {
-            edgesToCreate = graphView.graphViewChanged(m_GraphViewChange).edgesToCreate;
+            edgesToCreate = graphView.graphViewChanged(_graphViewChange).edgesToCreate;
         }
 
         foreach (Edge item in edgesToCreate)

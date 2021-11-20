@@ -249,7 +249,14 @@ public class EventGraphView : GraphView
         };
     }
 
+    #region Search Window
+
     void CreateSearchWindow()
+    {
+        nodeCreationRequest = (context) => OpenSearchWindow(context.screenMousePosition);
+    }
+
+    public void OpenSearchWindow(Vector2 position)
     {
         if (_searchWindow == null)
         {
@@ -257,9 +264,10 @@ public class EventGraphView : GraphView
             _searchWindow.Init(this);
         }
 
-        nodeCreationRequest = context => 
-            SearchWindow.Open(new SearchWindowContext(context.screenMousePosition), _searchWindow);
+        SearchWindow.Open(new SearchWindowContext(position), _searchWindow);
     }
+
+    #endregion
 
     void AddManips()
     {
