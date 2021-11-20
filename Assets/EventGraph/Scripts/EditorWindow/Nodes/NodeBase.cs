@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -47,6 +48,21 @@ public abstract class NodeBase : Node
     /// </summary>
     /// <returns></returns>
     public abstract string Serialize();
+
+    #endregion
+
+    #region Overrides
+
+    public override Port InstantiatePort(Orientation orientation, Direction direction, 
+        Port.Capacity capacity, Type type)
+    {
+        EdgeConnectorListenerBase listener = new EdgeConnectorListenerBase();
+        PortBase port = new PortBase(orientation, direction, capacity, type);
+        port.SetEdgeConnector(new EdgeConnector<Edge>(listener));
+        port.AddManipulator(port.edgeConnector);
+
+        return port;
+    }
 
     #endregion
 

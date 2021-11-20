@@ -95,7 +95,7 @@ public class ChoiceNode : NodeBase
 
     void CreateChoicePort(string choiceText)
     {
-        Port outputPort = this.CreatePort();
+        PortBase outputPort = this.CreatePort();
 
         Button deleteChoiceButton = EventGraphEditorUtils.CreateButton("X", () =>
         {
@@ -157,7 +157,7 @@ public class ChoiceNodeData : NodeDataBase
         {
             VisualElement item = nodeOutputElements[i];
 
-            if (item is Port port)
+            if (item is PortBase port)
             {
                 // save ports textField text
                 foreach (VisualElement portElement in port.Children())

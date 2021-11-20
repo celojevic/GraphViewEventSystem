@@ -20,8 +20,8 @@ public class EntryNode : NodeBase
     {
         title = "Start";
 
-        Port port = InstantiatePort(Orientation.Horizontal, Direction.Output, Port.Capacity.Single, default);
-        port.portName = "Output";
+        PortBase port = this.CreatePort(
+            "Output", Direction.Output, Port.Capacity.Single, Orientation.Horizontal);
         outputContainer.Add(port);
 
         capabilities = 0;
