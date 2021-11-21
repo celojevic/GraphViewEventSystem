@@ -11,7 +11,6 @@ public class IntVariableNode : VariableNodeBase<int>
     }
     public IntVariableNode(IntVariableNode copy) : base(copy)
     {
-        this.variable = copy.variable;
         DrawNode();
     }
     public IntVariableNode(EventGraphView graphView, IntVariableNodeData nodeData) : base(graphView, nodeData)
