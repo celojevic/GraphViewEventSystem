@@ -30,6 +30,44 @@ public static class EventGraphEditorExtensions
 
     #endregion
 
+
+    #region Edges
+
+    public static bool ConnectsVarToCndNode(this Edge edge)
+    {
+        return
+            // edge exists
+            edge != null
+            // ports exist
+            && edge.input != null && edge.output != null
+            // input port on cnd node should always be Value
+            && edge.input.portName == "Value"
+            // nodes exist
+            && edge.input.node != null && edge.output.node != null
+            // make sure they are both generic types
+            && edge.input.node.GetType().BaseType.IsGenericType
+            && edge.output.node.GetType().BaseType.IsGenericType
+            // check if they are var node to cnd node
+            && edge.input.node.GetType().BaseType.GetGenericTypeDefinition() == typeof(ConditionalNode<>)
+            && edge.output.node.GetType().BaseType.GetGenericTypeDefinition() == typeof(VariableNodeBase<>);
+    }
+
+    public static void SetValueNodeGuid(this Edge edge, bool asNull)
+    {
+        try
+        {
+            edge.input.node.GetType().GetField("valueNodeGuid")
+                .SetValue(edge.input.node,
+                    asNull ? null : (edge.output.node as NodeBase).guid);
+        }
+        catch(Exception e)
+        {
+            Debug.LogError(e.ToString());
+        }
+    }
+
+    #endregion
+
     public static VisualElement AddStyleSheets(this VisualElement element, params string[] styleSheets)
     {
         foreach (var item in styleSheets)

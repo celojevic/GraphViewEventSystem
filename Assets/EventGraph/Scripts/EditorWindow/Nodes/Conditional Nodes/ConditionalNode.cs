@@ -7,12 +7,13 @@ using UnityEditor.Experimental.GraphView;
 public abstract class ConditionalNode<T> : NodeBase
 {
 
-    public string valueNodeGuid { get; set; }
+    public string valueNodeGuid;
 
     #region Constructors
 
-    public ConditionalNode(NodeBase copy) : base(copy)
+    public ConditionalNode(ConditionalNode<T> copy) : base(copy)
     {
+        this.valueNodeGuid = copy.valueNodeGuid;
     }
 
     public ConditionalNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
@@ -20,9 +21,10 @@ public abstract class ConditionalNode<T> : NodeBase
         DrawNode();
     }
 
-    public ConditionalNode(EventGraphView graphView, ConditionalNodeData<T> nodeData) 
-        : base(graphView, nodeData)
-    { 
+    public ConditionalNode(EventGraphView graphView, ConditionalNodeData<T> data) 
+        : base(graphView, data)
+    {
+        this.valueNodeGuid = data.valueNodeGuid;
     }
 
     #endregion
@@ -54,9 +56,17 @@ public abstract class ConditionalNode<T> : NodeBase
 public abstract class ConditionalNodeData<T> : NodeDataBase
 {
 
-    public ConditionalNodeData(ConditionalNodeData<T> data) : base(data) { }
+    public string valueNodeGuid;
 
-    public ConditionalNodeData(ConditionalNode<T> node) : base(node) { }
+    public ConditionalNodeData(ConditionalNodeData<T> data) : base(data)
+    {
+        this.valueNodeGuid = data.valueNodeGuid;
+    }
+
+    public ConditionalNodeData(ConditionalNode<T> node) : base(node)
+    {
+        this.valueNodeGuid = node.valueNodeGuid;
+    }
 
     public abstract bool EvaluateCondition(T value);
 

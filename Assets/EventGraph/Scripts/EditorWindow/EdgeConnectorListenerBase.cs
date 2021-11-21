@@ -99,13 +99,11 @@ public class EdgeConnectorListenerBase : IEdgeConnectorListener
         }
 
         // check if var node was dropped on cndNode value port
-        if (e.input.node.GetType().BaseType.IsGenericType
-            && e.input.node.GetType().BaseType.GetGenericTypeDefinition() == typeof(ConditionalNode<>)
-            && e.input.portName == "Value")
+        if (e != null && e.ConnectsVarToCndNode())
         {
-            e.input.node.GetType().GetProperty("valueNodeGuid")
-                .SetValue(e.input.node, (e.output.node as NodeBase).guid);
+            e.SetValueNodeGuid(false);
         }
+
     }
 
 }

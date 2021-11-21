@@ -20,4 +20,12 @@ public class PortBase : Port
     }
 
 
+    public override void Disconnect(Edge edge)
+    {
+        if (edge.ConnectsVarToCndNode())
+            edge.SetValueNodeGuid(true);
+
+        base.Disconnect(edge);
+    }
+
 }
