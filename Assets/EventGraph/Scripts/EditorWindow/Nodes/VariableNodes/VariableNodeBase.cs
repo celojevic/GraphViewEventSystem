@@ -1,10 +1,16 @@
+using System;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 
-public class VariableNodeBase<T> : NodeBase
+public abstract class VariableNodeBase<T> : NodeBase
 {
 
     public VariableBase<T> variable;
+    /// <summary>
+    /// Required to find all ScriptableObjects of the parent type.
+    /// </summary>
+    public abstract string variableTypeName { get; }
 
     #region Constructors
 
@@ -18,16 +24,20 @@ public class VariableNodeBase<T> : NodeBase
     public VariableNodeBase(EventGraphView graphView, VariableNodeData<T> nodeData) 
         : base(graphView,nodeData)
     {
+        string[] guids = AssetDatabase.FindAssets("t:" + variableTypeName);
+        Type type = Type.GetType(variableTypeName);
 
-        // TODO make generic somehow
-        var list = EventGraphEditorUtils.FindScriptableObjects<IntVariable>();
-        foreach (var soVar in list)
+        foreach (var item in guids)
         {
-            if (soVar.guid == nodeData.soGuid)
+            var loadedVariable = Convert.ChangeType(
+                AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(item), type), type);
+
+            if ((loadedVariable as VariableBase<T>).guid == nodeData.soGuid)
             {
-                variable = soVar as VariableBase<T>;
+                variable = loadedVariable as VariableBase<T>;
                 break;
             }
+
         }
     }
 

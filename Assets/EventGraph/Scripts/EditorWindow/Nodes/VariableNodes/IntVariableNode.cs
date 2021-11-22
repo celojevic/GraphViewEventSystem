@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class IntVariableNode : VariableNodeBase<int>
 {
+    public override string variableTypeName => "IntVariable";
 
     public IntVariableNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
