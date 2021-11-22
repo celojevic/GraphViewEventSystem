@@ -25,4 +25,7 @@ public class ScriptableGuidObject : ScriptableObject
             AssetDatabase.SaveAssets();
         }
     }
+
+    public bool IsGuid(string otherGuid) => otherGuid == guid;
+
 }

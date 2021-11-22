@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -79,22 +80,34 @@ public class EventGraphParser : MonoBehaviour
 
         // get the var node  if it exists
         // then pass it to the evalCnd
-        int varToCompare = 0;
+        // TODO change dynamic, cuz it doesnt work on webgl
+        dynamic varToCompare = 0;
         bool found = false;
         if (nodes.TryGetValue(
             cndNodeData?.GetType()?.GetField("valueNodeGuid")?.GetValue(cndNodeData).ToString(),
             out NodeDataBase varNodeData))
         {
 
-            // TODO make generic
             string soGuid = varNodeData.GetType().GetField("soGuid").GetValue(varNodeData).ToString();
-            var list = EventGraphEditorUtils.FindScriptableObjects<IntVariable>();
-            foreach (var soVar in list)
+            string varTypeName = varNodeData.GetType().GetProperty("variableTypeName").GetValue(varNodeData).ToString();
+            Type type = Type.GetType(varTypeName);
+
+            // TODO make runtime friendly, use a database or something
+            //      also need to store in an efficient collection, load them all at start,
+            //      and get it from there instead of iterating every time
+            string[] guids = AssetDatabase.FindAssets("t:" + varTypeName);
+
+            foreach (var item in guids)
             {
-                if (soVar.guid == soGuid)
+                var loadedVariable = 
+                    AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(item), type);
+                bool isGuid = (bool)loadedVariable.GetType().GetMethod("IsGuid")
+                    .Invoke(loadedVariable, new object[] { soGuid });
+                if (isGuid)
                 {
-                    varToCompare = soVar.value;
+                    varToCompare = loadedVariable.GetType().GetField("value").GetValue(loadedVariable);
                     found = true;
+                    break;
                 }
             }
 

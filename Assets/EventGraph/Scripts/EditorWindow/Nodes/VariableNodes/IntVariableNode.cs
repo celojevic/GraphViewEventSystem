@@ -47,6 +47,7 @@ public class IntVariableNode : VariableNodeBase<int>
 public class IntVariableNodeData : VariableNodeData<int>
 {
 
+    public override string variableTypeName => "IntVariable";
 
     #region Constructors
 
@@ -57,6 +58,7 @@ public class IntVariableNodeData : VariableNodeData<int>
     public IntVariableNodeData(IntVariableNode node) : base(node)
     {
     }
+
 
     #endregion
 

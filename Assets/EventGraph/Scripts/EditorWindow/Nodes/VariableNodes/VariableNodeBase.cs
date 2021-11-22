@@ -37,7 +37,6 @@ public abstract class VariableNodeBase<T> : NodeBase
                 variable = loadedVariable as VariableBase<T>;
                 break;
             }
-
         }
     }
 
@@ -56,10 +55,14 @@ public abstract class VariableNodeBase<T> : NodeBase
 }
 
 [System.Serializable]
-public class VariableNodeData<T> : NodeDataBase
+public abstract class VariableNodeData<T> : NodeDataBase
 {
 
     public string soGuid;
+    /// <summary>
+    /// Required to find all ScriptableObjects of the parent type.
+    /// </summary>
+    public abstract string variableTypeName { get; }
 
     public VariableNodeData(NodeDataBase data) : base(data)
     {
