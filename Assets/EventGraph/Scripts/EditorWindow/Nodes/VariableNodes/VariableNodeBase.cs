@@ -1,5 +1,6 @@
 using System;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 
@@ -49,7 +50,14 @@ public abstract class VariableNodeBase<T> : NodeBase
 
     protected override void DrawNode()
     {
-        throw new System.NotImplementedException();
+        this.RemoveCollapse();
+
+        // TODO change this to titleContainer so it looks nicer.
+        //      but must change how it saves the node, bc it currently looks for ports in outputContainer
+        outputContainer.Add(this.CreatePort("", Direction.Output, Port.Capacity.Multi));
+
+
+
     }
 
 }

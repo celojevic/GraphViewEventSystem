@@ -1,6 +1,7 @@
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using UnityEngine;
+using UnityEditor.Experimental.GraphView;
 
 public class IntVariableNode : VariableNodeBase<int>
 {
@@ -26,7 +27,7 @@ public class IntVariableNode : VariableNodeBase<int>
 
     protected override void DrawNode()
     {
-        this.RemoveCollapse();
+        base.DrawNode();
 
         ObjectField objField = EventGraphEditorUtils.CreateObjectField(typeof(IntVariable), variable);
         objField.RegisterValueChangedCallback(evt =>
@@ -35,9 +36,7 @@ public class IntVariableNode : VariableNodeBase<int>
         });
         titleContainer.Insert(0, objField);
 
-        // TODO change this to titleContainer so it looks nicer.
-        //      but must change how it saves the node, bc it currently looks for outputContainer
-        outputContainer.Add(this.CreatePort());
+        titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("IntVar"));
 
         RefreshExpandedState();
     }
