@@ -1,14 +1,19 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
 
 public class ChoiceNode : NodeBase
 {
 
     public string message;
     public List<string> choices;
+    public AudioClip voiceClip;
+
 
     #region Constructors
 
@@ -16,44 +21,54 @@ public class ChoiceNode : NodeBase
     {
         this.message = copy.message;
         this.choices = copy.choices;
+        this.voiceClip = copy.voiceClip;
+
         DrawNode();
     }
 
     public ChoiceNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
     {
         this.message = "Choice Node";
-
         this.choices = new List<string>();
         this.choices.Add("Next Dialogue");
 
         DrawNode();
     }
 
-    public ChoiceNode(EventGraphView graphView, NodeDataBase nodeData) 
-        : base(graphView, nodeData)
+    public ChoiceNode(EventGraphView graphView, ChoiceNodeData nodeData) : base(graphView, nodeData)
     {
-        if (!(nodeData is ChoiceNodeData))
-        {
-            Debug.LogError("Save data was not the same type but tried to load it as such.");
-            return;
-        }
-
-        ChoiceNodeData cnData = nodeData as ChoiceNodeData;
-        this.message = cnData.message;
-        this.choices = cnData.choices;
+        this.message = nodeData.message;
+        this.choices = nodeData.choices;
+        if (!string.IsNullOrEmpty(nodeData.voiceClipName))
+            this.voiceClip = EventGraphEditorUtils.FindAudioClip(nodeData.voiceClipName);
 
         DrawNode();
     }
 
     #endregion
 
+
+    #region Drawing
+
     protected override void DrawNode()
     {
         DrawTitleContainer();
         DrawInputContainer();
         DrawOutputContainer();
+        DrawMainContainer();
 
         RefreshExpandedState();
+    }
+
+    void DrawMainContainer()
+    {
+        ObjectField voiceClipField = EventGraphEditorUtils.CreateObjectField(
+            typeof(AudioClip), voiceClip, "Voice Clip");
+        voiceClipField.RegisterValueChangedCallback(evt =>
+        {
+            this.voiceClip = evt.newValue as AudioClip;
+        });
+        mainContainer.Add(voiceClipField);
     }
 
     void DrawTitleContainer()
@@ -92,6 +107,9 @@ public class ChoiceNode : NodeBase
             CreateChoicePort(choiceText);
         }
     }
+
+    #endregion
+
 
     void CreateChoicePort(string choiceText)
     {
@@ -133,24 +151,29 @@ public class ChoiceNode : NodeBase
 
 }
 
+#endif
+
 [System.Serializable]
 public class ChoiceNodeData : NodeDataBase
 {
 
     public string message;
     public List<string> choices = new List<string>();
+    public string voiceClipName;
 
-    public ChoiceNodeData(NodeDataBase data) : base(data)
+    #region Constructors
+
+    public ChoiceNodeData(ChoiceNodeData data) : base(data)
     {
-        ChoiceNodeData oldData = data as ChoiceNodeData;
-        this.message = oldData.message;
-        this.choices = oldData.choices;
+        this.message = data.message;
+        this.choices = data.choices;
+        this.voiceClipName = data.voiceClipName;
     }
 
-    public ChoiceNodeData(NodeBase node) : base(node)
+    public ChoiceNodeData(ChoiceNode node) : base(node)
     {
-        ChoiceNode cn = node as ChoiceNode;
-        message = cn.message;
+        message = node.message;
+        this.voiceClipName = node.voiceClip?.name;
 
         List<VisualElement> nodeOutputElements = new List<VisualElement>(node.outputContainer.Children());
         for (int i = 0; i < nodeOutputElements.Count; i++)
@@ -166,6 +189,8 @@ public class ChoiceNodeData : NodeDataBase
             }
         }
     }
+
+    #endregion
 
     public override void Parse(EventGraphParser parser)
     {

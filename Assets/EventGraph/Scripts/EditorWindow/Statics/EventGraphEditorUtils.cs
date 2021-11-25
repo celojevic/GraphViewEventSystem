@@ -12,6 +12,20 @@ using UnityEngine.UIElements;
 public static class EventGraphEditorUtils
 {
 
+    public static AudioClip FindAudioClip(string clipName)
+    {
+        string[] clips = AssetDatabase.FindAssets("t:AudioClip");
+        foreach (var item in clips)
+        {
+            var clip = AssetDatabase.LoadAssetAtPath<AudioClip>(AssetDatabase.GUIDToAssetPath(item));
+            if (clip.name == clipName)
+                return clip;
+        }
+
+        Debug.LogError("Couldn't find audio clip with name: " + clipName);
+        return null;
+    }
+
     public static Image CreateImage(string iconName)
     {
         Image icon = new Image();
