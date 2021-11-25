@@ -92,7 +92,7 @@ public static class EventGraphSaver
                     graphData.nodeJsons.Add(node.Serialize());
                 }
             }
-            else if (graphElement is Group group)
+            else if (graphElement is GroupBase group)
             {
                 graphData.groups.Add(new GroupData(group));
             }
@@ -146,12 +146,16 @@ public static class EventGraphSaver
         if (graphView == null) return;
         if (graphData == null) return;
 
-        // TODO load groups first
-
         graphView.ClearGraph();
 
+        // load groups first
+        foreach (var groupData in graphData.groups)
+            graphView.CreateGroup(groupData);
+
+        // cache connections saved in nodes we are about to create
         List<EdgeData> savedConnections = new List<EdgeData>();
 
+        // recreate nodes
         for (int i = 0; i < graphData.nodeJsons.Count; i++)
         {
             // is it a node?
@@ -167,10 +171,19 @@ public static class EventGraphSaver
 
             // create node from loaded save data
             Type nodeType = Type.GetType(nodeData.nodeType);
-            var node = Activator.CreateInstance(nodeType, graphView, data);
+            object nodeObj = Activator.CreateInstance(nodeType, graphView, data);
+            NodeBase node = nodeObj as NodeBase;
 
             // add node to graph
-            graphView.AddElement((GraphElement)node);
+            graphView.AddElement(node);
+
+            // replace grouped nodes back into the group
+            if (!string.IsNullOrEmpty(node.groupGuid))
+            {
+                GroupBase group = graphView.GetElementByGuid(node.groupGuid) as GroupBase;
+                if (group != null)
+                    group.AddElement(node);
+            }
 
             // cache edges to add
             if ((data as NodeDataBase).edges.HasElements())
@@ -187,6 +200,7 @@ public static class EventGraphSaver
                 Debug.LogError("Couldn't get node from guid: " + conn.parentNodeGuid);
         }
 
+        // reconnect first node to entry node
         ConnectEntryNode(graphView, graphData);
     }
 

@@ -180,8 +180,7 @@ public class ChoiceNodeData : NodeDataBase
                 {
                     if (edges.Count <= index)
                     {
-                        // TODO end dialogue if nothing next and button pressed
-                        Debug.LogWarning("ChoiceNode with edge at index doesn't go anywhere: " + index);
+                        //Debug.LogWarning("ChoiceNode with edge at index doesn't go anywhere: " + index);
                         parser.StopParsing();
                         return;
                     }

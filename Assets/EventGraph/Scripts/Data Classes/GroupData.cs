@@ -5,12 +5,14 @@ using UnityEditor.Experimental.GraphView;
 public class GroupData : EventGraphElementData
 {
 
+    public string title;
     public List<string> nodeGuids;
 
-    public GroupData(Group group) : base(group)
+    public GroupData(GroupBase group) : base(group)
     {
-        nodeGuids = new List<string>();
+        this.title = group.title;
 
+        nodeGuids = new List<string>();
         foreach (GraphElement element in group.containedElements)
         {
             if (element is NodeBase node)

@@ -310,19 +310,42 @@ public class EventGraphView : GraphView
             )));
     }
 
-    public void CreateGroup(Vector2 pos, string title = "Event Group")
+    #region Groups
+
+    /// <summary>
+    /// Creates a groupBase at the given position with the given title,
+    /// adds the element to the graphView, and returns the groupBase.
+    /// </summary>
+    /// <param name="pos"></param>Position of the group.
+    /// <param name="title"></param>Title to assign.
+    /// <returns></returns>
+    public GroupBase CreateGroup(Vector2 pos, string title = "Event Group")
     {
-        Group group = new Group() { title = title };
+        GroupBase group = new GroupBase() { title = title };
         group.SetPosition(new Rect(pos, Vector2.zero));
 
         foreach (var item in selection)
         {
-            if (!(item is NodeBase)) continue;
-            group.AddElement(item as NodeBase);
+            if (!(item is NodeBase node)) continue;
+
+            node.groupGuid = group.guid;
+            group.AddElement(node);
         }
 
         AddElement(group);
+
+        return group;
     }
+
+    public GroupBase CreateGroup(GroupData data)
+    {
+        GroupBase group = CreateGroup(data.position, data.title);
+        group.viewDataKey = data.guid;
+
+        return group;
+    }
+
+    #endregion
 
     void CreateGridBg()
     {
