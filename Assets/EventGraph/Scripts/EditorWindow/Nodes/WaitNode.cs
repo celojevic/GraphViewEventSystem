@@ -52,6 +52,10 @@ public class WaitNode : NodeBase
             this.timeToWait = evt.newValue;
         });
         mainContainer.Add(timeField);
+
+        titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("Wait"));
+
+        RefreshExpandedState();
     }
 
 }

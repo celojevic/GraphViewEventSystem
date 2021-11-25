@@ -43,7 +43,6 @@ public class IntCompareNode : ConditionalNode<int>
 
     void DrawTitleContainer()
     {
-        base.DrawNode();
         titleContainer.Add(new Label("Int Comparison"));
 
         titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("IntCompare"));
