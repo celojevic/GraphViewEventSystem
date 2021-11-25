@@ -288,26 +288,26 @@ public class EventGraphView : GraphView
                     GetLocalMousePos(actionEvent.eventInfo.localMousePosition))
             )));
 
-        this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
-                "Add Choice Node",
-                actionEvent => AddElement(new ChoiceNode(
-                    GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
-                )
-            )));
+        //this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
+        //        "Add Choice Node",
+        //        actionEvent => AddElement(new ChoiceNode(
+        //            GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
+        //        )
+        //    )));
 
-        this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
-                "Add Int Compare Node",
-                actionEvent => AddElement(new IntCompareNode(
-                    GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
-                )
-            )));
+        //this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
+        //        "Add Int Compare Node",
+        //        actionEvent => AddElement(new IntCompareNode(
+        //            GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
+        //        )
+        //    )));
 
-        this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
-                "Add IntVar Node",
-                actionEvent => AddElement(new IntVariableNode(
-                    GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
-                )
-            )));
+        //this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
+        //        "Add IntVar Node",
+        //        actionEvent => AddElement(new IntVariableNode(
+        //            GetLocalMousePos(actionEvent.eventInfo.localMousePosition), this)
+        //        )
+        //    )));
     }
 
     #region Groups
