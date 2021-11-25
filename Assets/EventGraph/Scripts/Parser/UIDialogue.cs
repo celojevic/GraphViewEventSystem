@@ -15,13 +15,16 @@ public class UIDialogue : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private Button _choicePrefab = null;
 
+    private AudioSource _audioSource;
+
     private void Awake()
     {
         instance = this;
+        _audioSource = GetComponent<AudioSource>();
         Hide();
     }
 
-    public void ShowMessage(string message, List<ChoiceAction> choices)
+    public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null)
     {
         _panel.SetActive(true);
         _messageText.text = message;
@@ -33,6 +36,14 @@ public class UIDialogue : MonoBehaviour
             Button prefab = Instantiate(_choicePrefab, _choiceHolder);
             prefab.GetComponentInChildren<TMP_Text>().text = choices[i].choice;
             prefab.onClick.AddListener(() => choices[index].callback?.Invoke());
+        }
+
+        // play voice line
+        if (voiceClip != null)
+        {
+            _audioSource.Stop();
+            _audioSource.clip = voiceClip;
+            _audioSource.Play();
         }
     }
 

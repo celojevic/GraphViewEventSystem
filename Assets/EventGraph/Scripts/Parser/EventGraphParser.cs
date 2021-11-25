@@ -4,24 +4,22 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
-// TODO can use RuntimeInitializeOnLoadMethod and make this a regular class?
+// TODO can use RuntimeInitializeOnLoadMethod and make this a regular class that returns parsed values?
 public class EventGraphParser : MonoBehaviour
 {
 
     public Button talkButton;
+    public string fileName = "NewEventGraph";
 
     public string curNodeGuid { get; set; }
     public NodeDataBase curNodeData => nodes.ContainsKey(curNodeGuid) ? nodes[curNodeGuid] : null;
 
-    public string fileName = "NewEventGraph";
-
     private Dictionary<string, NodeDataBase> nodes = new Dictionary<string, NodeDataBase>();
-
     private EntryNodeData _entryNodeData;
 
     private void Start()
     {
-        // TODO load all events into memory on start
+        // TODO load all events into memory on start/awake
         //      cache in dict<EventGraphData, fileName string>
         LoadFile();
 

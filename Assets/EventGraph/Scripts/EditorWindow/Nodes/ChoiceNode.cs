@@ -161,6 +161,7 @@ public class ChoiceNodeData : NodeDataBase
     public List<string> choices = new List<string>();
     public string voiceClipName;
 
+
     #region Constructors
 
     public ChoiceNodeData(ChoiceNodeData data) : base(data)
@@ -192,6 +193,7 @@ public class ChoiceNodeData : NodeDataBase
 
     #endregion
 
+
     public override void Parse(EventGraphParser parser)
     {
         List<ChoiceAction> choiceActions = new List<ChoiceAction>();
@@ -216,7 +218,11 @@ public class ChoiceNodeData : NodeDataBase
             });
         }
 
-        UIDialogue.instance.ShowMessage(message, choiceActions);
+        UIDialogue.instance.ShowMessage(
+            message, 
+            choiceActions, 
+            EventGraphEditorUtils.FindAudioClip(voiceClipName)
+        );
     }
 
 }
