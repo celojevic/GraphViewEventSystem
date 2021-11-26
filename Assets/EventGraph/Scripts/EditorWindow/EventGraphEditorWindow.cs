@@ -18,7 +18,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
     private string _fileName = DEFAULT_FILE_NAME;
 
     private EnumFlagsField _saveTypeFlagsField;
-    public DataOperation saveTypeFlags => (DataOperation)_saveTypeFlagsField.value;
+    public DataType saveTypeFlags => (DataType)_saveTypeFlagsField.value;
 
     private Toolbar _saveBar;
     private PopupField<string> _jsonFilesPopup;
@@ -57,7 +57,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         _saveBar.Add(saveButton);
 
         // save type flags dropdown
-        _saveTypeFlagsField = new EnumFlagsField(DataOperation.JSON);
+        _saveTypeFlagsField = new EnumFlagsField(DataType.JSON);
         _saveTypeFlagsField.RegisterValueChangedCallback(evt =>
         {
             EditorPrefs.SetInt(SAVE_TYPE_KEY, (int)(SaveType)evt.newValue);
@@ -70,13 +70,13 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         // load button
         Button loadButton = EventGraphEditorUtils.CreateButton("Load", () =>
         {
-            switch ((DataOperation)_loadTypeField.value)
+            switch ((DataType)_loadTypeField.value)
             {
-                case DataOperation.JSON:
+                case DataType.JSON:
                     EventGraphSaver.LoadFromJson(_graphView, _jsonFilesPopup.value.RemoveString(".json"));
                     break;
 
-                case DataOperation.ScriptableObject:
+                case DataType.ScriptableObject:
                     EventGraphSaver.LoadFromSo(_graphView, _jsonFilesPopup.value);
                     break;
             }
@@ -98,15 +98,15 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
     void SetupLoadTypeField()
     {
-        _loadTypeField = new EnumField(DataOperation.JSON);
+        _loadTypeField = new EnumField(DataType.JSON);
 
         _loadTypeField.RegisterValueChangedCallback(evt =>
         {
-            EditorPrefs.SetInt(LOAD_TYPE_KEY, (int)(DataOperation)evt.newValue);
+            EditorPrefs.SetInt(LOAD_TYPE_KEY, (int)(DataType)evt.newValue);
             HandleLoadTypeChanged();
         });
 
-        _loadTypeField.value = (DataOperation)EditorPrefs.GetInt(LOAD_TYPE_KEY, (int)DataOperation.JSON);
+        _loadTypeField.value = (DataType)EditorPrefs.GetInt(LOAD_TYPE_KEY, (int)DataType.JSON);
 
         _saveBar.Add(_loadTypeField);
 
@@ -119,17 +119,17 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
         RemoveJsonPopup();
         RemoveSoPopup();
 
-        switch ((DataOperation)_loadTypeField.value)
+        switch ((DataType)_loadTypeField.value)
         {
-            case DataOperation.JSON:
+            case DataType.JSON:
                 PopulateJsonPopup();
                 break;
 
-            case DataOperation.ScriptableObject:
+            case DataType.ScriptableObject:
                 PopulateSoPopup();
                 break;
 
-            case DataOperation.SQLite:
+            case DataType.SQLite:
 
                 break;
         }
@@ -210,13 +210,20 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
         // minimap toggle
         ToolbarToggle minimapToggle = new ToolbarToggle();
-        minimapToggle.label = "Minimap";
+        minimapToggle.label = "  Minimap";
         minimapToggle.RegisterValueChangedCallback(evt =>
         {
             _graphView.ToggleMinimap(evt.newValue);
         });
         minimapToggle.value = false;
         toolbar.Add(minimapToggle);
+
+        // clear graph button
+        Button clearGraphButton = EventGraphEditorUtils.CreateButton("Clear Graph", () =>
+        {
+            _graphView.ClearGraph();
+        });
+        toolbar.Add(clearGraphButton);
 
         // add the toolbar to editor window
         rootVisualElement.Add(toolbar);
@@ -233,7 +240,7 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 }
 
 [Flags]
-public enum DataOperation
+public enum DataType
 {
     JSON = 1,
     ScriptableObject = 2,

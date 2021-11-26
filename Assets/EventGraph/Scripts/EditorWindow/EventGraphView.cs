@@ -22,7 +22,7 @@ public class EventGraphView : GraphView
     public EventGraphEditorWindow editorWindow;
     public Dictionary<string, EventGraphDataObject> dictSaveData = new Dictionary<string, EventGraphDataObject>();
 
-    public DataOperation saveFlags => editorWindow.saveTypeFlags;
+    public DataType saveFlags => editorWindow.saveTypeFlags;
 
     private SearchWindowBase _searchWindow;
     private ClipboardBase _clipboard;
@@ -321,8 +321,7 @@ public class EventGraphView : GraphView
     /// <returns></returns>
     public GroupBase CreateGroup(Vector2 pos, string title = "Event Group")
     {
-        GroupBase group = new GroupBase() { title = title };
-        group.SetPosition(new Rect(pos, Vector2.zero));
+        GroupBase group = new GroupBase(pos, this) { title = title };
 
         foreach (var item in selection)
         {
@@ -398,6 +397,17 @@ public class EventGraphView : GraphView
     }
 
     public EntryNode GetEntryNode() => (EntryNode)base.graphElements.ToList().Find(x => x is EntryNode);
+
+    public int GetNodeCount()
+    {
+        int count = 0;
+        graphElements.ForEach(e =>
+        {
+            if (e is NodeBase)
+                count++;
+        });
+        return count;
+    }
 
 }
 

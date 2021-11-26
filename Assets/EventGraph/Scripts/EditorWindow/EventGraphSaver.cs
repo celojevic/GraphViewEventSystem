@@ -29,11 +29,11 @@ public static class EventGraphSaver
 
         CreateFolders();
         
-        if (graphView.saveFlags.HasFlag(DataOperation.JSON))
+        if (graphView.saveFlags.HasFlag(DataType.JSON))
         {
             SaveAsJSON(graphView, fileName);
         }
-        if (graphView.saveFlags.HasFlag(DataOperation.ScriptableObject))
+        if (graphView.saveFlags.HasFlag(DataType.ScriptableObject))
         {
             SaveAsSO(graphView, fileName);
         }

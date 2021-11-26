@@ -53,7 +53,7 @@ public class SearchWindowBase : ScriptableObject, ISearchWindowProvider
         searchTreeEntries.Add(new SearchTreeEntry(new GUIContent("Group", _indentIcon))
         {
             level = 2,
-            userData = typeof(Group)
+            userData = typeof(GroupBase)
         });
 
         return searchTreeEntries;
@@ -65,31 +65,37 @@ public class SearchWindowBase : ScriptableObject, ISearchWindowProvider
 
         // TODO doesnt work for groups, either make a type check here or make 
         //      a custom group class EventGraphGroup with proper constructor
-        var node = (GraphElement)Activator.CreateInstance(
-            (Type)SearchTreeEntry.userData, localMousePos, _graphView);
-        _graphView.AddElement(node);
+        var element = (GraphElement)Activator.CreateInstance((Type)SearchTreeEntry.userData, 
+            localMousePos, _graphView);
+        _graphView.AddElement(element);
 
-        // if no other elements, automatically connect startNosde to this new one
-        if (_graphView.graphElements.ToList().Count == 2)
+        if (element is NodeBase node)
         {
-            EntryNode entryNode = (EntryNode)_graphView.graphElements.ToList()[0];
-            entryNode.ConnectEdge(new EdgeData
+            // if no other elements, automatically connect startNode to this new one
+            if (_graphView.GetNodeCount() == 2)
             {
-                portIndex = 0,
-                parentNodeGuid = entryNode.guid,
-                toNodeGuid = node.viewDataKey
-            });
-        }
-        else if (portDroppedFrom != null)
-        {
-            if (portDroppedFrom.connected)
-            {
-                _graphView.DeleteElements(portDroppedFrom.connections);
-                portDroppedFrom.DisconnectAll();
+                EntryNode entryNode = _graphView.GetEntryNode();
+                entryNode.ConnectEdge(new EdgeData
+                {
+                    portIndex = 0,
+                    parentNodeGuid = entryNode.guid,
+                    toNodeGuid = element.viewDataKey
+                });
             }
+            else if (portDroppedFrom != null)
+            {
+                if (portDroppedFrom.connected)
+                {
+                    _graphView.DeleteElements(portDroppedFrom.connections);
+                    portDroppedFrom.DisconnectAll();
+                }
 
-            Edge edge = portDroppedFrom.ConnectTo((node as NodeBase).GetInputPort());
-            _graphView.AddElement(edge);
+                Edge edge = portDroppedFrom.ConnectTo(node.GetInputPort());
+                _graphView.AddElement(edge);
+            }
+        }
+        else if (element is GroupBase group)
+        {
         }
 
         return true;
