@@ -26,16 +26,10 @@ public class EdgeConnectorListenerBase : IEdgeConnectorListener
         _port = port;
     }
 
+    // position = pos relative to editor window, origin at top-left
     public void OnDropOutsidePort(Edge edge, Vector2 position)
     {
-        // TODO positioning messed up if too far from entry node
-        Vector2 worldMousePosition = _graphView.editorWindow.rootVisualElement.ChangeCoordinatesTo(
-            _graphView.editorWindow.rootVisualElement.parent, 
-            position + _graphView.editorWindow.position.position // (+) gives the right coords here
-        );
-        Vector2 localMousePosition = _graphView.contentViewContainer.WorldToLocal(worldMousePosition);
-
-        _graphView.OpenSearchWindow(localMousePosition, _port);
+        _graphView.OpenSearchWindow(_graphView.editorWindow.position.position + position, _port);
     }
 
     public void OnDrop(GraphView graphView, Edge edge)

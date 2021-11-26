@@ -10,6 +10,7 @@ public class EventGraphParser : MonoBehaviour
 
     public Button talkButton;
     public string fileName = "NewEventGraph";
+    public bool autoParse = false;
 
     public string curNodeGuid { get; set; }
     public NodeDataBase curNodeData => nodes.ContainsKey(curNodeGuid) ? nodes[curNodeGuid] : null;
@@ -26,6 +27,13 @@ public class EventGraphParser : MonoBehaviour
         talkButton.onClick.AddListener(() => Next());
     }
 
+    private void Update()
+    {
+        if (autoParse)
+        {
+
+        }
+    }
 
     void LoadFile()
     {
