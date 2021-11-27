@@ -60,11 +60,12 @@ public static class EventGraphEditorUtils
         node.titleContainer.RemoveAt(1);
     }
 
-    public static ObjectField CreateObjectField(Type type, UnityEngine.Object value, string title = "")
+    public static ObjectField CreateObjectField(Type type, UnityEngine.Object defaultValue = null, 
+        string title = "")
     {
         ObjectField objField = new ObjectField(title);
         objField.objectType = type;
-        objField.value = value;
+        objField.value = defaultValue;
 
         return objField;
     }

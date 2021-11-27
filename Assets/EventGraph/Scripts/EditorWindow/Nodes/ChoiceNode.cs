@@ -11,8 +11,8 @@ public class ChoiceNode : NodeBase
 {
 
     public string message;
-    public List<string> choices;
     public AudioClip voiceClip;
+    public List<string> choices;
 
 
     #region Constructors
@@ -140,6 +140,7 @@ public class ChoiceNode : NodeBase
 
         TextField choiceTextField = EventGraphEditorUtils.CreateTextField(choiceText);
         outputPort.Add(choiceTextField);
+
 
         outputContainer.Add(outputPort);        
     }
