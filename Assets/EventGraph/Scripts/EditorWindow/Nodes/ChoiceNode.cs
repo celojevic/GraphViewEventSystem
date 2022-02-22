@@ -79,8 +79,7 @@ public class ChoiceNode : NodeBase
             (evt) => 
             { 
                 message = evt.newValue; 
-            }
-        );
+            });
         titleContainer.Insert(0, messageTextField);
 
         titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("Dialogue"));
