@@ -12,8 +12,15 @@ using UnityEngine.UIElements;
 public static class EventGraphEditorUtils
 {
 
+    public static VisualElement CreateSpace()
+    {
+        return new Label(" ");
+    }
+
     public static AudioClip FindAudioClip(string clipName)
     {
+        if (string.IsNullOrEmpty(clipName)) return null;
+
         string[] clips = AssetDatabase.FindAssets("t:AudioClip");
         foreach (var item in clips)
         {

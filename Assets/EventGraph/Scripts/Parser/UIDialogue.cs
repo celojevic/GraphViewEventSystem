@@ -1,3 +1,4 @@
+using EventGraph.Characters;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class UIDialogue : MonoBehaviour
     [SerializeField] private GameObject _panel = null;
     [SerializeField] private TMP_Text _messageText = null;
     [SerializeField] private Transform _choiceHolder = null;
+    [SerializeField] private Image _portraitImage = null;
 
     [Header("Prefabs")]
     [SerializeField] private Button _choicePrefab = null;
@@ -24,7 +26,7 @@ public class UIDialogue : MonoBehaviour
         Hide();
     }
 
-    public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null)
+    public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null, CharacterFoldoutData character=null)
     {
         _panel.SetActive(true);
         _messageText.text = message;
@@ -45,6 +47,13 @@ public class UIDialogue : MonoBehaviour
             _audioSource.clip = voiceClip;
             _audioSource.Play();
         }
+
+        // show character portrait and setup its position
+        if (character != null)
+        {
+            //_portraitImage.sprite=character.sp
+        }
+
     }
 
     public void Hide()

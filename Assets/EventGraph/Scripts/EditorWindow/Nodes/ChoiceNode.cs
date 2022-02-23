@@ -1,3 +1,4 @@
+using EventGraph.Characters;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -13,6 +14,10 @@ public class ChoiceNode : NodeBase
     public string message;
     public AudioClip voiceClip;
     public List<string> choices;
+
+    public Character character;
+    public string expression;
+    public DialoguePosition dialoguePosition;
 
 
     #region Constructors
@@ -30,7 +35,7 @@ public class ChoiceNode : NodeBase
     {
         this.message = "Choice Node";
         this.choices = new List<string>();
-        this.choices.Add("Next Dialogue");
+        this.choices.Add("Next");
 
         DrawNode();
     }
@@ -41,6 +46,12 @@ public class ChoiceNode : NodeBase
         this.choices = nodeData.choices;
         if (!string.IsNullOrEmpty(nodeData.voiceClipName))
             this.voiceClip = EventGraphEditorUtils.FindAudioClip(nodeData.voiceClipName);
+
+        // character foldout data
+        this.character = EventGraphEditorUtils.FindScriptableObjects<Character>()
+            .Find(x => x.name == nodeData.characterFoldoutData.characterName);
+        this.expression = nodeData.characterFoldoutData.expression;
+        this.dialoguePosition = nodeData.characterFoldoutData.dialoguePosition;
 
         DrawNode();
     }
@@ -61,15 +72,18 @@ public class ChoiceNode : NodeBase
         RefreshExpandedState();
     }
 
-    void DrawExtensionContainer()
+    private void DrawExtensionContainer()
     {
+        DrawCharacterFoldout();
+
+        // voice clip object field
         ObjectField voiceClipField = EventGraphEditorUtils.CreateObjectField(
             typeof(AudioClip), voiceClip, "Voice Clip");
         voiceClipField.RegisterValueChangedCallback(evt =>
         {
             this.voiceClip = evt.newValue as AudioClip;
         });
-        extensionContainer.Insert(0, voiceClipField);
+        extensionContainer.Add(voiceClipField);
 
         TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
             (evt) =>
@@ -79,11 +93,49 @@ public class ChoiceNode : NodeBase
         extensionContainer.Add(messageTextField);
     }
 
-    void DrawMainContainer()
+    /// <summary>
+    /// In the extension container.
+    /// TODO move this into a new node and make choiceNode a stack node that can contain and parse it
+    /// </summary>
+    private void DrawCharacterFoldout()
+    {
+        Foldout characterFoldout = new Foldout();
+        characterFoldout.text = "Character Data";
+
+        // character SO field
+        ObjectField characterField = EventGraphEditorUtils.CreateObjectField(
+            typeof(Character), character, "Character");
+        characterField.RegisterValueChangedCallback(evt =>
+        {
+            this.character = evt.newValue as Character;
+        });
+        characterFoldout.Add(characterField);
+
+        // character expression name
+        TextField expressionField = EventGraphEditorUtils.CreateTextField(expression, "Expression",
+            (evt) =>
+            {
+                this.expression = evt.newValue;
+            });
+        characterFoldout.Add(expressionField);
+
+        // dialogue position enum field
+        EnumField dialoguePositionField = new EnumField("Dialogue Position", DialoguePosition.Left);
+        dialoguePositionField.RegisterValueChangedCallback((evt) =>
+        {
+            this.dialoguePosition = (DialoguePosition)evt.newValue;
+        });
+        characterFoldout.Add(dialoguePositionField);
+
+        extensionContainer.Add(characterFoldout);
+
+    }
+
+    private void DrawMainContainer()
     {
     }
 
-    void DrawTitleContainer()
+    private void DrawTitleContainer()
     {
         this.RemoveCollapse();
 
@@ -97,12 +149,12 @@ public class ChoiceNode : NodeBase
         titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("Dialogue"));
     }
 
-    void DrawInputContainer()
+    private void DrawInputContainer()
     {
         inputContainer.Add(this.CreateInputPort());
     }
 
-    void DrawOutputContainer()
+    private void DrawOutputContainer()
     {
         // add choice button
         Button addChoiceButton = EventGraphEditorUtils.CreateButton("Add Choice", () =>
@@ -122,7 +174,7 @@ public class ChoiceNode : NodeBase
     #endregion
 
 
-    void CreateChoicePort(string choiceText)
+    private void CreateChoicePort(string choiceText)
     {
         PortBase outputPort = this.CreatePort();
 
@@ -165,6 +217,7 @@ public class ChoiceNode : NodeBase
 
 #endif
 
+
 [System.Serializable]
 public class ChoiceNodeData : NodeDataBase
 {
@@ -172,6 +225,7 @@ public class ChoiceNodeData : NodeDataBase
     public string message;
     public List<string> choices = new List<string>();
     public string voiceClipName;
+    public CharacterFoldoutData characterFoldoutData;
 
 
     #region Constructors
@@ -181,12 +235,14 @@ public class ChoiceNodeData : NodeDataBase
         this.message = data.message;
         this.choices = data.choices;
         this.voiceClipName = data.voiceClipName;
+        this.characterFoldoutData = data.characterFoldoutData;
     }
 
     public ChoiceNodeData(ChoiceNode node) : base(node)
     {
         message = node.message;
         this.voiceClipName = node.voiceClip?.name;
+        this.characterFoldoutData = new CharacterFoldoutData(node);
 
         List<VisualElement> nodeOutputElements = new List<VisualElement>(node.outputContainer.Children());
         for (int i = 0; i < nodeOutputElements.Count; i++)
@@ -233,7 +289,8 @@ public class ChoiceNodeData : NodeDataBase
         UIDialogue.instance.ShowMessage(
             message, 
             choiceActions, 
-            EventGraphEditorUtils.FindAudioClip(voiceClipName)
+            EventGraphEditorUtils.FindAudioClip(voiceClipName),
+            characterFoldoutData
         );
     }
 
