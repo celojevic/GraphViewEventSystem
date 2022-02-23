@@ -139,14 +139,11 @@ public class ChoiceNode : NodeBase
     {
         this.RemoveCollapse();
 
-        //TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
-        //    (evt) => 
-        //    { 
-        //        message = evt.newValue; 
-        //    });
-        //titleContainer.Insert(0, messageTextField);
-
         titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("Dialogue"));
+
+        // TODO center, make bigger, make bold
+        Label label = new Label("Choice Node");
+        titleContainer.Add(label);
     }
 
     private void DrawInputContainer()
