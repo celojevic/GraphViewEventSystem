@@ -34,11 +34,11 @@ public static class EventGraphEditorUtils
     }
 
     public static TextField CreateTextField(string value = null, string label = null,
-        EventCallback<ChangeEvent<string>> onValueChanged = null)
+        EventCallback<ChangeEvent<string>> onValueChanged = null, bool wordWrap=true)
     {
         TextField textField = new TextField() 
         { 
-            value = value ,
+            value = value,
             label = label            
         };
 
@@ -46,6 +46,8 @@ public static class EventGraphEditorUtils
             textField.RegisterValueChangedCallback(onValueChanged);
 
         textField.multiline = true;
+        textField.style.maxWidth = 350;
+        textField.style.whiteSpace = wordWrap ? WhiteSpace.Normal : WhiteSpace.NoWrap;
 
         return textField;
     }

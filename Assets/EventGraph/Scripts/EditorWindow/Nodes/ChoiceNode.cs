@@ -56,11 +56,12 @@ public class ChoiceNode : NodeBase
         DrawInputContainer();
         DrawOutputContainer();
         DrawMainContainer();
+        DrawExtensionContainer();
 
         RefreshExpandedState();
     }
 
-    void DrawMainContainer()
+    void DrawExtensionContainer()
     {
         ObjectField voiceClipField = EventGraphEditorUtils.CreateObjectField(
             typeof(AudioClip), voiceClip, "Voice Clip");
@@ -68,19 +69,30 @@ public class ChoiceNode : NodeBase
         {
             this.voiceClip = evt.newValue as AudioClip;
         });
-        mainContainer.Add(voiceClipField);
+        extensionContainer.Insert(0, voiceClipField);
+
+        TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
+            (evt) =>
+            {
+                message = evt.newValue;
+            });
+        extensionContainer.Add(messageTextField);
+    }
+
+    void DrawMainContainer()
+    {
     }
 
     void DrawTitleContainer()
     {
         this.RemoveCollapse();
 
-        TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
-            (evt) => 
-            { 
-                message = evt.newValue; 
-            });
-        titleContainer.Insert(0, messageTextField);
+        //TextField messageTextField = EventGraphEditorUtils.CreateTextField(message, "",
+        //    (evt) => 
+        //    { 
+        //        message = evt.newValue; 
+        //    });
+        //titleContainer.Insert(0, messageTextField);
 
         titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("Dialogue"));
     }
