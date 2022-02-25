@@ -1,3 +1,4 @@
+using EventGraph.Constants;
 using System.Collections;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -7,6 +8,9 @@ public class WaitNode : NodeBase
 {
 
     public float timeToWait;
+
+    protected override string colorHex => ColorConstants.LAVENDER;
+
 
     #region Constructors
 
@@ -33,6 +37,7 @@ public class WaitNode : NodeBase
 
     #endregion
 
+
     public override string Serialize()
     {
         return JsonUtility.ToJson(new WaitNodeData(this));
@@ -41,6 +46,7 @@ public class WaitNode : NodeBase
     protected override void DrawNode()
     {
         titleContainer.Add(new Label("Time to Wait"));
+        SetNodeColor();
 
         inputContainer.Add(this.CreateInputPort());
         outputContainer.Add(this.CreatePort("Output"));

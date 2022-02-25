@@ -1,4 +1,5 @@
-﻿using UnityEditor.Experimental.GraphView;
+﻿using EventGraph.Constants;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 
 using UnityEngine;
@@ -9,7 +10,11 @@ public class IntCompareNode : ConditionalNode<int>
 {
 
     public int intToCompare;
+
     public ComparisonOperator comparisonOperator;
+
+    protected override string colorHex { get => ColorConstants.INDIGO; }
+
 
     #region Constructors
 
@@ -34,6 +39,7 @@ public class IntCompareNode : ConditionalNode<int>
 
     #endregion
 
+
     protected override void DrawNode()
     {
         base.DrawNode();
@@ -47,6 +53,7 @@ public class IntCompareNode : ConditionalNode<int>
 
         titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("IntCompare"));
 
+        SetNodeColor();
         RefreshExpandedState();
     }
 

@@ -1,4 +1,5 @@
 using EventGraph.Characters;
+using EventGraph.Constants;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
@@ -18,6 +19,8 @@ public class ChoiceNode : NodeBase
     public Character character;
     public string expression;
     public DialoguePosition dialoguePosition;
+
+    protected override string colorHex => ColorConstants.CERULEAN;
 
 
     #region Constructors
@@ -135,7 +138,7 @@ public class ChoiceNode : NodeBase
     {
     }
 
-    private void DrawTitleContainer()
+    protected void DrawTitleContainer()
     {
         this.RemoveCollapse();
 
@@ -144,6 +147,8 @@ public class ChoiceNode : NodeBase
         // TODO center, make bigger, make bold
         Label label = new Label("Choice Node");
         titleContainer.Add(label);
+
+        SetNodeColor();
     }
 
     private void DrawInputContainer()

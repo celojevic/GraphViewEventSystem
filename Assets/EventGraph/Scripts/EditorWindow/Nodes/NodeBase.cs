@@ -13,6 +13,9 @@ public abstract class NodeBase : Node
 
     protected EventGraphView graphView;
 
+    protected abstract string colorHex { get; }
+
+
     #region Constructors
 
     public NodeBase(NodeBase copy)
@@ -36,6 +39,7 @@ public abstract class NodeBase : Node
 
     #endregion
 
+
     #region Abstract
 
     /// <summary>
@@ -50,6 +54,7 @@ public abstract class NodeBase : Node
     public abstract string Serialize();
 
     #endregion
+
 
     #region Overrides
 
@@ -66,6 +71,13 @@ public abstract class NodeBase : Node
     }
 
     #endregion
+
+
+    protected void SetNodeColor()
+    {
+        if (ColorUtility.TryParseHtmlString(colorHex, out Color color))
+            titleContainer.style.backgroundColor = new StyleColor(color);
+    }
 
     public void ConnectEdge(EdgeData conn)
     {

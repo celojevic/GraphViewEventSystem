@@ -11,6 +11,8 @@ public class EntryNode : NodeBase
         DrawNode();
     }
 
+    protected override string colorHex => "";
+
     public override string Serialize()
     {
         return JsonUtility.ToJson(new EntryNodeData(this));
