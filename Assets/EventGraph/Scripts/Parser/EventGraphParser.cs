@@ -86,8 +86,7 @@ public class EventGraphParser : MonoBehaviour
 
         // get the var node  if it exists
         // then pass it to the evalCnd
-        // TODO change dynamic, cuz it doesnt work on webgl
-        dynamic varToCompare = 0;
+        object varToCompare = 0;
         bool found = false;
         if (nodes.TryGetValue(
             cndNodeData?.GetType()?.GetField("valueNodeGuid")?.GetValue(cndNodeData).ToString(),

@@ -1,5 +1,6 @@
 using EventGraph.Characters;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,10 @@ public class UIDialogue : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private Button _choicePrefab = null;
+
+    [Header("Settings")]
+    [Tooltip("True if the portrait should always be replaced, even when it's null.")]
+    [SerializeField] private bool _replacePortrait = false;
 
     private AudioSource _audioSource;
 
@@ -51,7 +56,19 @@ public class UIDialogue : MonoBehaviour
         // show character portrait and setup its position
         if (character != null)
         {
-            //_portraitImage.sprite=character.sp
+            // TODO runtime friendly database
+            var so = EventGraphEditorUtils.FindScriptableObjects<Character>().Find(x => x.name == character.characterName);
+            if (so == null) return;
+
+            var exp = so.GetExpression(character.expression);
+            if (exp == null)
+            {
+                if (_replacePortrait)
+                    _portraitImage.sprite = null;
+                return;
+            }
+
+            _portraitImage.sprite = exp.Sprite;
         }
 
     }
