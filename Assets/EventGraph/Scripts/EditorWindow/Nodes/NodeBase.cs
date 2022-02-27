@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+
+using UnityEditor.Experimental.GraphView;
 
 public abstract class NodeBase : Node
 {
@@ -176,3 +179,5 @@ public abstract class NodeBase : Node
     }
 
 }
+
+#endif

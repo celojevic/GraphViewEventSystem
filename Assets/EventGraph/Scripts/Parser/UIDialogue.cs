@@ -1,4 +1,5 @@
 using EventGraph.Characters;
+using EventGraph.Database;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -56,8 +57,7 @@ public class UIDialogue : MonoBehaviour
         // show character portrait and setup its position
         if (character != null)
         {
-            // TODO runtime friendly database
-            var so = EventGraphEditorUtils.FindScriptableObjects<Character>().Find(x => x.name == character.characterName);
+            var so = Database.GetCharacter(character.characterName);
             if (so == null) return;
 
             var exp = so.GetExpression(character.expression);

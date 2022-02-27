@@ -1,13 +1,12 @@
 using EventGraph.Characters;
 using EventGraph.Constants;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
+
+using UnityEditor.UIElements;
 
 public class ChoiceNode : NodeBase
 {
@@ -240,6 +239,7 @@ public class ChoiceNodeData : NodeDataBase
         this.characterFoldoutData = data.characterFoldoutData;
     }
 
+#if UNITY_EDITOR
     public ChoiceNodeData(ChoiceNode node) : base(node)
     {
         message = node.message;
@@ -260,8 +260,9 @@ public class ChoiceNodeData : NodeDataBase
             }
         }
     }
+#endif
 
-    #endregion
+#endregion
 
 
     public override void Parse(EventGraphParser parser)
@@ -290,8 +291,10 @@ public class ChoiceNodeData : NodeDataBase
 
         UIDialogue.instance.ShowMessage(
             message, 
-            choiceActions, 
-            EventGraphEditorUtils.FindAudioClip(voiceClipName),
+            choiceActions,
+            // You can load your audio clips however you want to.
+            // I simply use a manager for this example.
+            AudioManager.GetAudioClip(voiceClipName),
             characterFoldoutData
         );
     }

@@ -1,8 +1,10 @@
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using UnityEngine;
-using UnityEditor.Experimental.GraphView;
 using EventGraph.Constants;
+
+#if UNITY_EDITOR
+
+using UnityEditor.UIElements;
 
 public class IntVariableNode : VariableNodeBase<int>
 {
@@ -53,25 +55,28 @@ public class IntVariableNode : VariableNodeBase<int>
 
 }
 
+#endif
+
 public class IntVariableNodeData : VariableNodeData<int>
 {
 
     public override string variableTypeName => "IntVariable";
+
 
     #region Constructors
 
     public IntVariableNodeData(IntVariableNodeData data) : base(data)
     {
     }
-    
+
+#if UNITY_EDITOR
     public IntVariableNodeData(IntVariableNode node) : base(node)
     {
     }
+#endif
 
 
-    #endregion
-
+#endregion
 
 
 }
-

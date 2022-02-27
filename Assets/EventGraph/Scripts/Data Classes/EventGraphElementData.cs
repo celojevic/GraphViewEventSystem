@@ -17,10 +17,12 @@ public class EventGraphElementData
         this.position = data.position;
     }
 
+#if UNITY_EDITOR
     public EventGraphElementData(GraphElement graphElement)
     {
         this.guid = graphElement.viewDataKey;
         this.position = graphElement.GetPosition().position;
     }
+#endif
 
 }

@@ -1,8 +1,11 @@
 using EventGraph.Constants;
 using System.Collections;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+
+using UnityEditor.UIElements;
 
 public class WaitNode : NodeBase
 {
@@ -66,10 +69,13 @@ public class WaitNode : NodeBase
 
 }
 
+#endif
+
 public class WaitNodeData : NodeDataBase
 {
 
     public float timeToWait;
+
 
     #region Constructors
 
@@ -78,13 +84,16 @@ public class WaitNodeData : NodeDataBase
         this.timeToWait = copy.timeToWait;
     }
 
+#if UNITY_EDITOR
     public WaitNodeData(NodeBase node) : base(node)
     {
         WaitNode waitNode = node as WaitNode;
         this.timeToWait = waitNode.timeToWait;
     }
+#endif
 
-    #endregion
+#endregion
+
 
     #region Runtime
 
@@ -102,5 +111,6 @@ public class WaitNodeData : NodeDataBase
     }
 
     #endregion
+
 
 }

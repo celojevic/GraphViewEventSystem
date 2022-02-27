@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+
+#if UNITY_EDITOR
+
+using UnityEditor.Experimental.GraphView;
 
 // TODO set this up and use it in EventGraphEditorExtensions.CreatePort
 public class EdgeConnectorBase : EdgeConnector
@@ -18,3 +21,5 @@ public class EdgeConnectorBase : EdgeConnector
         throw new System.NotImplementedException();
     }
 }
+
+#endif

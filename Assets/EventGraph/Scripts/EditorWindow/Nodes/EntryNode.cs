@@ -1,6 +1,8 @@
+using UnityEngine;
+
+#if UNITY_EDITOR
 
 using UnityEditor.Experimental.GraphView;
-using UnityEngine;
 
 [System.Serializable]
 public class EntryNode : NodeBase
@@ -32,16 +34,23 @@ public class EntryNode : NodeBase
     }
 }
 
+#endif
+
 [System.Serializable]
 public class EntryNodeData : NodeDataBase
 {
 
+    public EntryNodeData(EntryNodeData data) : base(data) { }
+
+#if UNITY_EDITOR
     public EntryNodeData(NodeBase node) : base(node)
     {
     }
+#endif
 
     public override void Parse(EventGraphParser parser)
     {
         throw new System.NotImplementedException();
     }
+
 }

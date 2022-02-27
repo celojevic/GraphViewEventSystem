@@ -1,8 +1,10 @@
 using System;
+using UnityEngine;
+
+#if UNITY_EDITOR
+
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
-using UnityEngine;
 
 public abstract class VariableNodeBase<T> : NodeBase
 {
@@ -12,6 +14,7 @@ public abstract class VariableNodeBase<T> : NodeBase
     /// Required to find all ScriptableObjects of the parent type.
     /// </summary>
     public abstract string variableTypeName { get; }
+
 
     #region Constructors
 
@@ -43,6 +46,7 @@ public abstract class VariableNodeBase<T> : NodeBase
 
     #endregion
 
+
     public override string Serialize()
     {
         throw new System.NotImplementedException();
@@ -62,6 +66,8 @@ public abstract class VariableNodeBase<T> : NodeBase
 
 }
 
+#endif
+
 [System.Serializable]
 public abstract class VariableNodeData<T> : NodeDataBase
 {
@@ -76,10 +82,13 @@ public abstract class VariableNodeData<T> : NodeDataBase
     {
         this.soGuid = (data as VariableNodeData<T>)?.soGuid;
     }
+
+#if UNITY_EDITOR
     public VariableNodeData(VariableNodeBase<T> node) : base(node)
     {
         this.soGuid = node.variable.guid;
     }
+#endif
 
     public override void Parse(EventGraphParser parser)
     {

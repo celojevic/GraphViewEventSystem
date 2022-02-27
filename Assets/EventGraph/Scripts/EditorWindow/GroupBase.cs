@@ -1,7 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+
+#if UNITY_EDITOR
+
+using UnityEditor.Experimental.GraphView;
 
 public class GroupBase : Group
 {
@@ -19,3 +22,5 @@ public class GroupBase : Group
 
 
 }
+
+#endif

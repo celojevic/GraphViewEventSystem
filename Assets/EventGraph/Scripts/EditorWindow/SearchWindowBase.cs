@@ -1,8 +1,11 @@
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using System.Reflection;
 using System;
+
+#if UNITY_EDITOR
+
+using UnityEditor.Experimental.GraphView;
 
 public class SearchWindowBase : ScriptableObject, ISearchWindowProvider
 {
@@ -100,12 +103,8 @@ public class SearchWindowBase : ScriptableObject, ISearchWindowProvider
 
         return true;
 
-        //switch (SearchTreeEntry.userData)
-        //{
-        //    case Group _:
-        //        _graphView.CreateGroup(localMousePos);
-        //        return true;
-        //}
     }
 
 }
+
+#endif

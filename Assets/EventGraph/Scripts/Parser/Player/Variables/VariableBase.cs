@@ -6,7 +6,6 @@ public abstract class VariableBase<T> : ScriptableGuidObject
 
     public T value;
 
-
 }
 
 public class ScriptableGuidObject : ScriptableObject
@@ -14,6 +13,7 @@ public class ScriptableGuidObject : ScriptableObject
     [SerializeField]
     public string guid;
 
+#if UNITY_EDITOR
     private void OnValidate()
     {
         if (string.IsNullOrEmpty(guid))
@@ -25,6 +25,7 @@ public class ScriptableGuidObject : ScriptableObject
             AssetDatabase.SaveAssets();
         }
     }
+#endif
 
     public bool IsGuid(string otherGuid) => otherGuid == guid;
 

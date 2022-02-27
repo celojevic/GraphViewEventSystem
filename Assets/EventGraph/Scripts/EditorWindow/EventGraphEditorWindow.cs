@@ -1,11 +1,14 @@
 using UnityEngine;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.IO;
 using System.Collections.Generic;
 using System;
+
+#if UNITY_EDITOR
+
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 
 public class EventGraphEditorWindow : GraphViewEditorWindow
 {
@@ -238,6 +241,8 @@ public class EventGraphEditorWindow : GraphViewEditorWindow
 
 
 }
+
+#endif
 
 [Flags]
 public enum DataType

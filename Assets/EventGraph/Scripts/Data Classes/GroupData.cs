@@ -1,5 +1,8 @@
 using System.Collections.Generic;
+
+#if UNITY_EDITOR
 using UnityEditor.Experimental.GraphView;
+#endif
 
 [System.Serializable]
 public class GroupData : EventGraphElementData
@@ -8,6 +11,11 @@ public class GroupData : EventGraphElementData
     public string title;
     public List<string> nodeGuids;
 
+    public GroupData(GroupData data) : base(data)
+    {
+    }
+
+#if UNITY_EDITOR
     public GroupData(GroupBase group) : base(group)
     {
         this.title = group.title;
@@ -19,5 +27,7 @@ public class GroupData : EventGraphElementData
                 nodeGuids.Add(node.viewDataKey);
         }
     }
+#endif
 
 }
+

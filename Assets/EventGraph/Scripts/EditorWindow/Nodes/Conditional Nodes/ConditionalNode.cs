@@ -63,10 +63,12 @@ public abstract class ConditionalNodeData<T> : NodeDataBase
         this.valueNodeGuid = data.valueNodeGuid;
     }
 
+#if UNITY_EDITOR
     public ConditionalNodeData(ConditionalNode<T> node) : base(node)
     {
         this.valueNodeGuid = node.valueNodeGuid;
     }
+#endif
 
     public abstract bool EvaluateCondition(T value);
 

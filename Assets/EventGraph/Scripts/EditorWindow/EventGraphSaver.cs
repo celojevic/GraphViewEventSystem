@@ -1,14 +1,19 @@
 using UnityEngine;
 
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
-
 using System;
 using System.IO;
 using System.Collections.Generic;
 
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+#endif
+
 public static class EventGraphSaver 
 {
+
+    #region Editor
+#if UNITY_EDITOR
 
     #region Saving
 
@@ -102,7 +107,6 @@ public static class EventGraphSaver
     }
 
     #endregion
-
 
 
     #region Loading
@@ -215,6 +219,7 @@ public static class EventGraphSaver
 
     #endregion
 
+
     static void CreateFolders()
     {
         // json save path
@@ -235,6 +240,8 @@ public static class EventGraphSaver
         Directory.CreateDirectory(path);
     }
 
+#endif
+    #endregion
 
     public static EventGraphData LoadGraphDataJson(string fileName)
     {
@@ -244,5 +251,5 @@ public static class EventGraphSaver
         );
     }
 
-
 }
+

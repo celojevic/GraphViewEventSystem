@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bf503b17053cda4c9fbd269f8121d41, type: 3}
   m_Name: New Bool Variable
   m_EditorClassIdentifier: 
+  guid: fb7340cb-9192-487a-805b-592742b6a53e
   value: 0

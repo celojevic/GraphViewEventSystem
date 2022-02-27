@@ -1,7 +1,10 @@
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+using UnityEditor.Experimental.GraphView;
+#endif
 
 [System.Serializable]
 public abstract class NodeDataBase : EventGraphElementData
@@ -22,6 +25,7 @@ public abstract class NodeDataBase : EventGraphElementData
         this.edges = data.edges;
     }
 
+#if UNITY_EDITOR
     public NodeDataBase(NodeBase node) : base(node)
     {
         this.groupGuid = node.groupGuid;
@@ -60,6 +64,7 @@ public abstract class NodeDataBase : EventGraphElementData
             }
         }
     }
+#endif
 
     public abstract void Parse(EventGraphParser parser);
 }
@@ -69,7 +74,12 @@ public abstract class NodeDataBase : EventGraphElementData
 /// </summary>
 public class NodeDataWrapper : NodeDataBase
 {
+
+    public NodeDataWrapper(NodeDataWrapper data) : base(data) { }
+
+#if UNITY_EDITOR
     public NodeDataWrapper(NodeBase node) : base(node) { }
+#endif
 
     public override void Parse(EventGraphParser parser) { }
 }

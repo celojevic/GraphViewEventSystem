@@ -1,7 +1,8 @@
 using System;
-using System.Collections.Generic;
+
+#if UNITY_EDITOR
+
 using UnityEditor.Experimental.GraphView;
-using UnityEngine;
 
 public class PortBase : Port
 {
@@ -29,3 +30,5 @@ public class PortBase : Port
     }
 
 }
+
+#endif

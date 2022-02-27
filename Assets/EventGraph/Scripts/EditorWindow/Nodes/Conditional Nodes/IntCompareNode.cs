@@ -1,9 +1,11 @@
 ﻿using EventGraph.Constants;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
 
 using UnityEngine;
 using UnityEngine.UIElements;
+
+#if UNITY_EDITOR
+
+using UnityEditor.UIElements;
 
 [System.Serializable]
 public class IntCompareNode : ConditionalNode<int>
@@ -83,6 +85,8 @@ public class IntCompareNode : ConditionalNode<int>
 
 }
 
+#endif
+
 [System.Serializable]
 public class IntCompareNodeData : ConditionalNodeData<int>
 {
@@ -96,11 +100,14 @@ public class IntCompareNodeData : ConditionalNodeData<int>
         this.comparisonOperator = data.comparisonOperator;
     }
 
+#if UNITY_EDITOR
     public IntCompareNodeData(IntCompareNode node) : base(node)
     {
         this.intToCompare = node.intToCompare;
         this.comparisonOperator = node.comparisonOperator;
     }
+#endif
+
 
     #region Runtime
 
