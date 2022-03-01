@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55d758f3bcc854c419ab34c81d41fb47, type: 3}
+  m_Name: Emoji
+  m_EditorClassIdentifier: 
+  guid: 8ee409b8-ce1d-4340-89d9-323460820c1b
+  Expressions:
+  - Expression: Happy
+    Sprite: {fileID: 21300000, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
+  - Expression: Yummy
+    Sprite: {fileID: 21300002, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
+  - Expression: Love
+    Sprite: {fileID: 21300004, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
+  - Expression: Cool
+    Sprite: {fileID: 21300006, guid: dffef66376be4fa480fb02b19edbe903, type: 3}
+  - Expression: Weary
+    Sprite: {fileID: 21300018, guid: dffef66376be4fa480fb02b19edbe903, type: 3}

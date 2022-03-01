@@ -51,7 +51,7 @@ public class ChoiceNode : NodeBase
 
         // character foldout data
         this.character = EventGraphEditorUtils.FindScriptableObjects<Character>()
-            .Find(x => x.name == nodeData.characterFoldoutData.characterName);
+            .Find(x => x.guid == nodeData.characterFoldoutData.characterGuid);
         this.expression = nodeData.characterFoldoutData.expression;
         this.dialoguePosition = nodeData.characterFoldoutData.dialoguePosition;
 
@@ -95,31 +95,63 @@ public class ChoiceNode : NodeBase
         extensionContainer.Add(messageTextField);
     }
 
+    // TODO move to own class
+    private Foldout _characterFoldout;
+    private PopupField<string> _expressionsPopup;
+
+    private void CreateExpressionsPopup()
+    {
+        var list = new List<string>();
+        if (character != null && character.Expressions.HasElements())
+            foreach (var item in character.Expressions)
+                list.Add(item.Expression);
+
+        if (list.HasElements() && list.Contains(this.expression))
+        {
+            _expressionsPopup = new PopupField<string>("Expression", list, this.expression);
+            _expressionsPopup.RegisterValueChangedCallback((evt) =>
+            {
+                this.expression = evt.newValue;
+            });
+        }
+        else if (list.HasElements())
+        {
+            _expressionsPopup = new PopupField<string>("Expression", list, 0);
+            _expressionsPopup.RegisterValueChangedCallback((evt) =>
+            {
+                this.expression = evt.newValue;
+            });
+            this.expression = list[0];
+        }
+        else
+        {
+            _expressionsPopup = new PopupField<string>();
+        }
+
+        _characterFoldout.Add(_expressionsPopup);
+    }
+
     /// <summary>
     /// In the extension container.
     /// TODO move this into a new node and make choiceNode a stack node that can contain and parse it
     /// </summary>
     private void DrawCharacterFoldout()
     {
-        Foldout characterFoldout = new Foldout();
-        characterFoldout.text = "Character Data";
+        _characterFoldout = new Foldout();
+        _characterFoldout.text = "Character Data";
 
         // character SO field
         ObjectField characterField = EventGraphEditorUtils.CreateObjectField(
             typeof(Character), character, "Character");
         characterField.RegisterValueChangedCallback(evt =>
         {
-            this.character = evt.newValue as Character;
-        });
-        characterFoldout.Add(characterField);
+            if ((evt.newValue as Character) == this.character) return;
 
-        // character expression name
-        TextField expressionField = EventGraphEditorUtils.CreateTextField(expression, "Expression",
-            (evt) =>
-            {
-                this.expression = evt.newValue;
-            });
-        characterFoldout.Add(expressionField);
+            this.character = evt.newValue as Character;
+            _characterFoldout.Remove(_expressionsPopup);
+            CreateExpressionsPopup();
+        });
+        _characterFoldout.Add(characterField);
 
         // dialogue position enum field
         EnumField dialoguePositionField = new EnumField("Dialogue Position", DialoguePosition.Left);
@@ -127,9 +159,12 @@ public class ChoiceNode : NodeBase
         {
             this.dialoguePosition = (DialoguePosition)evt.newValue;
         });
-        characterFoldout.Add(dialoguePositionField);
+        _characterFoldout.Add(dialoguePositionField);
 
-        extensionContainer.Add(characterFoldout);
+        // character expression
+        CreateExpressionsPopup();
+
+        extensionContainer.Add(_characterFoldout);
 
     }
 
@@ -262,7 +297,7 @@ public class ChoiceNodeData : NodeDataBase
     }
 #endif
 
-#endregion
+    #endregion
 
 
     public override void Parse(EventGraphParser parser)

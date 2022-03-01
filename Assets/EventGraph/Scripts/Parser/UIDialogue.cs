@@ -57,7 +57,7 @@ public class UIDialogue : MonoBehaviour
         // show character portrait and setup its position
         if (character != null)
         {
-            var so = Database.GetCharacter(character.characterName);
+            var so = Database.GetCharacter(character.characterGuid);
             if (so == null) return;
 
             var exp = so.GetExpression(character.expression);

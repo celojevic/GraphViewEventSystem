@@ -6,7 +6,7 @@ namespace EventGraph.Characters
 {
 
     [CreateAssetMenu(menuName = "EventGraph/Character")]
-    public class Character : ScriptableObject
+    public class Character : ScriptableGuidObject
     {
 
         public CharacterExpression[] Expressions;

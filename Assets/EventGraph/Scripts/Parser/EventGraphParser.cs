@@ -93,29 +93,8 @@ public class EventGraphParser : MonoBehaviour
             cndNodeData?.GetType()?.GetField("valueNodeGuid")?.GetValue(cndNodeData).ToString(),
             out NodeDataBase varNodeData))
         {
-
             string soGuid = varNodeData.GetType().GetField("soGuid").GetValue(varNodeData).ToString();
             string varTypeName = varNodeData.GetType().GetProperty("variableTypeName").GetValue(varNodeData).ToString();
-            Type type = Type.GetType(varTypeName);
-
-            //// TODO make runtime friendly, use a database or something
-            ////      also need to store in an efficient collection, load them all at start,
-            ////      and get it from there instead of iterating every time
-            //string[] guids = AssetDatabase.FindAssets("t:" + varTypeName);
-
-            //foreach (var item in guids)
-            //{
-            //    var loadedVariable = 
-            //        AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(item), type);
-            //    bool isGuid = (bool)loadedVariable.GetType().GetMethod("IsGuid")
-            //        .Invoke(loadedVariable, new object[] { soGuid });
-            //    if (isGuid)
-            //    {
-            //        varToCompare = loadedVariable.GetType().GetField("value").GetValue(loadedVariable);
-            //        found = true;
-            //        break;
-            //    }
-            //}
 
             var variable = Database.GetVariable(soGuid);
             if (variable != null)
@@ -123,7 +102,6 @@ public class EventGraphParser : MonoBehaviour
                 varToCompare = variable.GetType().GetField("value").GetValue(variable);
                 found = true;
             }
-
         }
 
         if (!found)

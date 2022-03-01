@@ -24,7 +24,7 @@ namespace EventGraph.Database
         {
             characters = new Dictionary<string, Character>();
             foreach (var item in _characters)
-                characters.Add(item.name, item);
+                characters.Add(item.guid, item);
 
             variables = new Dictionary<string, ScriptableGuidObject>();
             foreach (var item in _variables)

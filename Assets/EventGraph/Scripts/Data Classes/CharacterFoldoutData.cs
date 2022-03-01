@@ -7,7 +7,7 @@ using UnityEngine;
 public class CharacterFoldoutData
 {
 
-    public string characterName;
+    public string characterGuid;
     public string expression;
     public DialoguePosition dialoguePosition;
 
@@ -17,7 +17,7 @@ public class CharacterFoldoutData
     {
         if (node == null) return;
 
-        this.characterName = node?.character?.name;
+        this.characterGuid = node?.character?.guid;
         this.expression = node?.expression;
         this.dialoguePosition = node.dialoguePosition;
     }

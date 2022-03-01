@@ -154,6 +154,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characters:
   - {fileID: 11400000, guid: baee3318a739ab6468fba414641ca10d, type: 2}
+  _variables:
+  - {fileID: 11400000, guid: baee3318a739ab6468fba414641ca10d, type: 2}
+  - {fileID: 11400000, guid: fffc0720f4ada4043b79bc645429ecf2, type: 2}
+  - {fileID: 11400000, guid: 877356d680b8f2449a2bcbe2159e87ca, type: 2}
 --- !u!4 &118913704
 Transform:
   m_ObjectHideFlags: 0
