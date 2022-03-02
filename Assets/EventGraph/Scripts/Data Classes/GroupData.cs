@@ -4,30 +4,33 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 #endif
 
-[System.Serializable]
-public class GroupData : EventGraphElementData
+namespace EventGraph
 {
-
-    public string title;
-    public List<string> nodeGuids;
-
-    public GroupData(GroupData data) : base(data)
+    [System.Serializable]
+    public class GroupData : EventGraphElementData
     {
-    }
+
+        public string title;
+        public List<string> nodeGuids;
+
+        public GroupData(GroupData data) : base(data)
+        {
+        }
 
 #if UNITY_EDITOR
-    public GroupData(GroupBase group) : base(group)
-    {
-        this.title = group.title;
-
-        nodeGuids = new List<string>();
-        foreach (GraphElement element in group.containedElements)
+        public GroupData(GroupBase group) : base(group)
         {
-            if (element is NodeBase node)
-                nodeGuids.Add(node.viewDataKey);
+            this.title = group.title;
+
+            nodeGuids = new List<string>();
+            foreach (GraphElement element in group.containedElements)
+            {
+                if (element is NodeBase node)
+                    nodeGuids.Add(node.viewDataKey);
+            }
         }
-    }
 #endif
 
-}
+    }
 
+}

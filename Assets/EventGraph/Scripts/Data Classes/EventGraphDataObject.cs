@@ -1,8 +1,11 @@
 using UnityEngine;
 
-public class EventGraphDataObject : ScriptableObject
+namespace EventGraph
 {
+    public class EventGraphDataObject : ScriptableObject
+    {
 
-    public EventGraphData graphData;
+        public EventGraphData graphData;
 
+    }
 }

@@ -1,9 +1,15 @@
 using System.Collections.Generic;
 
-[System.Serializable]
-public class EventGraphData
+
+namespace EventGraph
 {
-    public string entryNode;
-    public List<string> nodeJsons = new List<string>();
-    public List<GroupData> groups = new List<GroupData>();
+
+    [System.Serializable]
+    public class EventGraphData
+    {
+        public string entryNode;
+        public List<string> nodeJsons = new List<string>();
+        public List<GroupData> groups = new List<GroupData>();
+    }
+
 }

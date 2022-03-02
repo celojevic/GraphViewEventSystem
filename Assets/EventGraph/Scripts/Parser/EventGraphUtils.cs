@@ -2,18 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class EventGraphUtils
+namespace EventGraph
 {
-
-    public static void DestroyChildren(this Transform transform)
+    public static class EventGraphUtils
     {
-        if (transform.childCount == 0) return;
 
-        for (int i = transform.childCount-1; i >= 0; i--)
+        public static void DestroyChildren(this Transform transform)
         {
-            GameObject.Destroy(transform.GetChild(i).gameObject);
+            if (transform.childCount == 0) return;
+
+            for (int i = transform.childCount - 1; i >= 0; i--)
+            {
+                GameObject.Destroy(transform.GetChild(i).gameObject);
+            }
         }
+
+
     }
-
-
 }

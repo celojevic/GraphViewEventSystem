@@ -1,147 +1,154 @@
 ﻿using EventGraph.Constants;
+using EventGraph.Runtime;
 
 using UnityEngine;
 using UnityEngine.UIElements;
 
+namespace EventGraph
+{
+    using EventGraph.Editor;
+
 #if UNITY_EDITOR
 
-using UnityEditor.UIElements;
-
-[System.Serializable]
-public class IntCompareNode : ConditionalNode<int>
-{
-
-    public int intToCompare;
-
-    public ComparisonOperator comparisonOperator;
-
-    protected override string colorHex { get => ColorConstants.INDIGO; }
+    using UnityEditor.UIElements;
 
 
-    #region Constructors
-
-    public IntCompareNode(IntCompareNode copy) : base(copy)
+    [System.Serializable]
+    public class IntCompareNode : ConditionalNode<int>
     {
-        this.intToCompare = copy.intToCompare;
-        this.comparisonOperator = copy.comparisonOperator;
 
-        DrawNode();
-    }
+        public int intToCompare;
 
-    public IntCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
-    
-    public IntCompareNode(EventGraphView graphView, IntCompareNodeData data) 
-        : base(graphView, data)
-    {
-        this.intToCompare = data.intToCompare;
-        this.comparisonOperator = data.comparisonOperator;
+        public ComparisonOperator comparisonOperator;
 
-        DrawNode();
-    }
-
-    #endregion
+        protected override string colorHex { get => ColorConstants.INDIGO; }
 
 
-    protected override void DrawNode()
-    {
-        base.DrawNode();
-        DrawTitleContainer();
-        DrawMainContainer();
-    }
+        #region Constructors
 
-    void DrawTitleContainer()
-    {
-        titleContainer.Add(new Label("Int Comparison"));
-
-        titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("IntCompare"));
-
-        SetNodeColor();
-        RefreshExpandedState();
-    }
-
-    void DrawMainContainer()
-    {
-        EnumField comparisonOperatorField = new EnumField(ComparisonOperator.EqualTo);
-        comparisonOperatorField.value = comparisonOperator;
-        comparisonOperatorField.RegisterValueChangedCallback(evt =>
+        public IntCompareNode(IntCompareNode copy) : base(copy)
         {
-            comparisonOperator = (ComparisonOperator)evt.newValue;
-        });
-        mainContainer.Add(comparisonOperatorField);
+            this.intToCompare = copy.intToCompare;
+            this.comparisonOperator = copy.comparisonOperator;
 
-        IntegerField intField = new IntegerField();
-        intField.value = intToCompare;
-        intField.RegisterValueChangedCallback(evt =>
-        {
-            this.intToCompare = evt.newValue;
-        });
-        mainContainer.Add(intField);
-    }
-
-    public override string Serialize()
-    {
-        return JsonUtility.ToJson(new IntCompareNodeData(this));
-    }
-
-}
-
-#endif
-
-[System.Serializable]
-public class IntCompareNodeData : ConditionalNodeData<int>
-{
-
-    public int intToCompare;
-    public ComparisonOperator comparisonOperator;
-
-    public IntCompareNodeData(IntCompareNodeData data) : base(data)
-    {
-        this.intToCompare = data.intToCompare;
-        this.comparisonOperator = data.comparisonOperator;
-    }
-
-#if UNITY_EDITOR
-    public IntCompareNodeData(IntCompareNode node) : base(node)
-    {
-        this.intToCompare = node.intToCompare;
-        this.comparisonOperator = node.comparisonOperator;
-    }
-#endif
-
-
-    #region Runtime
-
-    public override bool EvaluateCondition(int value)
-    {
-        switch (comparisonOperator)
-        {
-            case ComparisonOperator.EqualTo:
-                return value == intToCompare;
-            case ComparisonOperator.LessThan:
-                return value < intToCompare;
-            case ComparisonOperator.GreaterThan:
-                return value > intToCompare;
-            case ComparisonOperator.LessThanOrEqualTo:
-                return value <= intToCompare;
-            case ComparisonOperator.GreaterThanOrEqualTo:
-                return value >= intToCompare;
-            default:
-                return true;
+            DrawNode();
         }
+
+        public IntCompareNode(Vector2 pos, EventGraphView graphView) : base(pos, graphView) { }
+
+        public IntCompareNode(EventGraphView graphView, IntCompareNodeData data)
+            : base(graphView, data)
+        {
+            this.intToCompare = data.intToCompare;
+            this.comparisonOperator = data.comparisonOperator;
+
+            DrawNode();
+        }
+
+        #endregion
+
+
+        protected override void DrawNode()
+        {
+            base.DrawNode();
+            DrawTitleContainer();
+            DrawMainContainer();
+        }
+
+        void DrawTitleContainer()
+        {
+            titleContainer.Add(new Label("Int Comparison"));
+
+            titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("IntCompare"));
+
+            SetNodeColor();
+            RefreshExpandedState();
+        }
+
+        void DrawMainContainer()
+        {
+            EnumField comparisonOperatorField = new EnumField(ComparisonOperator.EqualTo);
+            comparisonOperatorField.value = comparisonOperator;
+            comparisonOperatorField.RegisterValueChangedCallback(evt =>
+            {
+                comparisonOperator = (ComparisonOperator)evt.newValue;
+            });
+            mainContainer.Add(comparisonOperatorField);
+
+            IntegerField intField = new IntegerField();
+            intField.value = intToCompare;
+            intField.RegisterValueChangedCallback(evt =>
+            {
+                this.intToCompare = evt.newValue;
+            });
+            mainContainer.Add(intField);
+        }
+
+        public override string Serialize()
+        {
+            return JsonUtility.ToJson(new IntCompareNodeData(this));
+        }
+
     }
 
-    public override void Parse(EventGraphParser parser)
+#endif
+
+    [System.Serializable]
+    public class IntCompareNodeData : ConditionalNodeData<int>
     {
-        throw new System.NotImplementedException();
+
+        public int intToCompare;
+        public ComparisonOperator comparisonOperator;
+
+        public IntCompareNodeData(IntCompareNodeData data) : base(data)
+        {
+            this.intToCompare = data.intToCompare;
+            this.comparisonOperator = data.comparisonOperator;
+        }
+
+#if UNITY_EDITOR
+        public IntCompareNodeData(IntCompareNode node) : base(node)
+        {
+            this.intToCompare = node.intToCompare;
+            this.comparisonOperator = node.comparisonOperator;
+        }
+#endif
+
+
+        #region Runtime
+
+        public override bool EvaluateCondition(int value)
+        {
+            switch (comparisonOperator)
+            {
+                case ComparisonOperator.EqualTo:
+                    return value == intToCompare;
+                case ComparisonOperator.LessThan:
+                    return value < intToCompare;
+                case ComparisonOperator.GreaterThan:
+                    return value > intToCompare;
+                case ComparisonOperator.LessThanOrEqualTo:
+                    return value <= intToCompare;
+                case ComparisonOperator.GreaterThanOrEqualTo:
+                    return value >= intToCompare;
+                default:
+                    return true;
+            }
+        }
+
+        public override void Parse(EventGraphParser parser)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        #endregion
+
     }
 
-    #endregion
-
-}
-
-public enum ComparisonOperator
-{
-    EqualTo,
-    LessThan, GreaterThan,
-    LessThanOrEqualTo, GreaterThanOrEqualTo,
+    public enum ComparisonOperator
+    {
+        EqualTo,
+        LessThan, GreaterThan,
+        LessThanOrEqualTo, GreaterThanOrEqualTo,
+    }
 }

@@ -1,83 +1,68 @@
 using EventGraph.Characters;
-using EventGraph.Database;
+using EventGraph.Databases;
+using EventGraph.Runtime;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDialogue : MonoBehaviour
+namespace EventGraph.Runtime.UI
 {
-
-    public static UIDialogue instance;
-
-    [SerializeField] private GameObject _panel = null;
-    [SerializeField] private TMP_Text _messageText = null;
-    [SerializeField] private Transform _choiceHolder = null;
-    [SerializeField] private Image[] _portraits = new Image[(int)DialoguePosition.Count];
-
-    [Header("Prefabs")]
-    [SerializeField] private Button _choicePrefab = null;
-
-    private AudioSource _audioSource;
-
-    private void Awake()
+    public class UIDialogue : MonoBehaviour
     {
-        instance = this;
-        _audioSource = GetComponent<AudioSource>();
-        Hide();
-    }
 
-    public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null, CharacterFoldoutData character=null)
-    {
-        _panel.SetActive(true);
-        _messageText.text = message;
+        public static UIDialogue instance;
 
-        _choiceHolder.DestroyChildren();
-        for (int i = 0; i < choices.Count; i++)
+        [SerializeField] private GameObject _panel = null;
+
+        [EnumNameArray(typeof(DialoguePosition))]
+        [SerializeField] private UIDialogueBox[] _dialogueBoxes = new UIDialogueBox[(int)DialoguePosition.Count];
+
+        private AudioSource _audioSource;
+
+        private void Awake()
         {
-            int index = i;
-            Button prefab = Instantiate(_choicePrefab, _choiceHolder);
-            prefab.GetComponentInChildren<TMP_Text>().text = choices[i].choice;
-            prefab.onClick.AddListener(() => choices[index].callback?.Invoke());
+            instance = this;
+            _audioSource = GetComponent<AudioSource>();
+            Hide();
         }
 
-        // play voice line
-        if (voiceClip != null)
+        public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null, CharacterFoldoutData character = null)
         {
-            _audioSource.Stop();
-            _audioSource.clip = voiceClip;
-            _audioSource.Play();
+            _panel.SetActive(true);
+
+            // play voice line
+            if (voiceClip != null)
+            {
+                _audioSource.Stop();
+                _audioSource.clip = voiceClip;
+                _audioSource.Play();
+            }
+
+            int index = character != null ? (int)character.dialoguePosition : 0;
+
+            for (int i = 0; i < _dialogueBoxes.Length; i++)
+            {
+                if (i == index)
+                {
+                    _dialogueBoxes[i].gameObject.SetActive(true);
+                    _dialogueBoxes[i].Setup(message, choices, character);
+                }
+                else
+                {
+                    _dialogueBoxes[i].gameObject.SetActive(false);
+                }
+            }
+
         }
 
-        // show character portrait and setup its position
-        if (character != null)
+
+        public void Hide()
         {
-            Character so = Database.GetCharacter(character.characterGuid);
-            if (so == null) return;
-
-            CharacterExpression exp = so.GetExpression(character.expression);
-            if (exp == null) return;
-
-            SetPortrait(character.dialoguePosition, exp.Sprite);
+            _panel.SetActive(false);
         }
 
+
     }
-
-    void SetPortrait(DialoguePosition pos, Sprite sprite)
-    {
-        for (DialoguePosition i = 0; i < DialoguePosition.Count; i++)
-        {
-            _portraits[(int)i].enabled = i == pos;
-            if (i==pos)
-                _portraits[(int)i].sprite = sprite;
-        }
-    }
-
-    public void Hide()
-    {
-        _panel.SetActive(false);
-    }
-
-
 }

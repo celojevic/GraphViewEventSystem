@@ -1,9 +1,10 @@
 using EventGraph.Characters;
+using EventGraph.Editor;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace EventGraph.Database
+namespace EventGraph.Databases
 {
 
     public class Database : MonoBehaviour

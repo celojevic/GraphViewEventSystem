@@ -4,25 +4,29 @@ using UnityEngine;
 using UnityEditor.Experimental.GraphView;
 #endif
 
-[System.Serializable]
-public class EventGraphElementData
+namespace EventGraph
 {
-
-    public string guid;
-    public Vector2 position;
-
-    public EventGraphElementData(EventGraphElementData data)
+    [System.Serializable]
+    public class EventGraphElementData
     {
-        this.guid = data.guid;
-        this.position = data.position;
-    }
+
+        public string guid;
+        public Vector2 position;
+
+        public EventGraphElementData(EventGraphElementData data)
+        {
+            this.guid = data.guid;
+            this.position = data.position;
+        }
 
 #if UNITY_EDITOR
-    public EventGraphElementData(GraphElement graphElement)
-    {
-        this.guid = graphElement.viewDataKey;
-        this.position = graphElement.GetPosition().position;
-    }
+        public EventGraphElementData(GraphElement graphElement)
+        {
+            this.guid = graphElement.viewDataKey;
+            this.position = graphElement.GetPosition().position;
+        }
 #endif
+
+    }
 
 }

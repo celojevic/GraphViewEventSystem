@@ -3,106 +3,109 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+namespace EventGraph.Editor
+{
 #if UNITY_EDITOR
 
-using UnityEditor.Experimental.GraphView;
+    using UnityEditor.Experimental.GraphView;
 
-public class EdgeConnectorListenerBase : IEdgeConnectorListener
-{
-
-    /// <summary>
-    /// Parent port
-    /// </summary>
-    private PortBase _port;
-    private EventGraphView _graphView;
-    private GraphViewChange _graphViewChange;
-    private List<Edge> _edgesToCreate;
-    private List<GraphElement> _edgesToDelete;
-
-    public EdgeConnectorListenerBase(EventGraphView graphView, PortBase port)
-    {
-        _edgesToCreate = new List<Edge>();
-        _edgesToDelete = new List<GraphElement>();
-        _graphViewChange.edgesToCreate = _edgesToCreate;
-
-        _graphView = graphView;
-        _port = port;
-    }
-
-    // position = pos relative to editor window, origin at top-left
-    public void OnDropOutsidePort(Edge edge, Vector2 position)
-    {
-        _graphView.OpenSearchWindow(_graphView.editorWindow.position.position + position, _port);
-    }
-
-    public void OnDrop(GraphView graphView, Edge edge)
+    public class EdgeConnectorListenerBase : IEdgeConnectorListener
     {
 
-        EdgeBase e = edge as EdgeBase;
+        /// <summary>
+        /// Parent port
+        /// </summary>
+        private PortBase _port;
+        private EventGraphView _graphView;
+        private GraphViewChange _graphViewChange;
+        private List<Edge> _edgesToCreate;
+        private List<GraphElement> _edgesToDelete;
 
-        _edgesToCreate.Clear();
-
-        // TODO prevent dropping value nodes on anything but value ports
-        //if (e.input.node.GetType().BaseType.IsGenericType && e.output.node.GetType().BaseType.IsGenericType
-        //    && e.input.portName == "Value"
-        //    && e.input.node.GetType().BaseType.GetGenericTypeDefinition() != typeof(ConditionalNode<>)
-        //    || e.output.node.GetType().BaseType.GetGenericTypeDefinition() != typeof(VariableNodeBase<>))
-        //{
-        //    return;
-        //}
-
-        _edgesToCreate.Add(edge);
-
-        _edgesToDelete.Clear();
-
-        if (edge.input.capacity == Port.Capacity.Single)
+        public EdgeConnectorListenerBase(EventGraphView graphView, PortBase port)
         {
-            foreach (Edge connection in edge.input.connections)
+            _edgesToCreate = new List<Edge>();
+            _edgesToDelete = new List<GraphElement>();
+            _graphViewChange.edgesToCreate = _edgesToCreate;
+
+            _graphView = graphView;
+            _port = port;
+        }
+
+        // position = pos relative to editor window, origin at top-left
+        public void OnDropOutsidePort(Edge edge, Vector2 position)
+        {
+            _graphView.OpenSearchWindow(_graphView.editorWindow.position.position + position, _port);
+        }
+
+        public void OnDrop(GraphView graphView, Edge edge)
+        {
+
+            EdgeBase e = edge as EdgeBase;
+
+            _edgesToCreate.Clear();
+
+            // TODO prevent dropping value nodes on anything but value ports
+            //if (e.input.node.GetType().BaseType.IsGenericType && e.output.node.GetType().BaseType.IsGenericType
+            //    && e.input.portName == "Value"
+            //    && e.input.node.GetType().BaseType.GetGenericTypeDefinition() != typeof(ConditionalNode<>)
+            //    || e.output.node.GetType().BaseType.GetGenericTypeDefinition() != typeof(VariableNodeBase<>))
+            //{
+            //    return;
+            //}
+
+            _edgesToCreate.Add(edge);
+
+            _edgesToDelete.Clear();
+
+            if (edge.input.capacity == Port.Capacity.Single)
             {
-                if (connection != edge)
+                foreach (Edge connection in edge.input.connections)
                 {
-                    _edgesToDelete.Add(connection);
+                    if (connection != edge)
+                    {
+                        _edgesToDelete.Add(connection);
+                    }
                 }
             }
-        }
 
-        if (edge.output.capacity == Port.Capacity.Single)
-        {
-            foreach (Edge connection2 in edge.output.connections)
+            if (edge.output.capacity == Port.Capacity.Single)
             {
-                if (connection2 != edge)
+                foreach (Edge connection2 in edge.output.connections)
                 {
-                    _edgesToDelete.Add(connection2);
+                    if (connection2 != edge)
+                    {
+                        _edgesToDelete.Add(connection2);
+                    }
                 }
             }
-        }
 
-        if (_edgesToDelete.Count > 0)
-        {
-            graphView.DeleteElements(_edgesToDelete);
-        }
+            if (_edgesToDelete.Count > 0)
+            {
+                graphView.DeleteElements(_edgesToDelete);
+            }
 
-        List<Edge> edgesToCreate = _edgesToCreate;
-        if (graphView.graphViewChanged != null)
-        {
-            edgesToCreate = graphView.graphViewChanged(_graphViewChange).edgesToCreate;
-        }
+            List<Edge> edgesToCreate = _edgesToCreate;
+            if (graphView.graphViewChanged != null)
+            {
+                edgesToCreate = graphView.graphViewChanged(_graphViewChange).edgesToCreate;
+            }
 
-        foreach (Edge item in edgesToCreate)
-        {
-            graphView.AddElement(item);
-            edge.input.Connect(item);
-            edge.output.Connect(item);
-        }
+            foreach (Edge item in edgesToCreate)
+            {
+                graphView.AddElement(item);
+                edge.input.Connect(item);
+                edge.output.Connect(item);
+            }
 
-        // check if var node was dropped on cndNode value port
-        if (e != null && e.ConnectsVarToCndNode())
-        {
-            e.SetValueNodeGuid(false);
+            // check if var node was dropped on cndNode value port
+            if (e != null && e.ConnectsVarToCndNode())
+            {
+                e.SetValueNodeGuid(false);
+            }
+
         }
 
     }
-
-}
 
 #endif
+}
