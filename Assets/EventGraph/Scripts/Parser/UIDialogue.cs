@@ -14,14 +14,10 @@ public class UIDialogue : MonoBehaviour
     [SerializeField] private GameObject _panel = null;
     [SerializeField] private TMP_Text _messageText = null;
     [SerializeField] private Transform _choiceHolder = null;
-    [SerializeField] private Image _portraitImage = null;
+    [SerializeField] private Image[] _portraits = new Image[(int)DialoguePosition.Count];
 
     [Header("Prefabs")]
     [SerializeField] private Button _choicePrefab = null;
-
-    [Header("Settings")]
-    [Tooltip("True if the portrait should always be replaced, even when it's null.")]
-    [SerializeField] private bool _replacePortrait = false;
 
     private AudioSource _audioSource;
 
@@ -40,7 +36,7 @@ public class UIDialogue : MonoBehaviour
         _choiceHolder.DestroyChildren();
         for (int i = 0; i < choices.Count; i++)
         {
-            var index = i;
+            int index = i;
             Button prefab = Instantiate(_choicePrefab, _choiceHolder);
             prefab.GetComponentInChildren<TMP_Text>().text = choices[i].choice;
             prefab.onClick.AddListener(() => choices[index].callback?.Invoke());
@@ -57,20 +53,25 @@ public class UIDialogue : MonoBehaviour
         // show character portrait and setup its position
         if (character != null)
         {
-            var so = Database.GetCharacter(character.characterGuid);
+            Character so = Database.GetCharacter(character.characterGuid);
             if (so == null) return;
 
-            var exp = so.GetExpression(character.expression);
-            if (exp == null)
-            {
-                if (_replacePortrait)
-                    _portraitImage.sprite = null;
-                return;
-            }
+            CharacterExpression exp = so.GetExpression(character.expression);
+            if (exp == null) return;
 
-            _portraitImage.sprite = exp.Sprite;
+            SetPortrait(character.dialoguePosition, exp.Sprite);
         }
 
+    }
+
+    void SetPortrait(DialoguePosition pos, Sprite sprite)
+    {
+        for (DialoguePosition i = 0; i < DialoguePosition.Count; i++)
+        {
+            _portraits[(int)i].enabled = i == pos;
+            if (i==pos)
+                _portraits[(int)i].sprite = sprite;
+        }
     }
 
     public void Hide()

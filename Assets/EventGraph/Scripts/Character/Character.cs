@@ -30,7 +30,9 @@ namespace EventGraph.Characters
 
     public enum DialoguePosition
     {
-        Left,Right
+        Left,Right,
+
+        Count
     }
 
 }
