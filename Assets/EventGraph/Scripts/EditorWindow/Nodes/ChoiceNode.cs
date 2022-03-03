@@ -50,6 +50,11 @@ namespace EventGraph
 
         public ChoiceNode(EventGraphView graphView, ChoiceNodeData nodeData) : base(graphView, nodeData)
         {
+            if (nodeData.message=="why u lie")
+            {
+                int i = 0;
+            }
+
             this.message = nodeData.message;
             this.choices = nodeData.choices;
             if (!string.IsNullOrEmpty(nodeData.voiceClipName))
@@ -160,7 +165,7 @@ namespace EventGraph
             _characterFoldout.Add(characterField);
 
             // dialogue position enum field
-            EnumField dialoguePositionField = new EnumField("Dialogue Position", DialoguePosition.Left);
+            EnumField dialoguePositionField = new EnumField("Dialogue Position", this.dialoguePosition);
             dialoguePositionField.RegisterValueChangedCallback((evt) =>
             {
                 this.dialoguePosition = (DialoguePosition)evt.newValue;

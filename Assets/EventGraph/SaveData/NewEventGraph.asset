@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NewEventGraph
   m_EditorClassIdentifier: 
   graphData:
-    entryNode: '{"guid":"c8df5c4a-5242-47da-b5b9-cfd8f2b805a5","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"c8df5c4a-5242-47da-b5b9-cfd8f2b805a5","toNodeGuid":"5fba0e6a-b122-4b10-8d0b-748447342114","edgeType":""}]}'
+    entryNode: '{"guid":"e021a279-448a-4f95-b941-c182e4892d8f","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"e021a279-448a-4f95-b941-c182e4892d8f","toNodeGuid":"5fba0e6a-b122-4b10-8d0b-748447342114","edgeType":""}]}'
     nodeJsons:
     - '{"guid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","position":{"x":1263.0,"y":-130.0},"nodeType":"EventGraph.IntCompareNode","nodeDataType":"EventGraph.IntCompareNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","edgeType":""},{"portIndex":1,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","edgeType":""}],"valueNodeGuid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","intToCompare":5,"comparisonOperator":4}'
     - '{"guid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","position":{"x":1494.0,"y":-182.0},"nodeType":"EventGraph.WaitNode","nodeDataType":"EventGraph.WaitNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","toNodeGuid":"81b3559c-5231-40f6-8c3e-e9cffe337253","edgeType":""}],"timeToWait":1.5}'
@@ -39,19 +39,19 @@ MonoBehaviour:
       ur not","choices":["Next"],"voiceClipName":"guessurnot","characterFoldoutData":{"characterGuid":"","expression":"Weary","dialoguePosition":0}}'
     groups:
     - guid: 6cee005a-81f8-4c12-b2db-307d07ea1fde
-      position: {x: 1195, y: -338}
+      position: {x: 1195, y: -338.00003}
       title: Yes
       nodeGuids:
       - e41791d4-d5a6-460e-bbe9-4da7a6b76086
       - 89369874-1a2f-4f95-8b8d-9432c37c2b47
       - f4adcd6f-55f4-4c3a-b319-9bbf181096c6
-      - abe409ba-c72e-437a-b3ce-d9c086a2f24f
       - 81b3559c-5231-40f6-8c3e-e9cffe337253
+      - abe409ba-c72e-437a-b3ce-d9c086a2f24f
     - guid: b197cfbf-b834-4c73-b661-2c1138646eb7
-      position: {x: 1283, y: 230}
+      position: {x: 1283, y: 230.00003}
       title: no
       nodeGuids:
       - 1b16df7b-4f57-4ff2-98bb-18900296896f
       - 6cacabfc-e38b-4322-8bb6-534116433d9b
-      - b8884e70-4870-42f4-9cf1-d7ebdfe54d89
       - 8a6cfe6a-b508-476d-8329-2c3ba6442adb
+      - b8884e70-4870-42f4-9cf1-d7ebdfe54d89

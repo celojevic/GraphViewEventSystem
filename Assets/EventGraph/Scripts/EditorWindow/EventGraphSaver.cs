@@ -143,7 +143,7 @@ namespace EventGraph
                 return;
             }
 
-            string path = $"{Application.persistentDataPath}/EventGraphs/{fileName}.json";
+            string path = Path.Combine(Application.persistentDataPath, "EventGraphs", $"{fileName}.json"); //$"{Application.persistentDataPath}//{fileName}.json";
             string json = File.ReadAllText(path);
 
             EventGraphData graphData = (EventGraphData)JsonUtility.FromJson(json, typeof(EventGraphData));
