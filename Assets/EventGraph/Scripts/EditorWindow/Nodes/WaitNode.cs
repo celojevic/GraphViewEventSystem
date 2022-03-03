@@ -106,8 +106,7 @@ namespace EventGraph
         {
             yield return new WaitForSeconds(this.timeToWait);
 
-            parser.curNodeGuid = edges[0].toNodeGuid;
-            parser.Next();
+            parser.SetNext();
         }
 
         #endregion

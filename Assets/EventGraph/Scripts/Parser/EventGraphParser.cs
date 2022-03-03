@@ -9,6 +9,7 @@ using UnityEngine.UI;
 namespace EventGraph.Runtime
 {
     // TODO can use RuntimeInitializeOnLoadMethod and make this a regular class that returns parsed values?
+    // TODO need a callback thing for when parsing begins and ends to reset vars and such
     public class EventGraphParser : MonoBehaviour
     {
 
@@ -79,7 +80,19 @@ namespace EventGraph.Runtime
             {
                 HandleConditionalNode();
             }
+        }
 
+        public void SetNext()
+        {
+            try
+            {
+                curNodeGuid = curNodeData.edges[0].toNodeGuid;
+                Next();
+            }
+            catch
+            {
+                StopParsing();
+            }
         }
 
         void HandleConditionalNode()

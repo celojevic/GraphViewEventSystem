@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using EventGraph.Runtime;
 
+// TODO camera animation node with a wait until anim completed bool
 namespace EventGraph
 {
 
@@ -84,6 +85,8 @@ namespace EventGraph
 
         public string cameraName;
 
+        private static Camera[] sceneCameras;
+
 
         #region Constructors
 
@@ -108,7 +111,12 @@ namespace EventGraph
 
         public override void Parse(EventGraphParser parser)
         {
-            // TODO find camera with cameraName here and switch to it
+            sceneCameras = GameObject.FindObjectsOfType<Camera>(true);
+
+            foreach (var item in sceneCameras)
+                item.enabled = (item.name == cameraName);
+
+            parser.SetNext();
         }
 
         #endregion
