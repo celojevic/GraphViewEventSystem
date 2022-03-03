@@ -56,6 +56,7 @@ namespace EventGraph.Editor
 
             textField.multiline = true;
             textField.style.maxWidth = 350;
+            textField.style.minWidth = 100;
             textField.style.whiteSpace = wordWrap ? WhiteSpace.Normal : WhiteSpace.NoWrap;
 
             return textField;

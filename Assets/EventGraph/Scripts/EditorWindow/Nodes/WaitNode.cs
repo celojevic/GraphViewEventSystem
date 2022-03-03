@@ -2,14 +2,15 @@ using EventGraph.Constants;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
+using EventGraph.Runtime;
 
 namespace EventGraph
 {
-    using EventGraph.Editor;
-    using EventGraph.Runtime;
+
 #if UNITY_EDITOR
 
     using UnityEditor.UIElements;
+    using EventGraph.Editor;
 
     public class WaitNode : NodeBase
     {
@@ -32,13 +33,9 @@ namespace EventGraph
             DrawNode();
         }
 
-        public WaitNode(EventGraphView graphView, NodeDataBase nodeData) : base(graphView, nodeData)
+        public WaitNode(EventGraphView graphView, WaitNodeData nodeData) : base(graphView, nodeData)
         {
-            if (nodeData is WaitNodeData wnData)
-            {
-                this.timeToWait = wnData.timeToWait;
-            }
-
+            this.timeToWait = nodeData.timeToWait;
             DrawNode();
         }
 
@@ -89,10 +86,9 @@ namespace EventGraph
         }
 
 #if UNITY_EDITOR
-        public WaitNodeData(NodeBase node) : base(node)
+        public WaitNodeData(WaitNode node) : base(node)
         {
-            WaitNode waitNode = node as WaitNode;
-            this.timeToWait = waitNode.timeToWait;
+            this.timeToWait = node.timeToWait;
         }
 #endif
 

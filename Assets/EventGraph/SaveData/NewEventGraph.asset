@@ -13,19 +13,43 @@ MonoBehaviour:
   m_Name: NewEventGraph
   m_EditorClassIdentifier: 
   graphData:
-    entryNode: '{"guid":"4132bbab-42ce-407a-9a8a-e5912183d566","position":{"x":100.0,"y":200.0},"nodeType":"EntryNode","nodeDataType":"EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"choiceIndex":0,"parentNodeGuid":"4132bbab-42ce-407a-9a8a-e5912183d566","toNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d"}]}'
+    entryNode: '{"guid":"b07fd0f4-54ca-4acb-82fe-fdb856ff92ba","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"b07fd0f4-54ca-4acb-82fe-fdb856ff92ba","toNodeGuid":"5fba0e6a-b122-4b10-8d0b-748447342114","edgeType":""}]}'
     nodeJsons:
-    - '{"guid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","position":{"x":204.0,"y":249.0},"nodeType":"ChoiceNode","nodeDataType":"ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[{"choiceIndex":1,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086"},{"choiceIndex":2,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f"}],"message":"are
-      u level 5?","choices":["yes","no"]}'
-    - '{"guid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","position":{"x":776.0,"y":317.0},"nodeType":"ChoiceNode","nodeDataType":"ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[],"message":"why
-      u lie","choices":["Next Dialogue"]}'
-    - '{"guid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","position":{"x":776.0,"y":438.0},"nodeType":"ChoiceNode","nodeDataType":"ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[],"message":"guess
-      ur not","choices":["Next Dialogue"]}'
-    - '{"guid":"1b16df7b-4f57-4ff2-98bb-18900296896f","position":{"x":487.0,"y":355.0},"nodeType":"IntCompareNode","nodeDataType":"IntCompareNodeData","groupGuid":"","isEntryNode":false,"edges":[{"choiceIndex":0,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb"},{"choiceIndex":1,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89"}],"intToCompare":5,"comparisonOperator":4}'
-    - '{"guid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","position":{"x":776.0,"y":174.0},"nodeType":"ChoiceNode","nodeDataType":"ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[],"message":"liar","choices":["Next
-      Dialogue"]}'
-    - '{"guid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","position":{"x":487.0,"y":91.0},"nodeType":"IntCompareNode","nodeDataType":"IntCompareNodeData","groupGuid":"","isEntryNode":false,"edges":[{"choiceIndex":0,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47"},{"choiceIndex":1,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f"}],"intToCompare":5,"comparisonOperator":4}'
-    - '{"guid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","position":{"x":796.0,"y":33.0},"nodeType":"WaitNode","nodeDataType":"WaitNodeData","groupGuid":"","isEntryNode":false,"edges":[{"choiceIndex":0,"parentNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","toNodeGuid":"81b3559c-5231-40f6-8c3e-e9cffe337253"}],"timeToWait":1.5}'
-    - '{"guid":"81b3559c-5231-40f6-8c3e-e9cffe337253","position":{"x":1021.0,"y":14.0},"nodeType":"ChoiceNode","nodeDataType":"ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[],"message":"u
-      really are","choices":["Next Dialogue"]}'
-    groups: []
+    - '{"guid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","position":{"x":1263.0,"y":-130.0},"nodeType":"EventGraph.IntCompareNode","nodeDataType":"EventGraph.IntCompareNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","edgeType":""},{"portIndex":1,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","edgeType":""}],"valueNodeGuid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","intToCompare":5,"comparisonOperator":4}'
+    - '{"guid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","position":{"x":1494.0,"y":-182.0},"nodeType":"EventGraph.WaitNode","nodeDataType":"EventGraph.WaitNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","toNodeGuid":"81b3559c-5231-40f6-8c3e-e9cffe337253","edgeType":""}],"timeToWait":1.5}'
+    - '{"guid":"1b16df7b-4f57-4ff2-98bb-18900296896f","position":{"x":1329.0,"y":327.0},"nodeType":"EventGraph.IntCompareNode","nodeDataType":"EventGraph.IntCompareNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","edgeType":""},{"portIndex":1,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","edgeType":""}],"valueNodeGuid":"6cacabfc-e38b-4322-8bb6-534116433d9b","intToCompare":5,"comparisonOperator":4}'
+    - '{"guid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","position":{"x":1220.0,"y":52.0},"nodeType":"EventGraph.IntVariableNode","nodeDataType":"EventGraph.IntVariableNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","toNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","edgeType":"var"}],"soGuid":"950b0db4-fac8-44f9-aa42-658d616ad831"}'
+    - '{"guid":"6cacabfc-e38b-4322-8bb6-534116433d9b","position":{"x":1308.0,"y":494.0},"nodeType":"EventGraph.IntVariableNode","nodeDataType":"EventGraph.IntVariableNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"6cacabfc-e38b-4322-8bb6-534116433d9b","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","edgeType":"var"}],"soGuid":"950b0db4-fac8-44f9-aa42-658d616ad831"}'
+    - '{"guid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","position":{"x":798.0,"y":162.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","edgeType":""},{"portIndex":2,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","edgeType":""}],"message":"are
+      u level 5?","choices":["yes","no"],"voiceClipName":"areulvl5","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Yummy","dialoguePosition":1}}'
+    - '{"guid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","position":{"x":1509.0,"y":-34.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[],"message":"liar","choices":[""],"voiceClipName":"liar","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Happy","dialoguePosition":0}}'
+    - '{"guid":"81b3559c-5231-40f6-8c3e-e9cffe337253","position":{"x":1688.0,"y":-279.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[],"message":"u
+      really are","choices":[""],"voiceClipName":"urlyare","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Love","dialoguePosition":0}}'
+    - '{"guid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","position":{"x":1618.0,"y":515.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[],"message":"guess
+      ur not","choices":[""],"voiceClipName":"guessurnot","characterFoldoutData":{"characterGuid":"","expression":"Weary","dialoguePosition":0}}'
+    - '{"guid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","position":{"x":1618.0,"y":289.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[],"message":"why
+      u lie","choices":[""],"voiceClipName":"whyulie","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Weary","dialoguePosition":1}}'
+    - '{"guid":"5fba0e6a-b122-4b10-8d0b-748447342114","position":{"x":264.0,"y":-76.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"5fba0e6a-b122-4b10-8d0b-748447342114","toNodeGuid":"45261742-2f6d-4244-87bd-e5af9583933a","edgeType":""}],"message":"changing
+      to camera 1. look at the ball","choices":["Next"],"voiceClipName":"","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Happy","dialoguePosition":0}}'
+    - '{"guid":"45261742-2f6d-4244-87bd-e5af9583933a","position":{"x":600.0,"y":-67.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"45261742-2f6d-4244-87bd-e5af9583933a","toNodeGuid":"4c5002d1-ee9c-40bf-8ef9-c4615d0603a4","edgeType":""}],"cameraName":"Camera1"}'
+    - '{"guid":"4c5002d1-ee9c-40bf-8ef9-c4615d0603a4","position":{"x":273.0,"y":227.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"4c5002d1-ee9c-40bf-8ef9-c4615d0603a4","toNodeGuid":"90f1083c-98fd-4845-8a80-f8f6a7f41661","edgeType":""}],"message":"changing
+      to camera two!! look at the capsule","choices":["Next"],"voiceClipName":"","characterFoldoutData":{"characterGuid":"","expression":"","dialoguePosition":0}}'
+    - '{"guid":"90f1083c-98fd-4845-8a80-f8f6a7f41661","position":{"x":609.0,"y":236.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"90f1083c-98fd-4845-8a80-f8f6a7f41661","toNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","edgeType":""}],"cameraName":"Camera2"}'
+    groups:
+    - guid: 6cee005a-81f8-4c12-b2db-307d07ea1fde
+      position: {x: 1195, y: -338}
+      title: Yes
+      nodeGuids:
+      - e41791d4-d5a6-460e-bbe9-4da7a6b76086
+      - 89369874-1a2f-4f95-8b8d-9432c37c2b47
+      - f4adcd6f-55f4-4c3a-b319-9bbf181096c6
+      - abe409ba-c72e-437a-b3ce-d9c086a2f24f
+      - 81b3559c-5231-40f6-8c3e-e9cffe337253
+    - guid: b197cfbf-b834-4c73-b661-2c1138646eb7
+      position: {x: 1283, y: 230}
+      title: no
+      nodeGuids:
+      - 1b16df7b-4f57-4ff2-98bb-18900296896f
+      - 6cacabfc-e38b-4322-8bb6-534116433d9b
+      - b8884e70-4870-42f4-9cf1-d7ebdfe54d89
+      - 8a6cfe6a-b508-476d-8329-2c3ba6442adb

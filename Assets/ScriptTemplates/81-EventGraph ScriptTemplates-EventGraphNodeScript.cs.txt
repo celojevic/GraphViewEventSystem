@@ -1,0 +1,102 @@
+using EventGraph.Constants;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UIElements;
+using EventGraph.Runtime;
+
+namespace EventGraph
+{
+
+#if UNITY_EDITOR
+
+    using EventGraph.Editor;
+    using UnityEditor.UIElements;
+
+    public class #SCRIPTNAME# : NodeBase
+    {
+
+        protected override string colorHex => null;
+
+
+        #region Constructors
+
+        public #SCRIPTNAME#(#SCRIPTNAME# copy) : base(copy)
+        {
+		
+		
+			// This must be called here to draw in the right order
+            DrawNode();
+        }
+
+        public #SCRIPTNAME#(Vector2 pos, EventGraphView graphView) : base(pos, graphView)
+        {
+            DrawNode();
+        }
+
+        public #SCRIPTNAME#(EventGraphView graphView, #SCRIPTNAME#Data nodeData) : base(graphView, nodeData)
+        {
+			// Copy node data here
+		
+            DrawNode();
+        }
+
+        #endregion
+
+
+        public override string Serialize()
+        {
+            return JsonUtility.ToJson(new #SCRIPTNAME#Data(this));
+        }
+
+        protected override void DrawNode()
+        {
+			// Set title and color
+            titleContainer.Add(new Label("#SCRIPTNAME#"));
+            SetNodeColor();
+			
+			// Add custom drawing here
+			
+			
+			// Refresh last
+            RefreshExpandedState();
+        }
+
+    }
+
+#endif
+
+    public class #SCRIPTNAME#Data : NodeDataBase
+    {
+
+        #region Constructors
+
+        public #SCRIPTNAME#Data(#SCRIPTNAME#Data copy) : base(copy)
+        {
+			// Copy node data here
+			
+        }
+
+#if UNITY_EDITOR
+        public #SCRIPTNAME#Data(#SCRIPTNAME# node) : base(node)
+        {
+			// Copy node data here
+			
+        }
+#endif
+
+        #endregion
+
+
+        #region Runtime
+
+        public override void Parse(EventGraphParser parser)
+        {
+			// Put custom runtime parsing code here
+			
+        }
+
+        #endregion
+
+    }
+
+}
