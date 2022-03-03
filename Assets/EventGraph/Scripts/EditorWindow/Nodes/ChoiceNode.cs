@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using EventGraph.Runtime;
 using EventGraph.Editor;
 using EventGraph.Runtime.UI;
+using System.Text;
 
 #if UNITY_EDITOR
 
@@ -13,6 +14,8 @@ using UnityEditor.UIElements;
 
 namespace EventGraph
 {
+
+    // TODO add portrait shake Node
 
     public class ChoiceNode : NodeBase
     {
@@ -50,11 +53,6 @@ namespace EventGraph
 
         public ChoiceNode(EventGraphView graphView, ChoiceNodeData nodeData) : base(graphView, nodeData)
         {
-            if (nodeData.message=="why u lie")
-            {
-                int i = 0;
-            }
-
             this.message = nodeData.message;
             this.choices = nodeData.choices;
             if (!string.IsNullOrEmpty(nodeData.voiceClipName))
@@ -67,6 +65,9 @@ namespace EventGraph
             this.dialoguePosition = nodeData.characterFoldoutData.dialoguePosition;
 
             DrawNode();
+
+            // set after CrawNode bc it sets the base color
+            SetColorFromCharacter();
         }
 
         #endregion
@@ -143,6 +144,20 @@ namespace EventGraph
         }
 
         /// <summary>
+        /// Color variation to make different character nodes look a bit different.
+        /// </summary>
+        private void SetColorFromCharacter()
+        {
+            if (character == null)
+            {
+                SetCurrentColor(baseColor);
+                return;
+            }
+
+            SetCurrentColor(EventGraphEditorUtils.ModifyColor(currentColor, character.name));
+        }
+
+        /// <summary>
         /// In the extension container.
         /// TODO move this into a new node and make choiceNode a stack node that can contain and parse it
         /// </summary>
@@ -161,6 +176,8 @@ namespace EventGraph
                 this.character = evt.newValue as Character;
                 _characterFoldout.Remove(_expressionsPopup);
                 CreateExpressionsPopup();
+                SetColorFromCharacter();
+
             });
             _characterFoldout.Add(characterField);
 

@@ -1,10 +1,11 @@
+// TODO just move to Editor folder
 namespace EventGraph.Editor
 {
 #if UNITY_EDITOR
 
     using System;
     using System.Collections.Generic;
-
+    using System.Text;
     using UnityEditor;
     using UnityEditor.Experimental.GraphView;
     using UnityEditor.UIElements;
@@ -13,6 +14,23 @@ namespace EventGraph.Editor
 
     public static class EventGraphEditorUtils
     {
+
+        /// <summary>
+        /// Creates a seeded modification of the inColor using the inString as the seed.
+        /// </summary>
+        /// <param name="inColor"></param>Color to modify.
+        /// <param name="inString"></param>String to use as a seed.
+        /// <returns></returns>
+        public static Color ModifyColor(Color inColor, string inString, float maxChange=0.2f)
+        {
+            byte[] bytes = Encoding.UTF8.GetBytes(inString);
+            int seed = BitConverter.ToInt32(bytes, 0);
+            System.Random rand = new System.Random(seed);
+            float next = (float)rand.NextDouble() * 2f - 1f; // -1 to 1
+            Color.RGBToHSV(inColor, out float h, out float s, out float v);
+            float change = maxChange * next;
+            return Color.HSVToRGB(h + change, s + change, v + change);
+        }
 
         public static VisualElement CreateSpace()
         {

@@ -20,6 +20,8 @@ namespace EventGraph
         protected EventGraphView graphView;
 
         protected abstract string colorHex { get; }
+        protected Color baseColor;
+        protected Color currentColor;
 
 
         #region Constructors
@@ -82,7 +84,16 @@ namespace EventGraph
         protected void SetNodeColor()
         {
             if (ColorUtility.TryParseHtmlString(colorHex, out Color color))
-                titleContainer.style.backgroundColor = new StyleColor(color);
+            {
+                baseColor = color;
+                SetCurrentColor(color);
+            }
+        }
+
+        protected void SetCurrentColor(Color color)
+        {
+            currentColor = color;
+            titleContainer.style.backgroundColor = new StyleColor(currentColor);
         }
 
         public void ConnectEdge(EdgeData conn)
