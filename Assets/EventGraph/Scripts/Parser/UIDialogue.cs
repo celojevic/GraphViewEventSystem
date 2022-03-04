@@ -1,4 +1,5 @@
 using EventGraph.Characters;
+using EventGraph.Components;
 using EventGraph.Databases;
 using EventGraph.Runtime;
 using System.Collections.Generic;
@@ -26,6 +27,15 @@ namespace EventGraph.Runtime.UI
             instance = this;
             _audioSource = GetComponent<AudioSource>();
             Hide();
+        }
+
+        public UIDialogueBox GetActiveDialogueBox()
+        {
+            for (int i = 0; i < _dialogueBoxes.Length; i++)
+                if (_dialogueBoxes[i].gameObject.activeInHierarchy)
+                    return _dialogueBoxes[i];
+
+            return null;
         }
 
         public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null, CharacterFoldoutData character = null)
@@ -60,6 +70,17 @@ namespace EventGraph.Runtime.UI
 
         public void Hide()
         {
+            // TODO put this in shaker node callback for when event parser stops parsings
+            // remove shakers on portraits 
+            Shaker shaker;
+            foreach (var item in _dialogueBoxes)
+            {
+                shaker = item.portrait.GetComponent<Shaker>();
+                if (shaker != null)
+                    Destroy(shaker);
+            }
+            
+
             _panel.SetActive(false);
         }
 

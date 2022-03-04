@@ -21,7 +21,7 @@ namespace EventGraph.Editor
         /// <param name="inColor"></param>Color to modify.
         /// <param name="inString"></param>String to use as a seed.
         /// <returns></returns>
-        public static Color ModifyColor(Color inColor, string inString, float maxChange=0.2f)
+        public static Color ModifyColorHSV(Color inColor, string inString, float maxChange=0.2f)
         {
             byte[] bytes = Encoding.UTF8.GetBytes(inString);
             int seed = BitConverter.ToInt32(bytes, 0);
@@ -31,6 +31,8 @@ namespace EventGraph.Editor
             float change = maxChange * next;
             return Color.HSVToRGB(h + change, s + change, v + change);
         }
+
+
 
         public static VisualElement CreateSpace()
         {

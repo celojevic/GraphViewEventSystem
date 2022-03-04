@@ -154,7 +154,7 @@ namespace EventGraph
                 return;
             }
 
-            SetCurrentColor(EventGraphEditorUtils.ModifyColor(currentColor, character.name));
+            SetCurrentColor(EventGraphEditorUtils.ModifyColorHSV(currentColor, character.name));
         }
 
         /// <summary>

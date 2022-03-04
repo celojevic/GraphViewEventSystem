@@ -55,8 +55,11 @@ namespace EventGraph
         protected override void DrawNode()
         {
             // Set title, color, and icon
-            titleContainer.Add(new Label("Change Camera"));
             SetNodeColor();
+            Label titleLabel = new Label("Change Camera");
+            // TODO try better label color
+            //titleLabel.style.color = new StyleColor(baseColor.Invert());
+            titleContainer.Add(titleLabel);
             titleContainer.Insert(0, EventGraphEditorUtils.CreateImage("ChangeCamera"));
 
             // Create input and output ports

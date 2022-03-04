@@ -22,7 +22,7 @@ namespace EventGraph
 
         public #SCRIPTNAME#(#SCRIPTNAME# copy) : base(copy)
         {
-		
+		    
 		
 			// This must be called here to draw in the right order
             DrawNode();
@@ -53,6 +53,10 @@ namespace EventGraph
 			// Set title and color
             titleContainer.Add(new Label("#SCRIPTNAME#"));
             SetNodeColor();
+
+            // Create input and output ports
+            inputContainer.Add(this.CreateInputPort());
+            outputContainer.Add(this.CreatePort("Output"));
 			
 			// Add custom drawing here
 			

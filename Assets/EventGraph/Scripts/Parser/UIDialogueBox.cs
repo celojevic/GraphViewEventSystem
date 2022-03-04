@@ -11,6 +11,8 @@ namespace EventGraph.Runtime.UI
     {
 
         [SerializeField] private Image _image = null;
+        public Image portrait => _image;
+
         [SerializeField] private TMP_Text _text = null;
         [SerializeField] private Transform _choiceHolder = null;
 
