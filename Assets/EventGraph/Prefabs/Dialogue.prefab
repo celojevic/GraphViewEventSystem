@@ -206,7 +206,7 @@ MonoBehaviour:
   _image: {fileID: 3723265998649986389}
   _text: {fileID: 3723265998074802671}
   _choiceHolder: {fileID: 3723265998148607816}
-  _choicePrefab: {fileID: 198185208475654754, guid: f7951086b6fe13a44849a524cf7b77c2, type: 3}
+  _choicePrefab: {fileID: 2622171334333322480, guid: f7951086b6fe13a44849a524cf7b77c2, type: 3}
 --- !u!1 &3723265997832346801
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,7 +261,7 @@ MonoBehaviour:
   _image: {fileID: 3723265997354481128}
   _text: {fileID: 3723265998664915877}
   _choiceHolder: {fileID: 3723265997886703865}
-  _choicePrefab: {fileID: 198185208475654754, guid: f7951086b6fe13a44849a524cf7b77c2, type: 3}
+  _choicePrefab: {fileID: 2622171334333322480, guid: f7951086b6fe13a44849a524cf7b77c2, type: 3}
 --- !u!1 &3723265997886703866
 GameObject:
   m_ObjectHideFlags: 0

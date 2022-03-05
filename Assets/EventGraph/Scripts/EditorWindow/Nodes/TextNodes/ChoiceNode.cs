@@ -15,7 +15,9 @@ using UnityEditor.UIElements;
 namespace EventGraph
 {
 
-    // TODO add portrait shake Node
+    // TODO make a base TextNode with no choices for this class.
+    //      so it can show text without needed player hitting next
+    //      ex: textNode: watch me shake -> portraitShakeNode -> waitNode -> etc
 
     public class ChoiceNode : NodeBase
     {

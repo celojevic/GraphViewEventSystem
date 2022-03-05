@@ -16,7 +16,7 @@ namespace EventGraph.Runtime.UI
         [SerializeField] private TMP_Text _text = null;
         [SerializeField] private Transform _choiceHolder = null;
 
-        [SerializeField] private Button _choicePrefab = null;
+        [SerializeField] private UIDialogueChoiceButton _choicePrefab = null;
 
         public void Setup(string message, List<ChoiceAction> choices, CharacterFoldoutData character = null)
         {
@@ -28,9 +28,8 @@ namespace EventGraph.Runtime.UI
             for (int i = 0; i < choices.Count; i++)
             {
                 int index = i;
-                Button prefab = Instantiate(_choicePrefab, _choiceHolder);
-                prefab.GetComponentInChildren<TMP_Text>().text = choices[i].choice;
-                prefab.onClick.AddListener(() => choices[index].callback?.Invoke());
+                UIDialogueChoiceButton prefab = Instantiate(_choicePrefab, _choiceHolder);
+                prefab.Setup(choices[index]);
             }
 
             // show character portrait and setup its position

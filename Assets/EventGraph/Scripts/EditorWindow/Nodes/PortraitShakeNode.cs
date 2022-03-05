@@ -18,6 +18,7 @@ namespace EventGraph
     {
 
         public float intensity;
+        public float duration;
 
         protected override string colorHex => ColorConstants.CELADON;
 
@@ -63,15 +64,19 @@ namespace EventGraph
             inputContainer.Add(this.CreateInputPort());
             outputContainer.Add(this.CreatePort("Output"));
 
+            // intensity
             extensionContainer.Add(new Label("Intensity"));
-
             FloatField intensityField = new FloatField();
             intensityField.value = intensity;
-            intensityField.RegisterValueChangedCallback((evt) =>
-            {
-                this.intensity = evt.newValue;
-            });
+            intensityField.RegisterValueChangedCallback((evt) => { this.intensity = evt.newValue; });
             extensionContainer.Add(intensityField);
+
+            // duration
+            extensionContainer.Add(new Label("Duration"));
+            FloatField durationField = new FloatField();
+            durationField.value = duration;
+            durationField.RegisterValueChangedCallback((evt) => { this.duration = evt.newValue; });
+            extensionContainer.Add(durationField);
 
             // Refresh last
             RefreshExpandedState();
@@ -85,6 +90,7 @@ namespace EventGraph
     {
 
         public float intensity;
+        public float duration;
 
 
         #region Constructors
@@ -92,12 +98,14 @@ namespace EventGraph
         public PortraitShakeNodeData(PortraitShakeNodeData copy) : base(copy)
         {
             this.intensity = copy.intensity;
+            this.duration = copy.duration;
         }
 
 #if UNITY_EDITOR
         public PortraitShakeNodeData(PortraitShakeNode node) : base(node)
         {
             this.intensity = node.intensity;
+            this.duration = node.duration;
         }
 #endif
 
@@ -114,7 +122,7 @@ namespace EventGraph
                 Shaker shaker = dialogueBox.portrait.GetComponent<Shaker>();
                 if (shaker==null)
                     shaker= dialogueBox.portrait.gameObject.AddComponent<Shaker>();
-                shaker.Shake(intensity);
+                shaker.Shake(intensity, duration);
             }
 
             parser.SetNext();

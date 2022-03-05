@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NewEventGraph
   m_EditorClassIdentifier: 
   graphData:
-    entryNode: '{"guid":"a15b6290-c673-4f6b-a1c0-7d425c9b4264","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"a15b6290-c673-4f6b-a1c0-7d425c9b4264","toNodeGuid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","edgeType":""}]}'
+    entryNode: '{"guid":"f689cd42-56aa-441d-a1f9-b103fbf4f24e","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"f689cd42-56aa-441d-a1f9-b103fbf4f24e","toNodeGuid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","edgeType":""}]}'
     nodeJsons:
     - '{"guid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","position":{"x":1819.0,"y":66.0},"nodeType":"EventGraph.IntCompareNode","nodeDataType":"EventGraph.IntCompareNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"89369874-1a2f-4f95-8b8d-9432c37c2b47","edgeType":""},{"portIndex":1,"parentNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","toNodeGuid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","edgeType":""}],"valueNodeGuid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","intToCompare":5,"comparisonOperator":4}'
     - '{"guid":"1b16df7b-4f57-4ff2-98bb-18900296896f","position":{"x":1804.0,"y":532.0},"nodeType":"EventGraph.IntCompareNode","nodeDataType":"EventGraph.IntCompareNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","edgeType":""},{"portIndex":1,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","edgeType":""}],"valueNodeGuid":"6cacabfc-e38b-4322-8bb6-534116433d9b","intToCompare":5,"comparisonOperator":4}'
@@ -21,7 +21,7 @@ MonoBehaviour:
     - '{"guid":"6cacabfc-e38b-4322-8bb6-534116433d9b","position":{"x":1783.0,"y":699.0},"nodeType":"EventGraph.IntVariableNode","nodeDataType":"EventGraph.IntVariableNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"6cacabfc-e38b-4322-8bb6-534116433d9b","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","edgeType":"var"}],"soGuid":"950b0db4-fac8-44f9-aa42-658d616ad831"}'
     - '{"guid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","position":{"x":2786.0,"y":325.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[],"cameraName":"Main
       Camera"}'
-    - '{"guid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","position":{"x":2060.0,"y":494.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","toNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","edgeType":""}],"intensity":5.0}'
+    - '{"guid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","position":{"x":2060.0,"y":494.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","toNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","edgeType":""}],"intensity":5.0,"duration":0.0}'
     - '{"guid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","position":{"x":2263.0,"y":494.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","toNodeGuid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","edgeType":""}],"message":"why
       u lie","choices":["Next"],"voiceClipName":"whyulie","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Weary","dialoguePosition":1}}'
     - '{"guid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","position":{"x":2263.0,"y":720.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","toNodeGuid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","edgeType":""}],"message":"guess
@@ -38,15 +38,15 @@ MonoBehaviour:
     - '{"guid":"90f1083c-98fd-4845-8a80-f8f6a7f41661","position":{"x":1219.0,"y":325.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"228c1908-67c9-4f18-a711-83ebc3783dcf","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"90f1083c-98fd-4845-8a80-f8f6a7f41661","toNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","edgeType":""}],"cameraName":"Camera2"}'
     - '{"guid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","position":{"x":1434.0,"y":161.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","edgeType":""},{"portIndex":2,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","edgeType":""}],"message":"are
       u level 5?","choices":["yes","no"],"voiceClipName":"areulvl5","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Yummy","dialoguePosition":1}}'
-    - '{"guid":"5e323b70-c899-42f3-9cde-e16308a205c1","position":{"x":598.0,"y":66.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"5e323b70-c899-42f3-9cde-e16308a205c1","toNodeGuid":"8a7949ee-5a10-4e50-89b4-bc325dc560f2","edgeType":""}],"intensity":5.0}'
-    - '{"guid":"05030775-c320-4ec6-b773-278fa5a1d6cc","position":{"x":598.0,"y":381.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"05030775-c320-4ec6-b773-278fa5a1d6cc","toNodeGuid":"5fba0e6a-b122-4b10-8d0b-748447342114","edgeType":""}],"intensity":0.0}'
+    - '{"guid":"5e323b70-c899-42f3-9cde-e16308a205c1","position":{"x":598.0,"y":66.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"5e323b70-c899-42f3-9cde-e16308a205c1","toNodeGuid":"8a7949ee-5a10-4e50-89b4-bc325dc560f2","edgeType":""}],"intensity":5.0,"duration":2.0}'
+    - '{"guid":"05030775-c320-4ec6-b773-278fa5a1d6cc","position":{"x":598.0,"y":381.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"05030775-c320-4ec6-b773-278fa5a1d6cc","toNodeGuid":"5fba0e6a-b122-4b10-8d0b-748447342114","edgeType":""}],"intensity":0.0,"duration":0.0}'
     - '{"guid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","position":{"x":262.0,"y":1.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","toNodeGuid":"5e323b70-c899-42f3-9cde-e16308a205c1","edgeType":""}],"message":"Watch
-      me shake!","choices":["Next"],"voiceClipName":"","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Cool","dialoguePosition":0}}'
+      me shake! (for 2 sec)","choices":["Next"],"voiceClipName":"","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Cool","dialoguePosition":0}}'
     - '{"guid":"8a7949ee-5a10-4e50-89b4-bc325dc560f2","position":{"x":262.0,"y":282.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"8a7949ee-5a10-4e50-89b4-bc325dc560f2","toNodeGuid":"05030775-c320-4ec6-b773-278fa5a1d6cc","edgeType":""}],"message":"Tell
       me when to stop","choices":["Next"],"voiceClipName":"","characterFoldoutData":{"characterGuid":"","expression":"","dialoguePosition":0}}'
     groups:
     - guid: 6cee005a-81f8-4c12-b2db-307d07ea1fde
-      position: {x: 1751.0001, y: -142.00003}
+      position: {x: 1751, y: -142}
       title: Yes
       nodeGuids:
       - e41791d4-d5a6-460e-bbe9-4da7a6b76086
@@ -55,7 +55,7 @@ MonoBehaviour:
       - 81b3559c-5231-40f6-8c3e-e9cffe337253
       - abe409ba-c72e-437a-b3ce-d9c086a2f24f
     - guid: b197cfbf-b834-4c73-b661-2c1138646eb7
-      position: {x: 1757.9999, y: 435}
+      position: {x: 1758, y: 435}
       title: no
       nodeGuids:
       - 1b16df7b-4f57-4ff2-98bb-18900296896f
@@ -68,11 +68,11 @@ MonoBehaviour:
       title: 'Shaker '
       nodeGuids:
       - 5e323b70-c899-42f3-9cde-e16308a205c1
-      - 99deaf93-2160-4a07-8af6-d3418dfac0f0
       - 05030775-c320-4ec6-b773-278fa5a1d6cc
+      - 99deaf93-2160-4a07-8af6-d3418dfac0f0
       - 8a7949ee-5a10-4e50-89b4-bc325dc560f2
     - guid: 228c1908-67c9-4f18-a711-83ebc3783dcf
-      position: {x: 849.00006, y: -46.00003}
+      position: {x: 849, y: -46}
       title: Change Camera
       nodeGuids:
       - 5fba0e6a-b122-4b10-8d0b-748447342114

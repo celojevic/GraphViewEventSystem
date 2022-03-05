@@ -143,6 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7589624376764970812}
+  - component: {fileID: 2622171334333322480}
   - component: {fileID: 6176968310661823428}
   - component: {fileID: 7956278709673343731}
   - component: {fileID: 198185208475654754}
@@ -173,6 +174,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2622171334333322480
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6424095737831261549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 323dfd7913185c647b12604ad9deda08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 198185208475654754}
+  tmpText: {fileID: 8907867155528297706}
 --- !u!222 &6176968310661823428
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -254,4 +269,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7956278709673343731}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2622171334333322480}
+        m_TargetAssemblyTypeName: EventGraph.Runtime.UI.UIDialogueChoiceButton, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
