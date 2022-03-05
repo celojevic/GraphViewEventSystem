@@ -19,6 +19,7 @@ namespace EventGraph.Runtime.UI
 
         [EnumNameArray(typeof(DialoguePosition))]
         [SerializeField] private UIDialogueBox[] _dialogueBoxes = new UIDialogueBox[(int)DialoguePosition.Count];
+        public UIDialogueBox[] dialogueBoxes => _dialogueBoxes;
 
         private AudioSource _audioSource;
 

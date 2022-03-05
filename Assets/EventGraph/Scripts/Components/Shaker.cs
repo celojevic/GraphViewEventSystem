@@ -28,8 +28,7 @@ namespace EventGraph.Components
             {
                 if (Time.time >= _endTime)
                 {
-                    transform.position = _basePos;
-                    Destroy(this);
+                    StopShake();
                     return;
                 }
             }
@@ -49,13 +48,19 @@ namespace EventGraph.Components
             transform.position = _basePos + Random.insideUnitCircle * intensity;
         }
 
+        public void StopShake()
+        {
+            transform.position = _basePos;
+            Destroy(this);
+        }
+
         public void Shake(float intensity = 1f, float duration = -1f,
             float decay=0f, bool destroyOnDecay = true)
         {
             // Stop shaking
             if (intensity == 0f)
             {
-                Destroy(this);
+                StopShake();
                 return;
             }
 

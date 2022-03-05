@@ -87,6 +87,16 @@ namespace EventGraph.Editor
             return new Button(onClick) { text = text };
         }
 
+        public static FloatField CreateFloatField(string label=null, float defaultValue=0f,
+            EventCallback<ChangeEvent<float>> onValueChanged = null)
+        {
+            FloatField ff = new FloatField();
+            ff.label = label;
+            ff.value = defaultValue;
+            ff.RegisterValueChangedCallback(onValueChanged);
+            return ff;
+        }
+
         public static void RemoveCollapse(this Node node)
         {
             node.titleContainer.RemoveAt(1);

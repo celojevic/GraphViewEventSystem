@@ -28,6 +28,7 @@ namespace EventGraph
         public PortraitShakeNode(PortraitShakeNode copy) : base(copy)
         {
             this.intensity = copy.intensity;
+            this.duration = copy.duration;
 		
 			// This must be called here to draw in the right order
             DrawNode();
@@ -40,8 +41,8 @@ namespace EventGraph
 
         public PortraitShakeNode(EventGraphView graphView, PortraitShakeNodeData nodeData) : base(graphView, nodeData)
         {
-            // Copy node data here
             this.intensity = nodeData.intensity;
+            this.duration = nodeData.duration;
 		
             DrawNode();
         }
@@ -73,9 +74,8 @@ namespace EventGraph
 
             // duration
             extensionContainer.Add(new Label("Duration"));
-            FloatField durationField = new FloatField();
-            durationField.value = duration;
-            durationField.RegisterValueChangedCallback((evt) => { this.duration = evt.newValue; });
+            FloatField durationField = 
+                EventGraphEditorUtils.CreateFloatField(null, duration, (evt) => { this.duration = evt.newValue; });
             extensionContainer.Add(durationField);
 
             // Refresh last
@@ -116,12 +116,11 @@ namespace EventGraph
 
         public override void Parse(EventGraphParser parser)
         {
-            UIDialogueBox dialogueBox = UIDialogue.instance.GetActiveDialogueBox();
-            if (dialogueBox != null)
+            foreach (var dialogueBox in UIDialogue.instance.dialogueBoxes)
             {
                 Shaker shaker = dialogueBox.portrait.GetComponent<Shaker>();
-                if (shaker==null)
-                    shaker= dialogueBox.portrait.gameObject.AddComponent<Shaker>();
+                if (shaker == null)
+                    shaker = dialogueBox.portrait.gameObject.AddComponent<Shaker>();
                 shaker.Shake(intensity, duration);
             }
 

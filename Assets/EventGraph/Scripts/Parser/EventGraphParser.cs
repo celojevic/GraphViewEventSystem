@@ -93,8 +93,10 @@ namespace EventGraph.Runtime
                 curNodeGuid = curNodeData.edges[0].toNodeGuid;
                 Next();
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogError(e);
+                Console.WriteLine(e);
                 StopParsing();
             }
         }
