@@ -68,6 +68,12 @@ namespace EventGraph.Runtime
 
         void ResetToFirstNode() => curNodeGuid = _entryNodeData.edges[0].toNodeGuid;
 
+        public void StartParsing()
+        {
+            ResetToFirstNode();
+            Next();
+        }
+
         public void Next()
         {
             Type dataType = Type.GetType(EventGraphSaver.AppendNamespace(curNodeData.nodeDataType));
@@ -93,10 +99,8 @@ namespace EventGraph.Runtime
                 curNodeGuid = curNodeData.edges[0].toNodeGuid;
                 Next();
             }
-            catch (Exception e)
+            catch
             {
-                Debug.LogError(e);
-                Console.WriteLine(e);
                 StopParsing();
             }
         }

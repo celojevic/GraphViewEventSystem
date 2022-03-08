@@ -24,6 +24,7 @@ namespace EventGraph.Runtime.UI
         public void OnClick()
         {
             choiceAction.callback.Invoke();
+            button.enabled = false;
         }
 
         public void Setup(ChoiceAction choiceAction)

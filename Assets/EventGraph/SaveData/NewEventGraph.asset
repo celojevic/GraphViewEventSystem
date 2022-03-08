@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NewEventGraph
   m_EditorClassIdentifier: 
   graphData:
-    entryNode: '{"guid":"99d35839-8065-46f8-8465-3947df54db6e","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"99d35839-8065-46f8-8465-3947df54db6e","toNodeGuid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","edgeType":""}]}'
+    entryNode: '{"guid":"2bcc9dbb-32ce-498c-bfa5-d6d2292c659e","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"2bcc9dbb-32ce-498c-bfa5-d6d2292c659e","toNodeGuid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","edgeType":""}]}'
     nodeJsons:
     - '{"guid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","position":{"x":454.0,"y":-100.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"76174790-7919-4643-9307-2c5ed9638775","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"99deaf93-2160-4a07-8af6-d3418dfac0f0","toNodeGuid":"5e323b70-c899-42f3-9cde-e16308a205c1","edgeType":""}],"message":"Watch
       me shake! (for 2 sec)","choices":["Next"],"voiceClipName":"","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Cool","dialoguePosition":0}}'
@@ -33,7 +33,7 @@ MonoBehaviour:
     - '{"guid":"1b16df7b-4f57-4ff2-98bb-18900296896f","position":{"x":1897.0,"y":1046.0},"nodeType":"EventGraph.IntCompareNode","nodeDataType":"EventGraph.IntCompareNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","edgeType":""},{"portIndex":1,"parentNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","toNodeGuid":"b8884e70-4870-42f4-9cf1-d7ebdfe54d89","edgeType":""}],"valueNodeGuid":"6cacabfc-e38b-4322-8bb6-534116433d9b","intToCompare":5,"comparisonOperator":4}'
     - '{"guid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","position":{"x":1869.0,"y":762.0},"nodeType":"EventGraph.IntVariableNode","nodeDataType":"EventGraph.IntVariableNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"f4adcd6f-55f4-4c3a-b319-9bbf181096c6","toNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","edgeType":"var"}],"soGuid":"950b0db4-fac8-44f9-aa42-658d616ad831"}'
     - '{"guid":"6cacabfc-e38b-4322-8bb6-534116433d9b","position":{"x":1876.0,"y":1213.0},"nodeType":"EventGraph.IntVariableNode","nodeDataType":"EventGraph.IntVariableNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"6cacabfc-e38b-4322-8bb6-534116433d9b","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","edgeType":"var"}],"soGuid":"950b0db4-fac8-44f9-aa42-658d616ad831"}'
-    - '{"guid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","position":{"x":2879.0,"y":839.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[],"cameraName":"Main
+    - '{"guid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","position":{"x":2879.0,"y":839.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","toNodeGuid":"bc342449-5c07-4fde-aedc-c47cbdc29d05","edgeType":""}],"cameraName":"Main
       Camera"}'
     - '{"guid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","position":{"x":2153.0,"y":1008.0},"nodeType":"EventGraph.PortraitShakeNode","nodeDataType":"EventGraph.PortraitShakeNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"b96d04b7-fd48-4283-9c16-4e50fe5fda0d","toNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","edgeType":""}],"intensity":5.0,"duration":0.0}'
     - '{"guid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","position":{"x":2356.0,"y":1008.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"b197cfbf-b834-4c73-b661-2c1138646eb7","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"8a6cfe6a-b508-476d-8329-2c3ba6442adb","toNodeGuid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","edgeType":""}],"message":"why
@@ -46,6 +46,7 @@ MonoBehaviour:
     - '{"guid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","position":{"x":2337.0,"y":657.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"6cee005a-81f8-4c12-b2db-307d07ea1fde","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"abe409ba-c72e-437a-b3ce-d9c086a2f24f","toNodeGuid":"2e4b2546-8d71-4c5b-8f25-f7ab0aab9dec","edgeType":""}],"message":"liar","choices":["Next"],"voiceClipName":"liar","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Happy","dialoguePosition":0}}'
     - '{"guid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","position":{"x":1214.0,"y":703.0},"nodeType":"EventGraph.ChoiceNode","nodeDataType":"EventGraph.ChoiceNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":1,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"e41791d4-d5a6-460e-bbe9-4da7a6b76086","edgeType":""},{"portIndex":2,"parentNodeGuid":"0bc3cfd2-c61f-415e-aaba-e3b0867cce7d","toNodeGuid":"1b16df7b-4f57-4ff2-98bb-18900296896f","edgeType":""}],"message":"are
       u level 5?","choices":["yes","no"],"voiceClipName":"areulvl5","characterFoldoutData":{"characterGuid":"8ee409b8-ce1d-4340-89d9-323460820c1b","expression":"Yummy","dialoguePosition":1}}'
+    - '{"guid":"bc342449-5c07-4fde-aedc-c47cbdc29d05","position":{"x":3100.0,"y":826.0},"nodeType":"EventGraph.ChangeSceneNode","nodeDataType":"EventGraph.ChangeSceneNodeData","groupGuid":"","isEntryNode":false,"edges":[],"sceneName":"ExampleChangeScene"}'
     groups:
     - guid: 6cee005a-81f8-4c12-b2db-307d07ea1fde
       position: {x: 1844, y: 372}
@@ -69,11 +70,11 @@ MonoBehaviour:
       position: {x: 429, y: -159}
       title: 'Shaker '
       nodeGuids:
-      - 5e323b70-c899-42f3-9cde-e16308a205c1
-      - 05030775-c320-4ec6-b773-278fa5a1d6cc
       - 99deaf93-2160-4a07-8af6-d3418dfac0f0
-      - 8a7949ee-5a10-4e50-89b4-bc325dc560f2
+      - 5e323b70-c899-42f3-9cde-e16308a205c1
       - 74f29a1e-c741-44d4-b2e5-a484a1ca930d
+      - 8a7949ee-5a10-4e50-89b4-bc325dc560f2
+      - 05030775-c320-4ec6-b773-278fa5a1d6cc
     - guid: 228c1908-67c9-4f18-a711-83ebc3783dcf
       position: {x: 457, y: 489}
       title: Change Camera

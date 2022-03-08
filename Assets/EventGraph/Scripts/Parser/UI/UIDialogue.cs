@@ -71,16 +71,12 @@ namespace EventGraph.Runtime.UI
 
         public void Hide()
         {
-            // TODO put this in shaker node callback for when event parser stops parsings
-            // remove shakers on portraits 
-            Shaker shaker;
             foreach (var item in _dialogueBoxes)
             {
-                shaker = item.portrait.GetComponent<Shaker>();
+                Shaker shaker = item.portrait.GetComponent<Shaker>();
                 if (shaker != null)
                     Destroy(shaker);
             }
-            
 
             _panel.SetActive(false);
         }

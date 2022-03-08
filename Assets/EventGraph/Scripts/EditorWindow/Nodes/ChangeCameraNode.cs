@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using EventGraph.Runtime;
 
-// TODO camera animation node with a wait until anim completed bool
+// TODO make toggle to wait until anim completed for cm vcams
+// TODO make toggle for isCmVcam, bc main cam needs to stay on if vcam changes
 namespace EventGraph
 {
 
