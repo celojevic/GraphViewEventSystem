@@ -6,35 +6,39 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 #endif
 
-public class EnumNameArrayAttribute : PropertyAttribute
+namespace EventGraph
 {
-
-    public Type EnumType;
-
-    public EnumNameArrayAttribute(Type enumType)
+    public class EnumNameArrayAttribute : PropertyAttribute
     {
-        EnumType = enumType;
-    }
 
-}
+        public Type EnumType;
+
+        public EnumNameArrayAttribute(Type enumType)
+        {
+            EnumType = enumType;
+        }
+
+    }
 
 #if UNITY_EDITOR
 
-[CustomPropertyDrawer(typeof(EnumNameArrayAttribute))]
-public class EnumNameArrayDrawer : PropertyDrawer
-{
-
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    [CustomPropertyDrawer(typeof(EnumNameArrayAttribute))]
+    public class EnumNameArrayDrawer : PropertyDrawer
     {
-        var enumNames = Enum.GetNames(((EnumNameArrayAttribute)attribute).EnumType);
-        int index = int.Parse(Regex.Match(property.propertyPath, @"\d+").Value);
 
-        if (index < enumNames.Length)
-            label = new GUIContent(enumNames[index]);
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            var enumNames = Enum.GetNames(((EnumNameArrayAttribute)attribute).EnumType);
+            int index = int.Parse(Regex.Match(property.propertyPath, @"\d+").Value);
 
-        EditorGUI.PropertyField(position, property, label, property.isExpanded);
+            if (index < enumNames.Length)
+                label = new GUIContent(enumNames[index]);
+
+            EditorGUI.PropertyField(position, property, label, property.isExpanded);
+        }
+
     }
 
-}
-
 #endif
+
+}
