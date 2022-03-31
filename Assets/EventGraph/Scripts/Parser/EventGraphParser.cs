@@ -76,16 +76,45 @@ namespace EventGraph.Runtime
 
         public void Next()
         {
-            Type dataType = Type.GetType(EventGraphSaver.AppendNamespace(curNodeData.nodeDataType));
-            NodeDataBase nodeData = (NodeDataBase)Activator.CreateInstance(dataType, nodes[curNodeGuid]);
+            if (!nodes.TryGetValue(curNodeGuid, out NodeDataBase nodeData))
+            {
+                Debug.LogError("No node with guid: " + curNodeGuid);
+                return;
+            }
 
+            ParseNodeType(nodeData);
+        }
+
+        public void ParseNode(string guid)
+        {
+            if (string.IsNullOrEmpty(guid))
+            {
+                Debug.LogError("Node guid was null");
+                return;
+            }
+            if (!nodes.TryGetValue(guid, out NodeDataBase nodeData))
+            {
+                Debug.LogError("No node with guid: " + guid);
+                return;
+            }
+            if (nodeData == null)
+            {
+                Debug.LogError("Cached node data was null, guid: " + guid);
+                return;
+            }
+
+            ParseNodeType(nodeData);
+        }
+
+        private void ParseNodeType(NodeDataBase nodeData)
+        {
             if (nodeData.GetType().BaseType == typeof(NodeDataBase))
             {
                 nodeData.Parse(this);
             }
             else // BaseType is ConditionalNodeData<>
             {
-                HandleConditionalNode();
+                HandleConditionalNode(nodeData);
             }
         }
 
@@ -105,16 +134,12 @@ namespace EventGraph.Runtime
             }
         }
 
-        void HandleConditionalNode()
+        void HandleConditionalNode(NodeDataBase cndNodeData)
         {
-            // create data class from type string
-            Type dataType = Type.GetType(EventGraphSaver.AppendNamespace(curNodeData.nodeDataType));
-            NodeDataBase cndNodeData = (NodeDataBase)Activator.CreateInstance(dataType, curNodeData);
-
-            // get the var node  if it exists
-            // then pass it to the evalCnd
+            // get the var node  if it exists, then pass it for evaluation
             object varToCompare = 0;
             bool found = false;
+
             if (nodes.TryGetValue(
                 cndNodeData?.GetType()?.GetField("valueNodeGuid")?.GetValue(cndNodeData).ToString(),
                 out NodeDataBase varNodeData))
