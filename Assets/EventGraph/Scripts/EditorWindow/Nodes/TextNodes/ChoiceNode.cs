@@ -332,6 +332,61 @@ namespace EventGraph
 
         public override void Parse(EventGraphParser parser)
         {
+
+#if FISHNET
+
+            bool isLocalPlayer = InstanceFinder.ClientManager.Connection == parser.Player.Interact.Owner;
+
+            choiceActions = new List<ChoiceAction>();
+            for (int i = 0; i < this.choices.Count; i++)
+            {
+                int index = i;
+                ChoiceAction ca = new ChoiceAction
+                {
+                    choice = choices[i],
+                    callback = (asServer) =>
+                    {
+                        // client tells server what they chose
+                        if (!asServer)
+                        {
+                            parser.Player.Interact.CmdEventChoice(index);
+                            return;
+                        }
+
+                        // everything below is server only
+                        if (edges.Count <= index)
+                        {
+                            // mark player not isInteracting, and tell them to stop parsing, remove index from itneractable dict
+                            parser.Parent.StopInteraction(parser.Player.Interact.Owner);
+                            return;
+                        }
+
+                        // use index to parse and send next to client
+                        parser.curNodeGuid = edges[index].toNodeGuid;
+                        parser.Next();
+                        parser.Player.Interact.TargetParseNode(parser.Player.Interact.Owner, parser.curNodeGuid);
+                    }
+                };
+                choiceActions.Add(ca);
+            }
+
+            // dont show UI for server
+            if (parser.IsServer) return;
+
+            // only show for interacting client
+            if (!isLocalPlayer) return;
+
+            UIDialogue.instance.ShowMessage(
+                message,
+                choiceActions,
+                // You can load your audio clips however you want to.
+                // I simply use a manager for this example.
+                EventGraph.Audio.AudioManager.GetAudioClip(voiceClipName),
+                characterFoldoutData
+            );
+
+#else
+
             List<ChoiceAction> choiceActions = new List<ChoiceAction>();
             for (int i = 0; i < this.choices.Count; i++)
             {
@@ -339,12 +394,12 @@ namespace EventGraph
                 choiceActions.Add(new ChoiceAction
                 {
                     choice = choices[i],
-                    callback = () =>
+                    callback = (asServer) =>
                     {
                         if (edges.Count <= index)
                         {
-                        //Debug.LogWarning("ChoiceNode with edge at index doesn't go anywhere: " + index);
-                        parser.StopParsing();
+                            //Debug.LogWarning("ChoiceNode with edge at index doesn't go anywhere: " + index);
+                            parser.StopParsing();
                             return;
                         }
 
@@ -362,7 +417,10 @@ namespace EventGraph
                 EventGraph.Audio.AudioManager.GetAudioClip(voiceClipName),
                 characterFoldoutData
             );
+
+#endif
         }
+
 
     }
 

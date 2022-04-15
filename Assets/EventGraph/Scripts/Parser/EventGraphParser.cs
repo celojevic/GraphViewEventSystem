@@ -6,17 +6,16 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if FISHNET
+using FishNet.Object;
+#endif
+
 namespace EventGraph.Runtime
 {
-    // TODO can use RuntimeInitializeOnLoadMethod and make this a regular class that returns parsed values?
-    // TODO need a callback thing for when parsing begins and ends to reset vars and such
-    //      - such as shakers on the dialogue boxes
-    public class EventGraphParser : MonoBehaviour
+    public class EventGraphParser
     {
 
-        public Button talkButton;
         public string fileName = "NewEventGraph";
-        public bool autoParse = false;
 
         public string curNodeGuid { get; set; }
         public NodeDataBase curNodeData => nodes.ContainsKey(curNodeGuid) ? nodes[curNodeGuid] : null;
@@ -24,27 +23,28 @@ namespace EventGraph.Runtime
         private Dictionary<string, NodeDataBase> nodes = new Dictionary<string, NodeDataBase>();
         private EntryNodeData _entryNodeData;
 
-        private void Start()
-        {
-            // TODO load all events into memory on start/awake
-            //      cache in dict<EventGraphData, fileName string>
-            LoadFile();
+#if FISHNET
+        /// <summary>
+        /// Parent interactable. Server only.
+        /// </summary>
+        public Interactable Parent { get; [Server]set; }
+        /// <summary>
+        /// Parent only exists on server, so its basically a server check
+        /// </summary>
+        public bool IsServer => Parent != null;
+        /// <summary>
+        /// Exists on both
+        /// </summary>
+        public Player Player { get; set; }
+#endif
 
-            talkButton?.onClick.AddListener(() => Next());
+        public EventGraphParser(EventGraphData data)
+        {
+            ParseGraphData(data);
         }
 
-        private void Update()
+        public void ParseGraphData(EventGraphData data)
         {
-            if (autoParse)
-            {
-
-            }
-        }
-
-        void LoadFile()
-        {
-            EventGraphData data = EventGraphSaver.LoadGraphDataJson(fileName);
-
             for (int i = 0; i < data.nodeJsons.Count; i++)
             {
                 string json = data.nodeJsons[i];
@@ -121,31 +121,32 @@ namespace EventGraph.Runtime
         /// <summary>
         /// Called from node data classes to progress the event.
         /// </summary>
-        public void SetNext()
+        public bool SetNext()
         {
             try
             {
                 curNodeGuid = curNodeData.edges[0].toNodeGuid;
                 Next();
+                return true;
             }
             catch
             {
                 StopParsing();
+                return false;
             }
         }
 
         void HandleConditionalNode(NodeDataBase cndNodeData)
         {
-            // get the var node  if it exists, then pass it for evaluation
-            object varToCompare = 0;
+            // get the var node  if it exists
+            // then pass it to the evalCnd
+            object varToCompare = default;
             bool found = false;
-
             if (nodes.TryGetValue(
                 cndNodeData?.GetType()?.GetField("valueNodeGuid")?.GetValue(cndNodeData).ToString(),
                 out NodeDataBase varNodeData))
             {
                 string soGuid = varNodeData.GetType().GetField("soGuid").GetValue(varNodeData).ToString();
-                string varTypeName = varNodeData.GetType().GetProperty("variableTypeName").GetValue(varNodeData).ToString();
 
                 var variable = EventGraph.Databases.Database.GetVariable(soGuid);
                 if (variable != null)
@@ -158,13 +159,13 @@ namespace EventGraph.Runtime
             if (!found)
             {
                 Debug.LogWarning("No var node attached to cnd Node's value port");
-                StopParsing();
-                return;
+                //StopParsing();
+                //return;
             }
 
             // get the evaluation result by passing in the appropriate comparison value
             bool result = (bool)cndNodeData.GetType().GetMethod("EvaluateCondition")
-                .Invoke(cndNodeData, new object[] { varToCompare });
+                .Invoke(cndNodeData, new object[] { this, varToCompare });
             if (result)
             {
                 // 0 is always true port
@@ -190,7 +191,10 @@ namespace EventGraph.Runtime
     public struct ChoiceAction
     {
         public string choice;
-        public Action callback;
+        /// <summary>
+        /// Bool = asServer if networking. Irrelevent otherwise
+        /// </summary>
+        public Action<bool> callback;
     }
 
 }

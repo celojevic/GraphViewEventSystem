@@ -99,7 +99,7 @@ namespace EventGraph
 
         public override void Parse(EventGraphParser parser)
         {
-            parser.StartCoroutine(WaitNodeCo(parser));
+            CoroutineHelper.instance.StartCoroutine(WaitNodeCo(parser));
         }
 
         IEnumerator WaitNodeCo(EventGraphParser parser)

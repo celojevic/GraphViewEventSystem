@@ -117,7 +117,7 @@ namespace EventGraph
 
         #region Runtime
 
-        public override bool EvaluateCondition(int value)
+        public override bool EvaluateCondition(EventGraphParser parser, int value)
         {
             switch (comparisonOperator)
             {
@@ -134,11 +134,6 @@ namespace EventGraph
                 default:
                     return true;
             }
-        }
-
-        public override void Parse(EventGraphParser parser)
-        {
-            throw new System.NotImplementedException();
         }
 
         #endregion

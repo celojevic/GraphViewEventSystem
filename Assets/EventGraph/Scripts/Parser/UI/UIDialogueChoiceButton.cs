@@ -23,7 +23,7 @@ namespace EventGraph.Runtime.UI
 
         public void OnClick()
         {
-            choiceAction.callback.Invoke();
+            choiceAction.callback.Invoke(false);
             button.enabled = false;
         }
 

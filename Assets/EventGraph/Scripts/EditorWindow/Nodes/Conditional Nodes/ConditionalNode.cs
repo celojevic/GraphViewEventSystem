@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEditor.Experimental.GraphView;
+using EventGraph.Runtime;
 
 namespace EventGraph
 {
@@ -72,7 +73,12 @@ namespace EventGraph
         }
 #endif
 
-        public abstract bool EvaluateCondition(T value);
+        public abstract bool EvaluateCondition(EventGraphParser parser, T value);
+
+        public override void Parse(EventGraphParser parser)
+        {
+            throw new System.Exception("Conditional node shouldnt parse!");
+        }
 
     }
 }
