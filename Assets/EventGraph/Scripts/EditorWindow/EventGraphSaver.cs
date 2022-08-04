@@ -3,7 +3,6 @@ using UnityEngine;
 using System;
 using System.IO;
 using System.Collections.Generic;
-using EventGraph.Editor;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -52,16 +51,13 @@ namespace EventGraph
             CreateFolders();
 
             if (graphView.saveFlags.HasFlag(DataType.JSON))
-            {
                 SaveAsJSON(graphView, fileName);
-            }
             if (graphView.saveFlags.HasFlag(DataType.ScriptableObject))
-            {
                 SaveAsSO(graphView, fileName);
-            }
 
             // reload the files in the toolbar
-            graphView.editorWindow.PopulateJsonPopup();
+            //graphView.editorWindow.PopulateJsonPopup();
+            graphView.editorWindow.HandleLoadTypeChanged();
         }
 
         static void SaveAsSO(EventGraphView graphView, string fileName)

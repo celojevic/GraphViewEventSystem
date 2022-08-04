@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -8,6 +7,7 @@ using EventGraph.Editor;
 
 #if UNITY_EDITOR
 
+using UnityEditor.UIElements;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 
@@ -16,8 +16,8 @@ namespace EventGraph
     public class EventGraphEditorWindow : GraphViewEditorWindow
     {
 
-        const string SAVE_TYPE_KEY = "EventGraphSaveType";
-        const string LOAD_TYPE_KEY = "EventGraphLoadType";
+        private const string SAVE_TYPE_KEY = "EventGraphSaveType";
+        private const string LOAD_TYPE_KEY = "EventGraphLoadType";
         private const string DEFAULT_FILE_NAME = "NewEventGraph";
 
         private EventGraphView _graphView;
@@ -27,13 +27,15 @@ namespace EventGraph
         public DataType saveTypeFlags => (DataType)_saveTypeFlagsField.value;
 
         private Toolbar _saveBar;
-        private PopupField<string> _jsonFilesPopup;
+        private PopupField<string> _fileListPopup;
         private Label _noFilesLabel;
         private TextField _fileNameTextField;
         private EnumField _loadTypeField;
 
+        private string _fileListCurSelection;
+
         [MenuItem("Window/Event Graph")]
-        static void Init()
+        private static void Init()
         {
             var window = GetWindow<EventGraphEditorWindow>();
             window.titleContent = new GUIContent("Event Graph");
@@ -51,7 +53,7 @@ namespace EventGraph
             CreateSaveBar();
         }
 
-        void CreateSaveBar()
+        private void CreateSaveBar()
         {
             _saveBar = new Toolbar();
 
@@ -80,35 +82,30 @@ namespace EventGraph
                 {
                     case DataType.JSON:
                         // TODO disable the load button if no files
-                        if (_jsonFilesPopup == null)
+                        if (_fileListPopup == null)
                         {
                             Debug.LogWarning("There are no saved JSON files to load.");
                             return;
                         }
-                        EventGraphSaver.LoadFromJson(_graphView, _jsonFilesPopup.value.RemoveString(".json"));
+                        EventGraphSaver.LoadFromJson(_graphView, _fileListPopup.value.RemoveString(".json"));
                         break;
 
                     case DataType.ScriptableObject:
-                        EventGraphSaver.LoadFromSo(_graphView, _jsonFilesPopup.value);
+                        EventGraphSaver.LoadFromSo(_graphView, _fileListPopup.value);
                         break;
                 }
 
-
-
-                _fileName = _jsonFilesPopup.value.RemoveString(".json");
+                _fileName = _fileListPopup.value.RemoveString(".json");
                 _fileNameTextField.value = _fileName;
             });
             _saveBar.Add(loadButton);
 
             SetupLoadTypeField();
 
-            // TODO only show if loadTypeField is JSON
-            //PopulateJSONDropdown();
-
             rootVisualElement.Add(_saveBar);
         }
 
-        void SetupLoadTypeField()
+        private void SetupLoadTypeField()
         {
             _loadTypeField = new EnumField(DataType.JSON);
 
@@ -126,10 +123,10 @@ namespace EventGraph
             HandleLoadTypeChanged();
         }
 
-        void HandleLoadTypeChanged()
+        internal void HandleLoadTypeChanged()
         {
-            RemoveJsonPopup();
-            RemoveSoPopup();
+            RemoveFileListPopup();
+            _fileListCurSelection = "";
 
             switch ((DataType)_loadTypeField.value)
             {
@@ -142,20 +139,23 @@ namespace EventGraph
                     break;
 
                 case DataType.SQLite:
-
+                    // TODO
                     break;
             }
         }
 
-
-
-        void RemoveSoPopup()
+        private void RemoveFileListPopup()
         {
-
+            if (_fileListPopup != null && _saveBar.Contains(_fileListPopup))
+                _saveBar.Remove(_fileListPopup);
+            if (_noFilesLabel != null && _saveBar.Contains(_noFilesLabel))
+                _saveBar.Remove(_noFilesLabel);
         }
 
-        void PopulateSoPopup()
+        private void PopulateSoPopup()
         {
+            RemoveFileListPopup();
+
             var list = EventGraphEditorUtils.FindScriptableObjects<EventGraphDataObject>();
             if (list.Count == 0)
             {
@@ -166,27 +166,26 @@ namespace EventGraph
             {
                 List<string> concatFiles = new List<string>();
                 foreach (var item in list)
-                {
                     concatFiles.Add(item.name);
-                }
 
-                _jsonFilesPopup = new PopupField<string>(concatFiles, 0);
-                _saveBar.Add(_jsonFilesPopup);
+                // create file list
+                _fileListPopup = new PopupField<string>(concatFiles, 0);
+                _fileListPopup.RegisterValueChangedCallback((evt) => 
+                { 
+                    _fileListCurSelection = evt.newValue; 
+                    //Debug.Log(_fileListCurSelection); 
+                });
+                // TODO this will not switch back to selection after saving...
+                if (!string.IsNullOrEmpty(_fileListCurSelection))
+                    _fileListPopup.index = concatFiles.IndexOf(_fileListCurSelection);
 
+                _saveBar.Add(_fileListPopup);
             }
-        }
-
-        void RemoveJsonPopup()
-        {
-            if (_jsonFilesPopup != null && _saveBar.Contains(_jsonFilesPopup))
-                _saveBar.Remove(_jsonFilesPopup);
-            if (_noFilesLabel != null && _saveBar.Contains(_jsonFilesPopup))
-                _saveBar.Remove(_noFilesLabel);
         }
 
         public void PopulateJsonPopup()
         {
-            RemoveJsonPopup();
+            RemoveFileListPopup();
 
             // load files dropdown list
             string savePath = $"{Application.persistentDataPath}/EventGraphs";
@@ -208,8 +207,8 @@ namespace EventGraph
             }
             else
             {
-                _jsonFilesPopup = new PopupField<string>(concatFiles, 0);
-                _saveBar.Add(_jsonFilesPopup);
+                _fileListPopup = new PopupField<string>(concatFiles, 0);
+                _saveBar.Add(_fileListPopup);
             }
         }
 
@@ -253,8 +252,6 @@ namespace EventGraph
 
     }
 
-#endif
-
     [Flags]
     public enum DataType
     {
@@ -262,4 +259,7 @@ namespace EventGraph
         ScriptableObject = 2,
         SQLite = 4,
     }
+
 }
+
+#endif

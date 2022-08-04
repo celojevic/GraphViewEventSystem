@@ -21,7 +21,6 @@ public class ScriptableGuidObject : ScriptableObject
             guid = System.Guid.NewGuid().ToString();
             Debug.Log(guid);
             EditorUtility.SetDirty(this);
-            SetDirty();
             AssetDatabase.SaveAssets();
         }
     }
