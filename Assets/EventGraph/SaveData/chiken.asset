@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb4225927487a04a91413458c36c1a0, type: 3}
+  m_Name: chiken
+  m_EditorClassIdentifier: 
+  graphData:
+    entryNode: '{"guid":"4b974b8f-cc71-4782-a470-336aa02a807d","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"4b974b8f-cc71-4782-a470-336aa02a807d","toNodeGuid":"47d0dcd5-5ced-45ff-9f02-69b260be96b6","edgeType":""}]}'
+    nodeJsons:
+    - '{"guid":"47d0dcd5-5ced-45ff-9f02-69b260be96b6","position":{"x":606.0,"y":189.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[],"cameraName":""}'
+    groups: []

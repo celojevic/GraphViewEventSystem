@@ -34,17 +34,32 @@ namespace EventGraph
 
         private string _fileListCurSelection;
 
+        private static EventGraphDataObject _dataToLoad;
+
         [MenuItem("Window/Event Graph")]
         private static void Init()
         {
-            var window = GetWindow<EventGraphEditorWindow>();
-            window.titleContent = new GUIContent("Event Graph");
+            GetWindow<EventGraphEditorWindow>("Event Graph");
+        }
+
+        public static void Open(EventGraphDataObject obj)
+        {
+            if (obj == null) return;
+
+            _dataToLoad = obj;
+            GetWindow<EventGraphEditorWindow>("Event Graph");
         }
 
         private void OnEnable()
         {
             CreateGraphView();
             CreateToolbars();
+
+            if (_dataToLoad != null)
+            {
+                EventGraphSaver.LoadFromData(_graphView, _dataToLoad.graphData);
+                _dataToLoad = null;
+            }
         }
 
         public void CreateToolbars()
@@ -212,7 +227,7 @@ namespace EventGraph
             }
         }
 
-        void CreateToolbar()
+        private void CreateToolbar()
         {
             Toolbar toolbar = new Toolbar();
 
@@ -242,13 +257,12 @@ namespace EventGraph
             rootVisualElement.Add(toolbar);
         }
 
-        void CreateGraphView()
+        private void CreateGraphView()
         {
             _graphView = new EventGraphView(this);
             _graphView.StretchToParentSize();
             rootVisualElement.Add(_graphView);
         }
-
 
     }
 

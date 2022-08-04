@@ -31,21 +31,64 @@ namespace EventGraph
         private SearchWindowBase _searchWindow;
         private ClipboardBase _clipboard;
         private MiniMap _minimap;
-
+        private Blackboard _blackboard;
 
         public EventGraphView(EventGraphEditorWindow editorWindow)
         {
             this.editorWindow = editorWindow;
 
             CreateSearchWindow();
-            CreateGridBg();
+            CreateGridBackground();
             CreateMinimap();
+            CreateBlackboard();
+
             this.AddStyleSheets("GridBackground.uss");
             AddManips();
             CreateEntryNode();
             SetupCallbacks();
             SetupClipboard();
         }
+
+
+        #region Blackboard
+
+        private void CreateBlackboard()
+        {
+            // create the blackboard with params - for internal use i guess?
+            _blackboard = new Blackboard(this);
+
+            // add sections
+            BlackboardSection headerSection = new BlackboardSection
+            {
+                title = "Exposed Properties",
+            };
+            _blackboard.Add(headerSection);
+
+            // callbacks
+            _blackboard.addItemRequested = OnAddItemRequested;
+            _blackboard.editTextRequested = OnEditTextRequested;
+
+            _blackboard.SetPosition(new Rect(10, 30, 200, 300));
+
+            // add to graphview
+            Add(_blackboard);
+        }
+
+        private void OnEditTextRequested(Blackboard bb, VisualElement element, string text)
+        {
+
+        }
+
+        private void OnAddItemRequested(Blackboard bb)
+        {
+            // create a field for the property
+            BlackboardField field = new BlackboardField()
+            {
+
+            };
+        }
+
+        #endregion
 
 
         #region Clipboard, Copy/Paste Functionality
@@ -353,7 +396,7 @@ namespace EventGraph
 
         #endregion
 
-        void CreateGridBg()
+        void CreateGridBackground()
         {
             GridBackground bg = new GridBackground();
             bg.StretchToParentSize();

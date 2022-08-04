@@ -126,6 +126,7 @@ namespace EventGraph
 
         public static void LoadFromSo(EventGraphView graphView, string fileName)
         {
+            // TODO move path to StreamingAssets
             string path = $"Assets/EventGraph/SaveData/{fileName}.asset";
             EventGraphDataObject data = AssetDatabase.LoadAssetAtPath<EventGraphDataObject>(path);
             LoadFromData(graphView, data?.graphData);
@@ -146,7 +147,7 @@ namespace EventGraph
             LoadFromData(graphView, graphData);
         }
 
-        static void LoadFromData(EventGraphView graphView, EventGraphData graphData)
+        public static void LoadFromData(EventGraphView graphView, EventGraphData graphData)
         {
             if (graphData != null && graphData != null)
             {
