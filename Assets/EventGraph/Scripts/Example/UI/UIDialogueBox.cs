@@ -24,7 +24,9 @@ namespace EventGraph.Runtime.UI
 
             _text.text = message;
 
-            _choiceHolder.DestroyChildren();
+            foreach (Transform child in _choiceHolder)
+                Destroy(child.gameObject);
+
             for (int i = 0; i < choices.Count; i++)
             {
                 int index = i;

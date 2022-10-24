@@ -1,12 +1,7 @@
 using EventGraph.Characters;
 using EventGraph.Components;
-using EventGraph.Databases;
-using EventGraph.Runtime;
 using System.Collections.Generic;
-using System.Linq;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace EventGraph.Runtime.UI
 {
@@ -39,7 +34,8 @@ namespace EventGraph.Runtime.UI
             return null;
         }
 
-        public void ShowMessage(string message, List<ChoiceAction> choices, AudioClip voiceClip = null, CharacterFoldoutData character = null)
+        public void ShowMessage(string message, List<ChoiceAction> choices, 
+            AudioClip voiceClip = null, CharacterFoldoutData character = null)
         {
             _panel.SetActive(true);
 

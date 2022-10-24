@@ -71,8 +71,8 @@ namespace EventGraph
         {
             PortBase port = new PortBase(orientation, direction, capacity, type);
             EdgeConnectorListenerBase listener = new EdgeConnectorListenerBase(graphView, port);
-            // TODO make custom edgeConnector, Edge classes
-            port.SetEdgeConnector(new EdgeConnector<EdgeBase>(listener));
+            // TODO make custom edgeConnector class
+            port.SetEdgeConnector(new EdgeConnectorBase(listener));
             port.AddManipulator(port.edgeConnector);
 
             return port;
@@ -131,11 +131,15 @@ namespace EventGraph
             this.RefreshExpandedState();
         }
 
+        /// <summary>
+        /// Assumes a port was placed in the outputContainer, and returns the first port found in it.
+        /// </summary>
+        /// <returns></returns>
         public Port GetFirstOutputPort()
         {
             foreach (var item in this.outputContainer.Children())
-                if (item is Port)
-                    return item as Port;
+                if (item is Port port)
+                    return port;
 
             // no ports
             Debug.LogError("No output ports found for node.");
@@ -156,7 +160,7 @@ namespace EventGraph
             int count = 0;
             foreach (var item in this.outputContainer.Children())
             {
-                if (!(item is Port port)) continue;
+                if (item is not Port port) continue;
 
                 if (index == count)
                     return port;
@@ -168,6 +172,10 @@ namespace EventGraph
             return null;
         }
 
+        /// <summary>
+        /// Assumes the input port was put first in the inputContainer and returns it.
+        /// </summary>
+        /// <returns></returns>
         public Port GetInputPort()
         {
             if (inputContainer.Children().FirstElement() is Port port)
@@ -181,14 +189,16 @@ namespace EventGraph
             }
         }
 
+        /// <summary>
+        /// Assumes the variable input port was placed in the main container.
+        /// Returns the first port found in the mainContainer.
+        /// </summary>
+        /// <returns></returns>
         public Port GetVarInputPort()
         {
             foreach (var item in mainContainer.Children())
-            {
                 if (item is Port port)
                     return port;
-            }
-
             return null;
         }
 

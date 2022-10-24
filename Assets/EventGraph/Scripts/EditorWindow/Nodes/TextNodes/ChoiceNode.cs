@@ -403,7 +403,7 @@ namespace EventGraph
                             return;
                         }
 
-                        parser.curNodeGuid = edges[index].toNodeGuid;
+                        parser.CurNodeGuid = edges[index].toNodeGuid;
                         parser.Next();
                     }
                 });

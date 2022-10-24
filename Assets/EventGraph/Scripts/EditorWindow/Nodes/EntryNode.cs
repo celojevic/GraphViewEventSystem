@@ -53,6 +53,7 @@ namespace EventGraph
 
         public override void Parse(EventGraphParser parser)
         {
+            Debug.LogError("this node need not be parsed");
             throw new System.NotImplementedException();
         }
 

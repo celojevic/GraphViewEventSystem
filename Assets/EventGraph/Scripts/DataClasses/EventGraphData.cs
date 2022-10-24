@@ -10,6 +10,7 @@ namespace EventGraph
         public string entryNode;
         public List<string> nodeJsons = new List<string>();
         public List<GroupData> groups = new List<GroupData>();
+        public BlackboardData blackboardData;
     }
 
 }

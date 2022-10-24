@@ -1,16 +1,16 @@
-// TODO just move to Editor folder
-namespace EventGraph.Editor
-{
 #if UNITY_EDITOR
 
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using UnityEditor;
-    using UnityEditor.Experimental.GraphView;
-    using UnityEditor.UIElements;
-    using UnityEngine;
-    using UnityEngine.UIElements;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace EventGraph.Editor
+{
 
     public static class EventGraphEditorUtils
     {
@@ -33,11 +33,6 @@ namespace EventGraph.Editor
         }
 
 
-
-        public static VisualElement CreateSpace()
-        {
-            return new Label(" ");
-        }
 
         public static AudioClip FindAudioClip(string clipName)
         {
@@ -136,7 +131,7 @@ namespace EventGraph.Editor
 
     }
 
-#endif
 
 }
 
+#endif

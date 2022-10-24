@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bb4225927487a04a91413458c36c1a0, type: 3}
+  m_Name: a
+  m_EditorClassIdentifier: 
+  graphData:
+    entryNode: '{"guid":"610e50ad-c1b1-435c-bf1d-353b190dae54","position":{"x":100.0,"y":200.0},"nodeType":"EventGraph.EntryNode","nodeDataType":"EventGraph.EntryNodeData","groupGuid":"","isEntryNode":false,"edges":[{"portIndex":0,"parentNodeGuid":"610e50ad-c1b1-435c-bf1d-353b190dae54","toNodeGuid":"eb2560b4-ff64-4e5f-ab6e-81c3ca6a062f","edgeType":""}]}'
+    nodeJsons:
+    - '{"guid":"eb2560b4-ff64-4e5f-ab6e-81c3ca6a062f","position":{"x":415.0,"y":246.0},"nodeType":"EventGraph.ChangeCameraNode","nodeDataType":"EventGraph.ChangeCameraNodeData","groupGuid":"","isEntryNode":false,"edges":[],"cameraName":""}'
+    groups: []

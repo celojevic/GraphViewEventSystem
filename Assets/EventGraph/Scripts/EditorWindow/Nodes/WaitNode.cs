@@ -4,13 +4,15 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using EventGraph.Runtime;
 
+#if UNITY_EDITOR
+using UnityEditor.UIElements;
+using EventGraph.Editor;
+#endif
+
 namespace EventGraph
 {
 
 #if UNITY_EDITOR
-
-    using UnityEditor.UIElements;
-    using EventGraph.Editor;
 
     public class WaitNode : NodeBase
     {
@@ -99,7 +101,7 @@ namespace EventGraph
 
         public override void Parse(EventGraphParser parser)
         {
-            CoroutineHelper.instance.StartCoroutine(WaitNodeCo(parser));
+            parser.ParentMb.StartCoroutine(WaitNodeCo(parser));
         }
 
         IEnumerator WaitNodeCo(EventGraphParser parser)

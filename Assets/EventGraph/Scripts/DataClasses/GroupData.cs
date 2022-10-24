@@ -13,9 +13,8 @@ namespace EventGraph
         public string title;
         public List<string> nodeGuids;
 
-        public GroupData(GroupData data) : base(data)
-        {
-        }
+        public GroupData(GroupData data) : base(data) { }
+
 
 #if UNITY_EDITOR
         public GroupData(GroupBase group) : base(group)

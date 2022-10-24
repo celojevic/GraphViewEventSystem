@@ -6,22 +6,16 @@ namespace EventGraph
 {
 #if UNITY_EDITOR
 
+    using EventGraph.Editor;
     using UnityEditor.Experimental.GraphView;
 
-    // TODO set this up and use it in EventGraphEditorExtensions.CreatePort
-    public class EdgeConnectorBase : EdgeConnector
+    public class EdgeConnectorBase : EdgeConnector<EdgeBase>
     {
-        public override EdgeDragHelper edgeDragHelper => throw new System.NotImplementedException();
 
-        protected override void RegisterCallbacksOnTarget()
+        public EdgeConnectorBase(IEdgeConnectorListener listener) : base(listener)
         {
-            throw new System.NotImplementedException();
         }
 
-        protected override void UnregisterCallbacksFromTarget()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
 #endif

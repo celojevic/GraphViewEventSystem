@@ -1,14 +1,10 @@
-using EventGraph;
-using EventGraph.Runtime;
 using EventGraph.Runtime.UI;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace EventGraph.Runtime.Example
 {
+
     public class GameManager : MonoBehaviour
     {
 
@@ -27,8 +23,9 @@ namespace EventGraph.Runtime.Example
 
         private void OnTalk()
         {
-            EventGraphParser parser = new EventGraphParser(_event.graphData);
+            EventGraphParser parser = new EventGraphParser(_event.graphData, this);
             parser.StartParsing();
+            parser.OnStopParsing = UIDialogue.instance.Hide;
         }
 
         // conceptual example usage with FishNet. doesn't actually work.

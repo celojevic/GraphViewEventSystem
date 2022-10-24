@@ -28,8 +28,18 @@ namespace EventGraph
                 return input;
         }
 
+        public static EventGraphData LoadGraphDataJson(string fileName)
+        {
+            return (EventGraphData)JsonUtility.FromJson(
+                File.ReadAllText($"{Application.persistentDataPath}/EventGraphs/{fileName}.json"),
+                typeof(EventGraphData)
+            );
+        }
+
+
         #region Editor
 #if UNITY_EDITOR
+
 
         #region Saving
 
@@ -63,7 +73,7 @@ namespace EventGraph
         static void SaveAsSO(EventGraphView graphView, string fileName)
         {
             string path = $"Assets/EventGraph/SaveData/{fileName}.asset";
-            Debug.Log(path);
+            //Debug.Log(path);
 
             var so = ScriptableObject.CreateInstance<EventGraphDataObject>();
             so.graphData = GetGraphData(graphView);
@@ -97,6 +107,7 @@ namespace EventGraph
         {
             EventGraphData graphData = new EventGraphData();
 
+            // save graph elements, such as nodes and groups
             graphView.graphElements.ForEach(graphElement =>
             {
                 if (graphElement is NodeBase node)
@@ -115,6 +126,16 @@ namespace EventGraph
                     graphData.groups.Add(new GroupData(group));
                 }
             });
+
+            // save blackboard
+            foreach (var item in graphView.Blackboard.Children())
+            {
+                Debug.Log(item.GetType());
+                if (item is BlackboardField field)
+                {
+                    //field.text;
+                }
+            }
 
             return graphData;
         }
@@ -257,13 +278,6 @@ namespace EventGraph
 #endif
         #endregion
 
-        public static EventGraphData LoadGraphDataJson(string fileName)
-        {
-            return (EventGraphData)JsonUtility.FromJson(
-                File.ReadAllText($"{Application.persistentDataPath}/EventGraphs/{fileName}.json"),
-                typeof(EventGraphData)
-            );
-        }
 
     }
 

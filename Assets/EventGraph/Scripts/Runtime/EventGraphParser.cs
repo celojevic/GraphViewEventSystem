@@ -15,31 +15,41 @@ namespace EventGraph.Runtime
     public class EventGraphParser
     {
 
-        public string fileName = "NewEventGraph";
+        public string FileName = "NewEventGraph";
 
-        public string curNodeGuid { get; set; }
-        public NodeDataBase curNodeData => nodes.ContainsKey(curNodeGuid) ? nodes[curNodeGuid] : null;
+        public string CurNodeGuid { get; set; }
+        public NodeDataBase curNodeData => _nodes.ContainsKey(CurNodeGuid) ? _nodes[CurNodeGuid] : null;
 
-        private Dictionary<string, NodeDataBase> nodes = new Dictionary<string, NodeDataBase>();
+        public MonoBehaviour ParentMb { get; private set; }
+
+        private Dictionary<string, NodeDataBase> _nodes = new Dictionary<string, NodeDataBase>();
         private EntryNodeData _entryNodeData;
+
+        // events
+        public Action OnStopParsing;
+
 
 #if FISHNET
         /// <summary>
         /// Parent interactable. Server only.
         /// </summary>
         public Interactable Parent { get; [Server]set; }
+
         /// <summary>
-        /// Parent only exists on server, so its basically a server check
+        /// Parent only exists on server, so it's basically a server check
         /// </summary>
         public bool IsServer => Parent != null;
+
         /// <summary>
-        /// Exists on both
+        /// Exists on both client and server
         /// </summary>
         public Player Player { get; set; }
 #endif
 
-        public EventGraphParser(EventGraphData data)
+
+        public EventGraphParser(EventGraphData data, MonoBehaviour mb)
         {
+            ParentMb = mb;
             ParseGraphData(data);
         }
 
@@ -59,14 +69,14 @@ namespace EventGraph.Runtime
                 // get save type and load data as parent
                 Type dataType = Type.GetType(EventGraphSaver.AppendNamespace(nodeData.nodeDataType));
 
-                nodes.Add(nodeData.guid, (NodeDataBase)JsonUtility.FromJson(json, dataType));
+                _nodes.Add(nodeData.guid, (NodeDataBase)JsonUtility.FromJson(json, dataType));
             }
 
             _entryNodeData = JsonUtility.FromJson<EntryNodeData>(data.entryNode);
             ResetToFirstNode();
         }
 
-        void ResetToFirstNode() => curNodeGuid = _entryNodeData.edges[0].toNodeGuid;
+        void ResetToFirstNode() => CurNodeGuid = _entryNodeData.edges[0].toNodeGuid;
 
         public void StartParsing()
         {
@@ -76,9 +86,9 @@ namespace EventGraph.Runtime
 
         public void Next()
         {
-            if (!nodes.TryGetValue(curNodeGuid, out NodeDataBase nodeData))
+            if (!_nodes.TryGetValue(CurNodeGuid, out NodeDataBase nodeData))
             {
-                Debug.LogError("No node with guid: " + curNodeGuid);
+                Debug.LogError("No node with guid: " + CurNodeGuid);
                 return;
             }
 
@@ -92,7 +102,7 @@ namespace EventGraph.Runtime
                 Debug.LogError("Node guid was null");
                 return;
             }
-            if (!nodes.TryGetValue(guid, out NodeDataBase nodeData))
+            if (!_nodes.TryGetValue(guid, out NodeDataBase nodeData))
             {
                 Debug.LogError("No node with guid: " + guid);
                 return;
@@ -125,7 +135,7 @@ namespace EventGraph.Runtime
         {
             try
             {
-                curNodeGuid = curNodeData.edges[0].toNodeGuid;
+                CurNodeGuid = curNodeData.edges[0].toNodeGuid;
                 Next();
                 return true;
             }
@@ -142,7 +152,7 @@ namespace EventGraph.Runtime
             // then pass it to the evalCnd
             object varToCompare = default;
             bool found = false;
-            if (nodes.TryGetValue(
+            if (_nodes.TryGetValue(
                 cndNodeData?.GetType()?.GetField("valueNodeGuid")?.GetValue(cndNodeData).ToString(),
                 out NodeDataBase varNodeData))
             {
@@ -169,12 +179,12 @@ namespace EventGraph.Runtime
             if (result)
             {
                 // 0 is always true port
-                curNodeGuid = cndNodeData.edges[0].toNodeGuid;
+                CurNodeGuid = cndNodeData.edges[0].toNodeGuid;
             }
             else
             {
                 // 1 is always false port
-                curNodeGuid = cndNodeData.edges[1].toNodeGuid;
+                CurNodeGuid = cndNodeData.edges[1].toNodeGuid;
             }
 
             Next();
@@ -182,7 +192,7 @@ namespace EventGraph.Runtime
 
         public void StopParsing()
         {
-            UIDialogue.instance.Hide();
+            OnStopParsing();
             ResetToFirstNode();
         }
 

@@ -31,7 +31,9 @@ namespace EventGraph
         private SearchWindowBase _searchWindow;
         private ClipboardBase _clipboard;
         private MiniMap _minimap;
+
         private Blackboard _blackboard;
+        public Blackboard Blackboard => _blackboard;
 
         public EventGraphView(EventGraphEditorWindow editorWindow)
         {
@@ -56,6 +58,7 @@ namespace EventGraph
         {
             // create the blackboard with params - for internal use i guess?
             _blackboard = new Blackboard(this);
+            _blackboard.scrollable = true;
 
             // add sections
             BlackboardSection headerSection = new BlackboardSection
@@ -81,11 +84,16 @@ namespace EventGraph
 
         private void OnAddItemRequested(Blackboard bb)
         {
-            // create a field for the property
-            BlackboardField field = new BlackboardField()
-            {
+            // open context menu
 
-            };
+            // create a field for the property
+            BlackboardRow row = new BlackboardRow(new BlackboardField()
+            {
+                text = "text",
+                typeText = "type",
+            }, 
+            new TextField());
+            _blackboard.Add(row);
         }
 
         #endregion
@@ -332,6 +340,7 @@ namespace EventGraph
 
         void CreateRightClickMenu()
         {
+            // TODO these show when right-clicking BB
             this.AddManipulator(new ContextualMenuManipulator(menuEvent => menuEvent.menu.AppendAction(
                     "Add Group",
                     actionEvent => CreateGroup(

@@ -39,8 +39,11 @@ namespace EventGraph.Editor
 
         public void OnDrop(GraphView graphView, Edge edge)
         {
-
-            EdgeBase e = edge as EdgeBase;
+            if (edge is not EdgeBase e)
+            {
+                Debug.LogError("Invalid edge type, must be EdgeBase: " + edge?.GetType());
+                return;
+            }
 
             _edgesToCreate.Clear();
 
